@@ -22,6 +22,16 @@
 
 VERSION = "0.1"
 
+USAGE="uptodate [options] command [options] [arguments]"
+
+DESCRIPTION='''Commands:
+%s
+Run "uptodate command --help" for more information.
+
+Exit codes:
+%s
+'''
+
 
 import urllib
 import re
@@ -32,6 +42,7 @@ from optparse import OptionParser, IndentedHelpFormatter
 
 
 # error codes
+
 ERROR_INVALID_NB_OF_ARGS = 1
 ERROR_NO_VERSION_FOUND = 2
 ERROR_MODULE_NOT_FOUND = 3
@@ -47,7 +58,12 @@ ERRORS = {
 	ERROR_MODULE_EXISTS: "Module already exists",
 	ERROR_UNKNOWN_COMMAND: "Unknown command",
 }
+
+
+
 # following functions are commands
+# first line of docstring is used as command short description
+# next lines are used in command description
 
 def commandAdd(options, conf, out) :
 	"Add a new module"
@@ -115,23 +131,28 @@ def commandAuto(options, conf, out) :
 
 	module = args[0]
 	url = args[1]
-	comment = " ".join(args[3:])
 	version = args[2]
+	comment = " ".join(args[3:])
 	
 	if not opts.force and conf.has_section(module) :
 		print >> sys.stderr, "Module %s already exists." % module
 		return ERROR_MODULE_EXISTS
-	
+
+	# load data which will be used to search regexp
 	urlFile = urllib.urlopen(url)
 	urlData = urlFile.read()
 	urlFile.close()
 
+	# find text around version string given by user
+	# text is keep from version to ', " or < (or >, depending of side)
+	# versin string is escaped to avoid problem with regexp. Without escape, "2.7.4" can match "217a4" for example.
 	borders = set(re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData))
 	
 	if len(borders) == 0 :
 		print >> sys.stderr, "Error: no version found."
 		return ERROR_NO_VERSION_FOUND
-	
+
+	# generate regexp candidates, and select the best one
 	candidates = []
 	regexp = ""
 	for border in borders :
@@ -153,14 +174,15 @@ def commandAuto(options, conf, out) :
 		# select regexp... actually, the best is the largest
 		if len(candidate) > len(regexp) :
 			regexp = candidate
-			
-		candidates.append(candidate)
-	
-	candidates.sort()
 
+		# finally, add regexp candidate to the list
+		candidates.append(candidate)
+
+	
 	if opts.choose :
+		# ask to user to select a regexp
 		print >> sys.stderr, "Avaible candidates: "
-		for i, candidate in enumerate(candidates) :
+		for i, candidate in enumerate(sorted(candidates)) :
 			print >> sys.stderr, "%i. %s" % (i, candidate)
 			print >> sys.stderr, '    %s' % repr(re.findall(candidate, urlData))
 			print >> sys.stderr
@@ -174,8 +196,10 @@ def commandAuto(options, conf, out) :
 					selectRegExp = -1
 			except ValueError :
 				pass
+		# replace automatically selected regexp with user one
 		regexp = candidates[selectRegExp]
 
+	# get versions founds with selected regexp
 	current = list(set(re.findall(regexp, urlData)))
 
 	# test if a version can be found
@@ -458,7 +482,6 @@ def printModule(conf, module, out, verbose=False) :
 		
 
 
-USAGE="uptodate [options] command [options] [arguments]"
 
 COMMANDS = {'add': commandAdd,
 	    'check': commandCheck,
@@ -470,28 +493,27 @@ COMMANDS = {'add': commandAdd,
 	    'auto': commandAuto,
 	    }
 
-comString = ""
-fill = max([len(c) for c in COMMANDS.keys()])
-for command in sorted(COMMANDS.keys()) :
-	comString += "  %s  %s\n" % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
-
-errString = ""
-fill = max([len(str(c)) for c in ERRORS.keys()])
-for error in sorted(ERRORS.keys()) :
-	errString += "  %s  %s\n" % (str(error).ljust(fill), ERRORS[error])
-
-DESCRIPTION='''Commands:
-%s
-Run "uptodate command --help" for more information.
-
-Exit codes:
-%s
-''' % (comString, errString)
 
 
 def parse_options(argv):
+    # generate command description
+    comString = ""
+    fill = max([len(c) for c in COMMANDS.keys()])
+    for command in sorted(COMMANDS.keys()) :
+	    comString += "  %s  %s\n" % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
+
+    # generate exit code description
+    errString = ""
+    fill = max([len(str(c)) for c in ERRORS.keys()])
+    for error in sorted(ERRORS.keys()) :
+	    errString += "  %s  %s\n" % (str(error).ljust(fill), ERRORS[error])
+
+    # generate complete description
+    fullDesc = DESCRIPTION % (comString, errString)
+
+    # and create option parser
     parser = OptionParser(usage=USAGE,
-                          description=DESCRIPTION,
+                          description=fullDesc,
                           version="uptodate %s" % VERSION,
 			  formatter=UptodateHelpFormatter())
     parser.disable_interspersed_args()
