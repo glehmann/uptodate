@@ -76,10 +76,13 @@ def printModule(conf, module, out, verbose=False) :
 
         print module info to out file. Infos comes from conf object.
         """
+	# get infos
         url = conf.get(module, 'url')
         regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
         current = eval(conf.get(module, 'current'))
         comment = conf.get(module, 'comment')
+	
+	# for backward compatibility : some attribute may be absent
         if conf.has_option(module, 'added') :
                 added = eval(conf.get(module, 'added'))
         else :
@@ -100,7 +103,7 @@ def printModule(conf, module, out, verbose=False) :
 """)
 
                 if added or removed:
-                        # create a list with added and removed versions
+                        # create a list with added and removed versions sorted by modification time
                         hList = []
                         for t, versions in added.iteritems() :
                                 hList.append((t, True))
@@ -124,6 +127,7 @@ def printModule(conf, module, out, verbose=False) :
 		
 		print >> out, template % {'module': module, 'comment': comment, 'url': url, 'regexp': regexp, 'current': andJoin(map(repr, current)), 'history': historyString}
 	else :
+		# display some information on one line
 		s = module
 		if comment :
 			s += " (%s)" % comment
@@ -137,6 +141,9 @@ def printModule(conf, module, out, verbose=False) :
 		print >> out, s
 		
 def makeTime(t) :
+	"""makeTime(time) -> str
+	
+	format a time"""
 	import time
 	template = _('%(d)i/%(M)i/%(y)i %(h)ih%(m)i')
 	tTuple = time.gmtime(t)
@@ -144,6 +151,12 @@ def makeTime(t) :
 	return template % tDict
 
 def andJoin(iterable) :
+	"""andJoin(list) -> str
+	
+	join every element and terminate with a 'and' according to locale.
+	
+	Ex: andJoin([1, 2, 3]) -> '1, 2 and 3'
+	"""
 	last = _(" et ")
 	sep = _(", ")
 	if len(iterable) == 0 :
@@ -156,6 +169,10 @@ def andJoin(iterable) :
 
 
 def yes(question, default=None) :
+	"""yes(str, bool) -> bool
+	
+	return user's anwer to the asked question. The answer can be yes or no, and a default can be provided
+	"""
 	import readline
 	if default != None and default :
 		values = _('Y/n')
@@ -181,16 +198,31 @@ def yes(question, default=None) :
 
 
 def listOptions(parser) :
+	"""listOptions(parser)
+	
+	print option of an option parser to stdout
+	"""
 	for opt in parser.option_list :
 		print opt._long_opts[0]
 
 
 def listModules(conf) :
+	"""listModules(conf)
+	
+	print modules in the config to stdout
+	"""
 	for module in conf.sections() :
 		print module
 	
 
 def loadData(url) :
+    """loadData(url) -> str
+    
+    return text found at given url
+    """
+    # we can't use only urllib to read data from url, because urllib doesn't manage remote and local url the same way
+    # local directories gives a IOError, but ftp directories returns the result of 'ls -l' command
+    # so we catch IOError exception #21 (== url is a directory) and execute 'ls -l' by hand
     try :
 	    urlFile = urllib.urlopen(url)
 	    urlData = urlFile.read()
@@ -211,12 +243,22 @@ def loadData(url) :
 
 
 def getVersions(module, url, regexp) :
+    """getVersions(str, str, str) -> list of str
+    
+    module is not used !!! 
+    url is url fron which we get data where we should find versions
+    regexp is the regular expression which allows to find data and which should contains only one () pair
+    """
     urlData = loadData(url)
     new = re.findall(regexp, urlData)
     return list(set(new))
 
 
 def updateVersions(conf, name, newVersions) :
+	"""updateVersions(conf, str, list or str)
+	
+	update version of module named 'name' in config 'conf' according to versions in newVersions
+	"""
 	import time
 	
 	if not conf.has_option(name, 'current') :
@@ -286,17 +328,25 @@ def file(fName, output=False, notNone=False, append=False) :
 
 
 def escape(s) :
+	"""escape(str) -> str
+	
+	escape chars to make string usable in a regular expression and stay readable
+	"""
 	for c in '\\{}[]()?.' :
 		s = s.replace(c, '\\'+c)
 	return s
 
 
 class UptodateHelpFormatter(IndentedHelpFormatter) :
+	"""a help formatter which do not format description. used for 'uptodate --help'
+	"""
 	def format_description(self, description) :
 		return description
 
 
 class UptodateCommandHelpFormatter(IndentedHelpFormatter) :
+	"""a help formatter which try to keep intelligently return carriage. Used in 'uptodate command --help'
+	"""
 	def format_description(self, description) :
 		if not description :
 			return ""
@@ -314,6 +364,10 @@ class UptodateCommandHelpFormatter(IndentedHelpFormatter) :
 
 
 def initCommands() :
+	"""initCommands() -> list of python modules
+	
+	return the list of avaible commands
+	"""
 	import plugins
 	import os, os.path
 	
