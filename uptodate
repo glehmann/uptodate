@@ -148,7 +148,7 @@ def commandAuto(options, conf, out) :
 		rBorder = re.escape(rBorder)
 		
 		# create regexp candidate
-		candidate = r'%s([^<>\n]{1,30})%s' % (lBorder, rBorder)
+		candidate = r'%s([^<>\n]+)%s' % (lBorder, rBorder)
 	
 		# select regexp... actually, the best is the largest
 		if len(candidate) > len(regexp) :
