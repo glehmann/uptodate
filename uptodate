@@ -201,7 +201,6 @@ def commandAuto(options, conf, out) :
 	
 	if opts.choose :
 		# ask to user to select a regexp
-		candidates.sort()
 		print >> sys.stderr, "Avaible candidates: "
 		for i, candidate in enumerate(candidates) :
 			print >> sys.stderr, "%i. %s" % (i, candidate)
