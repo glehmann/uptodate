@@ -4,19 +4,19 @@ uptodate helps you to keep your system uptodate
 uptodate can tell you when a new version of a program is avaible. To
 do that, you have to add a module. Lets try with zope :
 
-   uptodate add zope \
+   uptodate auto zope \
       http://www.zope.org/Products/ \
       2.7.4 \
       A leading open source application server
    
- uptodate add --auto command takes three arguments:
+ uptodate auto command takes three arguments:
  + a name
  + url where it will search version
  + the current version number
  + an optional comment
 
-uptodate add --auto try to find a regular expression which will be used
-to find new versions. If uptodate add --auto can't find a regular
+uptodate auto try to find a regular expression which will be used
+to find new versions. If uptodate auto can't find a regular
 expression, or if the regular expression isn't good enough for you, you
 can use uptodate add :
 
