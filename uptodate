@@ -152,9 +152,21 @@ def commandAuto(options, conf, out) :
 	urlFile.close()
 
 	# find text around version string given by user
+	bordersRegexps = []
 	# text is keep from version to ', " or < (or >, depending of side)
 	# versin string is escaped to avoid problem with regexp. Without escape, "2.7.4" can match "217a4" for example.
-	borders = set(re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData))
+	bordersRegexps.append(('', r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])', ''))
+	# for ftp listing
+	bordersRegexps.append((r'[drwxl\-]{10}\s+' + r'\S+\s+' * 7, r'(\S+)%s(\S+)', ''))
+	# finally, use what we can find
+	bordersRegexps.append(('', '(.*)%s(.*)', ''))
+		
+	borders = []
+	# select borders
+	for (prefix, bRegexp, suffix) in bordersRegexps :
+		borders = re.findall(prefix + bRegexp % re.escape(version) + suffix, urlData)
+		if borders != [] :
+			break
 	
 	if len(borders) == 0 :
 		print >> sys.stderr, "Error: no version found."
@@ -177,12 +189,12 @@ def commandAuto(options, conf, out) :
 		rBorder = re.escape(rBorder)
 		
 		# create regexp candidate
-		candidate = r'%s([^<>\n]+)%s' % (lBorder, rBorder)
+		candidate = prefix + r'%s([^<>\n]+)%s' % (lBorder, rBorder) + suffix
 	
 		# finally, add regexp candidate to the list
 		candidates.add(candidate)
 
-		
+
 	# sort canditates... actually, the best is the largest
 	candidates = sorted(candidates, key=len, reverse=True)
 	regexp = candidates[0]
