@@ -161,7 +161,7 @@ def commandAuto(options, conf, out) :
 		return ERROR_NO_VERSION_FOUND
 
 	# generate regexp candidates, and select the best one
-	candidates = []
+	candidates = set()
 	regexp = ""
 	for border in borders :
 		lBorder, rBorder = border
@@ -179,13 +179,13 @@ def commandAuto(options, conf, out) :
 		# create regexp candidate
 		candidate = r'%s([^<>\n]+)%s' % (lBorder, rBorder)
 	
-		# select regexp... actually, the best is the largest
-		if len(candidate) > len(regexp) :
-			regexp = candidate
-
 		# finally, add regexp candidate to the list
-		candidates.append(candidate)
+		candidates.add(candidate)
 
+		
+	# sort canditates... actually, the best is the largest
+	candidates = sorted(candidates, key=len, reverse=True)
+	regexp = candidates[0]
 	
 	if opts.choose :
 		# ask to user to select a regexp
