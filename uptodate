@@ -181,7 +181,7 @@ def commandDisplay(options, conf, out) :
 
 	modules = args
 	if opts.all :
-		modules = conf.sections()
+		modules = sorted(conf.sections())
 
 	if len(modules) == 0 :
 		parser.print_usage(sys.stderr)
