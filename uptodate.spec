@@ -20,16 +20,27 @@ do that, you have to add a module. Lets try with zope :
 
    uptodate add zope \
       http://www.zope.org/Products/ \
-      'Download Zope (.{1,10})\s*</a>' \
+      2.7.4 \
       A leading open source application server
-
-uptodate add command takes three arguments:
+   
+ uptodate add --auto command takes three arguments:
  + a name
  + url where it will search version
- + a regular expression to locate version in the text
+ + the current version number
  + an optional comment
 
-Future release will try to find the regular expression for you.
+uptodate add --auto try to find a regular expression which will be used
+to find new versions. If uptodate add --auto can't find a regular
+expression, or if the regular expression isn't good enough for you, you
+can use uptodate add :
+
+   uptodate add zope \
+      http://www.zope.org/Products/ \
+      'Download Zope (.{1,10})\s*</a>' \
+      A leading open source application server
+      
+arguments are the same, but the third is regular expression instead of 
+version.
 
 You can now check for new versions with
 
