@@ -101,8 +101,7 @@ def commandAdd(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
+		listOptions(parser)
 		return 0
     
 	if len(args) < 3 :
@@ -154,8 +153,7 @@ def commandAuto(options, conf, out) :
 	versionRegExp = r'([^<>\n\r]+)'
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
+		listOptions(parser)
 		return 0
     
 	if len(args) < 3 :
@@ -303,10 +301,8 @@ def commandCheck(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
-		for module in conf.sections() :
-			print module
+		listOptions(parser)
+		listModules(conf)
 		return 0
 
     
@@ -319,7 +315,7 @@ def commandCheck(options, conf, out) :
 		# no module to check... print usage and exit
 		parser.print_usage(sys.stderr)
 		return
-	
+
 	if opts.all :
 		modules = conf.sections()
 	else :
@@ -368,10 +364,8 @@ def commandEdit(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
-		for module in conf.sections() :
-			print module
+		listOptions(parser)
+		listModules(conf)
 		return 0
     
 	if len(args) == 2 and not opts.batch :
@@ -433,10 +427,8 @@ def commandRemove(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
-		for module in conf.sections() :
-			print module
+		listOptions(parser)
+		listModules(conf)
 		return 0
 
     
@@ -473,10 +465,8 @@ def commandDisplay(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
-		for module in conf.sections() :
-			print module
+		listOptions(parser)
+		listModules(conf)
 		return 0
     
     
@@ -511,10 +501,8 @@ def commandCopy(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
-		for module in conf.sections() :
-			print module
+		listOptions(parser)
+		listModules(conf)
 		return 0
     
 	if len(args) != 2 :
@@ -556,10 +544,8 @@ def commandRename(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
-		for opt in parser.option_list :
-			print opt.get_opt_string()
-		for module in conf.sections() :
-			print module
+		listOptions(parser)
+		listModules(conf)
 		return 0
     
 	if len(args) != 2 :
@@ -627,6 +613,15 @@ def yes(question) :
 	return yes(question)
 
 
+def listOptions(parser) :
+	for opt in parser.option_list :
+		print opt._long_opts[0]
+
+
+def listModules(conf) :
+	for module in conf.sections() :
+		print module
+	
 
 
 COMMANDS = {'add': commandAdd,
