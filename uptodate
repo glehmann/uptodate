@@ -125,6 +125,8 @@ def commandAuto(options, conf, out) :
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 	
+	versionRegExp = r'([^<>\n]+)'
+
 	if opts.listOption :
 		for opt in parser.option_list :
 			print opt.get_opt_string()
@@ -189,14 +191,32 @@ def commandAuto(options, conf, out) :
 		rBorder = re.escape(rBorder)
 		
 		# create regexp candidate
-		candidate = prefix + r'%s([^<>\n]+)%s' % (lBorder, rBorder) + suffix
+		candidate = prefix + lBorder + versionRegExp + rBorder + suffix
 	
 		# finally, add regexp candidate to the list
 		candidates.add(candidate)
 
 
-	# sort canditates... actually, the best is the largest
-	candidates = sorted(candidates, key=len, reverse=True)
+	# sort canditates
+	# best candidates have the module name near the version
+	# find candidates with module name in it
+	bestCandidates = [c for c in candidates if module in c]
+	# define a function able to give distance from module to version
+	def lenModuleVersion(s) :
+		vPos = s.find(versionRegExp)
+		mPos = s.find(module)
+		if vPos > mPos :
+			return vPos - (mPos + len(module))
+		else :
+			return mPos - (vPos + len(versionRegExp))
+
+	# use this function to sort bestCandidates
+	bestCandidates.sort(key=lenModuleVersion)
+
+	# sort the other candidate (largest is the best)	
+	otherCandidates = sorted(candidates - set(bestCandidates), key=len, reverse=True)
+
+	candidates = bestCandidates + otherCandidates
 	regexp = candidates[0]
 	
 	if opts.choose :
