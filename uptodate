@@ -578,6 +578,21 @@ def commandRename(options, conf, out) :
 
 	
 	
+COMMANDS = {'add': commandAdd,
+	    'check': commandCheck,
+	    'edit': commandEdit,
+	    'remove': commandRemove,
+	    'display': commandDisplay,
+	    'copy': commandCopy,
+	    'rename': commandRename,
+	    'auto': commandAuto,
+	    }
+
+
+
+
+# helper functions
+
 def printModule(conf, module, out, verbose=False) :
 	"""
 	printModule(conf, module, out, verbose)
@@ -622,66 +637,6 @@ def listModules(conf) :
 	for module in conf.sections() :
 		print module
 	
-
-
-COMMANDS = {'add': commandAdd,
-	    'check': commandCheck,
-	    'edit': commandEdit,
-	    'remove': commandRemove,
-	    'display': commandDisplay,
-	    'copy': commandCopy,
-	    'rename': commandRename,
-	    'auto': commandAuto,
-	    }
-
-
-
-def parse_options(argv):
-    # generate command description
-    comString = ""
-    fill = max([len(c) for c in COMMANDS.keys()])
-    for command in sorted(COMMANDS.keys()) :
-	    comString += "  %s  %s\n" % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
-
-    # generate exit code description
-    errString = ""
-    fill = max([len(str(c)) for c in ERRORS.keys()])
-    for error in sorted(ERRORS.keys()) :
-	    errString += "  %s  %s\n" % (str(error).ljust(fill), ERRORS[error])
-
-    # generate complete description
-    fullDesc = DESCRIPTION % (comString, errString)
-
-    # and create option parser
-    parser = OptionParser(usage=USAGE,
-                          description=fullDesc,
-                          version="uptodate %s" % VERSION,
-			  formatter=UptodateHelpFormatter())
-    parser.disable_interspersed_args()
-    parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help="configuration file")
-    parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help="do not modify config file")
-    parser.add_option("-o", "--output", dest="outputPath", default="-", metavar="FILE", help="write output to FILE")
-    parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
-    opts, args = parser.parse_args()
-    
-    if opts.listOption :
-    	for opt in parser.option_list :
-		print opt.get_opt_string()
-	for command in COMMANDS :
-		print command
-	raise Exception(0)
-    
-    if args and args[0] in COMMANDS.keys() :
-        opts.command = args[0]
-        opts.argv = args[1:]
-    else:
-        opts.command = None
-        opts.argv = []
-    if not opts.command:
-        parser.print_usage()
-        raise Exception(ERROR_UNKNOWN_COMMAND)
-    return opts
-
 
 
 def getVersions(module, url, regexp) :
@@ -729,6 +684,53 @@ def file(fName, output=False, notNone=False, append=False) :
                         return __builtin__.file(fName, wMode)
                 else :
                         return __builtin__.file(fName)
+
+
+
+def parse_options(argv):
+    # generate command description
+    comString = ""
+    fill = max([len(c) for c in COMMANDS.keys()])
+    for command in sorted(COMMANDS.keys()) :
+	    comString += "  %s  %s\n" % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
+
+    # generate exit code description
+    errString = ""
+    fill = max([len(str(c)) for c in ERRORS.keys()])
+    for error in sorted(ERRORS.keys()) :
+	    errString += "  %s  %s\n" % (str(error).ljust(fill), ERRORS[error])
+
+    # generate complete description
+    fullDesc = DESCRIPTION % (comString, errString)
+
+    # and create option parser
+    parser = OptionParser(usage=USAGE,
+                          description=fullDesc,
+                          version="uptodate %s" % VERSION,
+			  formatter=UptodateHelpFormatter())
+    parser.disable_interspersed_args()
+    parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help="configuration file")
+    parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help="do not modify config file")
+    parser.add_option("-o", "--output", dest="outputPath", default="-", metavar="FILE", help="write output to FILE")
+    parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+    opts, args = parser.parse_args()
+    
+    if opts.listOption :
+        listOptions(parser)
+	for command in COMMANDS :
+		print command
+	raise Exception(0)
+    
+    if args and args[0] in COMMANDS.keys() :
+        opts.command = args[0]
+        opts.argv = args[1:]
+    else:
+        opts.command = None
+        opts.argv = []
+    if not opts.command:
+        parser.print_usage()
+        raise Exception(ERROR_UNKNOWN_COMMAND)
+    return opts
 
 
 
