@@ -7,12 +7,12 @@ _uptodate()
     COMPREPLY=()
 
     if (($COMP_CWORD == 1)); then
-        COMPREPLY=( $( /home/gaetan/uptodate/uptodate --list-option | grep "^$cur" ) )
+        COMPREPLY=( $( uptodate --list-option | grep "^$cur" ) )
         return 0
     fi
 
     local IFS=$'\n' # So that the following "command-output to array" operation splits only at newlines, not at each space, tab or newline.
-    COMPREPLY=( $( /home/gaetan/uptodate/uptodate ${COMP_WORDS[1]} --list-option | grep "^$cur") )
+    COMPREPLY=( $( uptodate ${COMP_WORDS[1]} --list-option | grep "^$cur") )
 
 	# Then, we adapt the resulting strings to be reusable by bash. If we don't
 	# do this, in the case where we have two repositories named
