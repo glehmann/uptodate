@@ -286,7 +286,12 @@ def main(argv) :
 
 	# load config file
 	conf = ConfigParser.SafeConfigParser()
-	confFile = file(options.configPath)
+	try :
+		confFile = file(options.configPath)
+	except :
+		# try to create file
+		file(options.configPath, True).close()
+		confFile = file(options.configPath)
 	conf.readfp(confFile)
 	confFile.close()
 
