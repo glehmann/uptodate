@@ -438,6 +438,9 @@ if sys.version < '2.4' :
 				raise ValueError('Unrecognized named group in pattern',
 						self.pattern)
 			return self.pattern.sub(convert, self.template)
+		
+else :
+	from string import Template
 
 	
 
