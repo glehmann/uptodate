@@ -119,7 +119,7 @@ def commandAuto(options, conf, out) :
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
-
+	
 	if opts.listOption :
 		for opt in parser.option_list :
 			print opt.get_opt_string()
@@ -181,8 +181,9 @@ def commandAuto(options, conf, out) :
 	
 	if opts.choose :
 		# ask to user to select a regexp
+		candidates.sort()
 		print >> sys.stderr, "Avaible candidates: "
-		for i, candidate in enumerate(sorted(candidates)) :
+		for i, candidate in enumerate(candidates) :
 			print >> sys.stderr, "%i. %s" % (i, candidate)
 			print >> sys.stderr, '    %s' % repr(re.findall(candidate, urlData))
 			print >> sys.stderr
