@@ -77,3 +77,40 @@ def runCommand(opts, args, conf, out) :
 			raise NoVersionFound()
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
+
+	# we should avoid user creating wrong type.
+	# test it at edit time (before saving)
+	
+	if not opts.force and prop == 'current' :
+		# should be a list of str
+		# we use {} as globals (and locals, according to eval doc) to be sure that user will not use value defined in edit
+		if not isListOfStr(eval(value, {})) :
+			raise PropertyTypeError()
+		
+	if not opts.force and prop in ['added', 'removed'] :
+		# should be a dict, with time (float or int) as keys, and list of str as values
+		evaluedValue = eval(value, {})
+		for s in evaluedValue.keys() :
+			if not (isinstance(s, int) or isinstance(s, float)) :
+				raise PropertyTypeError()
+		for s in evaluedValue.keys() :
+			if not isListOfStr(s) :
+				raise PropertyTypeError()
+				
+	if not opts.force and prop in ['add-command', 'remove-command'] :
+		# should work fine with template
+		try :
+			Template(value).substitute({'module': 'module', 'version': 'version'})
+		except KeyError :
+			raise PropertyTypeError()
+		
+		
+def isListOfStr(var) :
+	if isinstance(var, list) :
+		# more than a list, it should be a list of string
+		for s in var :
+			if not isinstance(s, str) :
+				return False
+		return True
+	return False
+	

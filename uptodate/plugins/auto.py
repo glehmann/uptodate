@@ -56,6 +56,13 @@ options = add.options + [Option("-i", "--interactive", action="store_true", dest
 def runCommand(opts, args, conf, out) :
 	versionRegExp = r'([^<>\n\r]+)'
     
+	# test addcommand and removeCommand values
+	try :
+		Template(opts.addCommand).substitute({'module': 'module', 'version': 'version'})
+		Template(opts.removeCommand).substitute({'module': 'module', 'version': 'version'})
+	except KeyError :
+		raise PropertyTypeError()
+
 	if len(args) != 3 :
 		raise InvalidNbOfArgsException(usage)
 

@@ -91,6 +91,7 @@ Codes de sortie :
 		ERROR_UNKNOWN_COMMAND: _("Commande inconnue"),
 		ERROR_IO: _("Erreur d'entrée/sortie"),
 		ERROR_KB_INTERRUPT: _("Interuption au clavier"),
+		ERROR_PROPERTY_TYPE: _('Type de propriété invalide'),
 	}
 
 	# generate command description
@@ -254,3 +255,8 @@ if __name__ == '__main__':
 	except UnknownCommandException, e :
 		print >> sys.stderr, _("Erreur : La commande %s n'existe pas.") % e.args[0]
 		sys.exit(ERROR_UNKNOWN_COMMAND)
+		
+	except PropertyTypeError, e :
+		print >> sys.stderr, _("Erreur : Le type de la propriété est invalide.")
+		sys.exit(ERROR_PROPERTY_TYPE)
+		

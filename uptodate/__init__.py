@@ -45,6 +45,7 @@ ERROR_MODULE_EXISTS = 5
 ERROR_UNKNOWN_COMMAND = 6
 ERROR_IO = 7
 ERROR_KB_INTERRUPT = 8
+ERROR_PROPERTY_TYPE = 9
 
 # define uptodate internals exceptions
 
@@ -64,6 +65,9 @@ class UnknownCommandException(Exception) :
         pass
 
 class PropertyNotFoundException(Exception) :
+        pass
+
+class PropertyTypeError(Exception) :
         pass
 
 

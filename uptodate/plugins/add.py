@@ -51,6 +51,13 @@ def runCommand(opts, args, conf, out) :
 
 
 def add(module, url, regexp, opts, conf, out) :
+	# test addcommand and removeCommand values
+	try :
+		Template(opts.addCommand).substitute({'module': 'module', 'version': 'version'})
+		Template(opts.removeCommand).substitute({'module': 'module', 'version': 'version'})
+	except KeyError :
+		raise PropertyTypeError()
+
 	if not opts.force and conf.has_section(module) :
 		if opts.batch or not yes(_("Voulez vous supprimer le module %s ?") % module, False) :
 			raise ModuleExistsException(module)
