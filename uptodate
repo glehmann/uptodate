@@ -1,0 +1,126 @@
+#!/usr/bin/env python
+#coding: iso-8859-15
+
+# uptodate helps you to keep your system uptodate
+# Copyright (C) 2005  Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+
+
+import ConfigParser
+import urllib
+import os.path
+import sys
+import re
+import __builtin__
+
+
+def file(fName, output=False, notNone=False, append=False) :
+        """Renvoi un fichier en fonction du nom de fichier passé en paramètre.
+        
+        fName est le chemin d'acces complet a un fichier.
+        fName = "-" est interprété comme l'entrée (ou la sortie, si output=True) standard.
+        output = True indique que le ficher doit etre ouvert en ecriture
+        notNone = True provoque le renvoi d'un fichier ouvert sur /dev/null plutot que None quand fName = ""
+        append provoque l'ouverture du ficheir en mode append. Doit etre utilisé avec output = True
+        """
+        if append :
+                wMode = "a"
+        else :
+                wMode = "w"
+        
+        #le nom de fichier est vide...
+        if fName == "" :
+                if notNone :
+                        if output :
+                                return file("/dev/null", wMode)
+                        else :
+                                return file("/dev/null")
+                else :
+                        return None
+        
+        elif fName == "-" :
+                #la sortie ou l'entree standard
+                if output :
+                        return sys.stdout
+                else :
+                        return sys.stdin
+        else :
+                # un fichier normal
+                if output :
+                        return __builtin__.file(fName, wMode)
+                else :
+                        return __builtin__.file(fName)
+
+
+
+
+def main(argv) :
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-o", "--output", dest="out", default="-", metavar="FILE", help="Write output to FILE")
+    parser.add_option("-c", "--config", dest="config", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help="Obtain modules from FILE")
+    parser.add_option("-a", "--all", action="store_true", dest="all", help="do not modify config file.")
+    parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help="do not modify config file.")
+    parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="?")
+    (options, args) = parser.parse_args(argv[1:])
+
+    conf = ConfigParser.SafeConfigParser()
+    confFile = file(options.config)
+    conf.readfp(confFile)
+    confFile.close()
+
+    modules = args
+    if options.all :
+        modules = conf.sections()
+
+    out = file(options.out, True)
+    
+    for module in modules :
+        url = conf.get(module, 'url')
+        regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
+        currentVersions = eval(conf.get(module, 'current'))
+
+        newVersions = getVersions(module, url, regexp)
+
+        conf.set(module, 'current', repr(newVersions))
+        
+        added = set(newVersions) - set(currentVersions)
+        removed = set(currentVersions) - set(newVersions)
+        if added :
+            print >> out, "%s: %s added." % (module, ", ".join(map(repr, added)))
+        if removed :
+            print >> out, "%s: %s removed." % (module, ", ".join(map(repr, removed)))
+
+    if not options.dryRun :
+        confFile = file(options.config, 'w')
+        conf.write(confFile)
+        confFile.close()
+
+
+def getVersions(module, url, regexp) :
+    urlFile = urllib.urlopen(url)
+    urlData = urlFile.read()
+    urlFile.close()
+    new = re.findall(regexp, urlData)
+    return new
+
+
+
+
+if __name__ == '__main__':
+        import sys
+        sys.exit(main(sys.argv))
