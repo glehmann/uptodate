@@ -68,9 +68,9 @@ ERRORS = {
 def commandAdd(options, conf, out) :
 	"Add a new module"
 	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=commandAdd.__doc__)
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -118,9 +118,9 @@ def commandAdd(options, conf, out) :
 def commandAuto(options, conf, out) :
 	"Search for a regexp and a new module"
 	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=commandAdd.__doc__)
-	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
+	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
@@ -268,8 +268,8 @@ def commandCheck(options, conf, out) :
 	"Check version"
 	parser = OptionParser(usage="uptodate [options] check [options] [name] ...", description=commandCheck.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="check all modules")
-	parser.add_option("-r", "--removed", action="store_true", dest="removed", help="display removed versions")
 	parser.add_option("-A", "--added", action="store_true", dest="added", help="display added versions")
+	parser.add_option("-r", "--removed", action="store_true", dest="removed", help="display removed versions")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display what is done")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="display what is done")
 	opts, args = parser.parse_args(options.argv)
@@ -328,8 +328,8 @@ def commandCheck(options, conf, out) :
 def commandEdit(options, conf, out) :
 	"Edit module properties"
 	parser = OptionParser(usage="uptodate [options] edit [options] name property [value]", description=commandEdit.__doc__)
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="don't test if new value allows to find versions")
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="don't test if new value allows to find versions")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display modified module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
@@ -465,9 +465,9 @@ def commandDisplay(options, conf, out) :
 def commandCopy(options, conf, out) :
 	"Copy a module"
 	parser = OptionParser(usage="uptodate [options] copy name name", description=commandCopy.__doc__)
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -510,9 +510,9 @@ def commandCopy(options, conf, out) :
 def commandRename(options, conf, out) :
 	"Rename a module"
 	parser = OptionParser(usage="uptodate [options] rename name newName", description=commandRename.__doc__)
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="rename module even if new name already exist")
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="rename module even if new name already exist")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -624,9 +624,9 @@ def parse_options(argv):
                           version="uptodate %s" % VERSION,
 			  formatter=UptodateHelpFormatter())
     parser.disable_interspersed_args()
-    parser.add_option("-o", "--output", dest="outputPath", default="-", metavar="FILE", help="write output to FILE")
     parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help="configuration file")
     parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help="do not modify config file")
+    parser.add_option("-o", "--output", dest="outputPath", default="-", metavar="FILE", help="write output to FILE")
     parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
     opts, args = parser.parse_args()
     
