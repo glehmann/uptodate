@@ -70,6 +70,7 @@ def commandAdd(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=commandAdd.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
+	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -88,8 +89,11 @@ def commandAdd(options, conf, out) :
 	comment = " ".join(args[3:])
 	
 	if not opts.force and conf.has_section(module) :
-		print >> sys.stderr, "Module %s already exists." % module
-		return ERROR_MODULE_EXISTS
+		if opts.batch or not yes("Do you want to remove existing %s module?" % module) :
+			print >> sys.stderr, "Module %s already exists." % module
+			return ERROR_MODULE_EXISTS
+		else :
+			opts.force = True
 	
 	current = getVersions(module, url, regexp)
 	
@@ -116,6 +120,7 @@ def commandAuto(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=commandAdd.__doc__)
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
+	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
@@ -135,9 +140,12 @@ def commandAuto(options, conf, out) :
 	comment = " ".join(args[3:])
 	
 	if not opts.force and conf.has_section(module) :
-		print >> sys.stderr, "Module %s already exists." % module
-		return ERROR_MODULE_EXISTS
-
+		if opts.batch or not yes("Do you want to remove existing %s module?" % module) :
+			print >> sys.stderr, "Module %s already exists." % module
+			return ERROR_MODULE_EXISTS
+		else :
+			opts.force = True
+	
 	# load data which will be used to search regexp
 	urlFile = urllib.urlopen(url)
 	urlData = urlFile.read()
@@ -324,6 +332,7 @@ def commandRemove(options, conf, out) :
 	"Remove a module"
 	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description=commandRemove.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="remove all modules")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="remove modules without questions and ignore missing modules")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display what is done")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
@@ -341,19 +350,23 @@ def commandRemove(options, conf, out) :
 	else :
 		wrongModules = set(modules) - set(conf.sections())
 		if wrongModules :
-			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
-			return ERROR_MODULE_NOT_FOUND
+			if opts.force :
+				modules =  list(set(modules) - wrongModules)
+			else :
+				print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+				return ERROR_MODULE_NOT_FOUND
 
 
-	if len(modules) == 0 :
+	if len(modules) == 0 and not opts.force :
 		parser.print_usage(sys.stderr)
 		return ERROR_INVALID_NB_OF_ARGS
 	
 	for module in modules :
-		if opts.verbose :
-			printModule(conf, module, out, True)
-		conf.remove_section(module)
-	
+		if opts.force or yes("Remove %s?" % module) :
+			if opts.verbose :
+				printModule(conf, module, out, True)
+			conf.remove_section(module)
+		
 
 def commandDisplay(options, conf, out) :
 	"Display configured modules"
@@ -392,6 +405,7 @@ def commandCopy(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] copy name name", description=commandCopy.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
+	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -411,19 +425,23 @@ def commandCopy(options, conf, out) :
 		print >> sys.stderr, "Error: %s doesn't exist." % module
 		return ERROR_MODULE_NOT_FOUND
 
+	if not opts.force and conf.has_section(new) :
+		if opts.batch or not yes("Do you want to remove existing %s module?" % new) :
+			print >> sys.stderr, "Module %s already exists." % new
+			return ERROR_MODULE_EXISTS
+		else :
+			opts.force = True
+	
 	# remove new section if it already exist and --force is used
 	if opts.force and  conf.has_section(new) :
 		conf.remove_section(new)
 
-	if not conf.has_section(new) :
-		conf.add_section(new)
-		for prop in conf.options(module) :
-			conf.set(new, prop, conf.get(module, prop))
-		if opts.verbose :
-			printModule(conf, new, out, True)
-	else :
-		print >> sys.stderr, "Module %s already exists." % new
-		return ERROR_MODULE_EXISTS
+	conf.add_section(new)
+	for prop in conf.options(module) :
+		conf.set(new, prop, conf.get(module, prop))
+	if opts.verbose :
+		printModule(conf, new, out, True)
+
 
 	
 	
@@ -432,6 +450,7 @@ def commandRename(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] rename name newName", description=commandRename.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="rename module even if new name already exist")
+	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -452,19 +471,23 @@ def commandRename(options, conf, out) :
 		return ERROR_MODULE_NOT_FOUND
 	
 	# remove new section if it already exist and --force is used
+	if not opts.force and conf.has_section(new) :
+		if opts.batch or not yes("Do you want to remove existing %s module?" % new) :
+			print >> sys.stderr, "Module %s already exists." % new
+			return ERROR_MODULE_EXISTS
+		else :
+			opts.force = True
+	
+	# remove new section if it already exist and --force is used
 	if opts.force and  conf.has_section(new) :
 		conf.remove_section(new)
 
-	if not conf.has_section(new) :
-		conf.add_section(new)
-		for prop in conf.options(module) :
-			conf.set(new, prop, conf.get(module, prop))
-		conf.remove_section(module)
-		if opts.verbose :
-			printModule(conf, new, out, True)
-	else :
-		print >> sys.stderr, "Module %s already exists." % new
-		return ERROR_MODULE_EXISTS
+	conf.add_section(new)
+	for prop in conf.options(module) :
+		conf.set(new, prop, conf.get(module, prop))
+	conf.remove_section(module)
+	if opts.verbose :
+		printModule(conf, new, out, True)
 
 	
 	
@@ -491,6 +514,17 @@ def printModule(conf, module, out, verbose=False) :
 			s += " (%s)" % comment
 		print >> out, s
 		
+
+def yes(question) :
+	import readline
+	ret = raw_input(question + " ").lower()
+	if ret in ["n", "no"] :
+		return False
+	if ret in ["y", "yes"] :
+		return True
+	# invalid answer... reask the question
+	return yes(question)
+
 
 
 
@@ -660,7 +694,7 @@ if __name__ == '__main__':
 		sys.stderr.write(str(e.strerror)+"\n")
 		sys.exit(e.errno)
 
-	except KeyboardInterrupt, e :
+	except (KeyboardInterrupt, EOFError), e :
 		sys.stderr.write(str(e)+"\n")
 		sys.exit(130)
 		
