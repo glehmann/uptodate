@@ -48,7 +48,6 @@ TODO:
  + manage errors such as unreachable network
  + be able to check versions on ftp servers
  + enhance options usage
- + use bash completion
  + add more details in help message
  + what you want to add here. Fill free to send patch (see below)
 
