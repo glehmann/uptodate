@@ -169,7 +169,7 @@ def commandRemove(options, conf, out) :
 	
 	for module in modules :
 		if opts.verbose :
-			print >> out, "Removing %s" % module
+			printModule(conf, module, out, True)
 		conf.remove_section(module)
 	
 
