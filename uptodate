@@ -160,6 +160,29 @@ def commandDisplay(options, conf, out) :
 		printModule(conf, module, out, opts.verbose)
 
 
+def commandCopy(options, conf, out) :
+	parser = OptionParser(usage="uptodate [options] copy name name", description="")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module.")
+	opts, args = parser.parse_args(options.argv)
+
+	if len(args) != 2 :
+		parser.print_usage(sys.stderr)
+		return
+
+	module = args[0]
+	new = args[1]
+	
+	if conf.has_section(module) :
+		conf.add_section(new)
+		for prop in conf.options(module) :
+			conf.set(new, prop, conf.get(module, prop))
+		if opts.verbose :
+			printModule(conf, new, out, True)
+	else :
+		print >> sys.stderr, "Unknown module."
+
+	
+	
 def printModule(conf, module, out, verbose=False) :
 	url = conf.get(module, 'url')
 	regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
@@ -186,7 +209,8 @@ COMMANDS = {'add': commandAdd,
 	    'check': commandCheck,
 	    'edit': commandEdit,
 	    'remove': commandRemove,
-	    'display': commandDisplay
+	    'display': commandDisplay,
+	    'copy' : commandCopy
 	    }
 
 DESCRIPTION="Commands :"
