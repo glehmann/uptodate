@@ -51,9 +51,7 @@ ERRORS = {
 
 def commandAdd(options, conf, out) :
 	"Add a new module"
-	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n"
-		+"uptodate [options] add --auto [options] name url version [comment]""", description=commandAdd.__doc__)
-	parser.add_option("-a", "--auto", action="store_true", dest="auto", help="find automatically the regular expression")
+	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=commandAdd.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
@@ -69,60 +67,113 @@ def commandAdd(options, conf, out) :
 
 	module = args[0]
 	url = args[1]
-	# regexp = args[2]
+	regexp = args[2]
 	comment = " ".join(args[3:])
 	
 	if conf.has_section(module) :
 		print >> sys.stderr, "Module %s already exists." % module
 		return ERROR_MODULE_EXISTS
 	
-	if opts.auto :
-		version = args[2]
-		
-		urlFile = urllib.urlopen(url)
-		urlData = urlFile.read()
-		urlFile.close()
-
-		borders = set(re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData))
-		
-		if len(borders) == 0 :
-			print >> sys.stderr, "Error: no version found."
-			return ERROR_NO_VERSION_FOUND
-		
-		regexp = ""
-		for border in sorted(borders) :
-			lBorder, rBorder = border
-			
-			# remove part of border if version is found in it
-			if version in lBorder :
-				lBorder = lBorder[lBorder.find(version)+len(version):]
-			if version in rBorder :
-				rBorder = rBorder[:lBorder.find(version)]
-				
-			# escape characters so they can be used in regexp
-			lBorder = re.escape(lBorder)
-			rBorder = re.escape(rBorder)
-			
-			# create regexp candidate
-			candidate = r'%s([^<>\n]{1,30})%s' % (lBorder, rBorder)
-			if opts.verbose :
-				print >> sys.stderr, "regexp candidate= %s" % candidate
-				print >> sys.stderr, '\t', re.findall(candidate, urlData)
-				print >> sys.stderr
-			
-			# select regexp... actually, the best is the largest
-			if len(candidate) > len(regexp) :
-				regexp = candidate
-			
-		if opts.verbose :
-			# print a blank line after regexp candidates
-			print >> sys.stderr
-
-	else :
-		regexp = args[2]
-
 	current = getVersions(module, url, regexp)
 	
+	# test if a version can be found
+	if len(current) != 0 :
+		conf.add_section(module)
+		conf.set(module, 'url', url)
+		conf.set(module, 'regexp', regexp)
+		conf.set(module, 'comment', comment)
+		conf.set(module, 'current', repr(current))
+		
+		if opts.verbose :
+			printModule(conf, module, out, True)
+	else :
+		# no version found... exit
+		print >> sys.stderr, "Error: no version found."
+		return ERROR_NO_VERSION_FOUND
+
+
+def commandAuto(options, conf, out) :
+	"Search for a regexp and a new module"
+	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=commandAdd.__doc__)
+	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	opts, args = parser.parse_args(options.argv)
+
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		return 0
+    
+	if len(args) < 3 :
+		parser.print_usage(sys.stderr)
+		return ERROR_INVALID_NB_OF_ARGS
+
+	module = args[0]
+	url = args[1]
+	comment = " ".join(args[3:])
+	version = args[2]
+	
+	if conf.has_section(module) :
+		print >> sys.stderr, "Module %s already exists." % module
+		return ERROR_MODULE_EXISTS
+	
+	urlFile = urllib.urlopen(url)
+	urlData = urlFile.read()
+	urlFile.close()
+
+	borders = set(re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData))
+	
+	if len(borders) == 0 :
+		print >> sys.stderr, "Error: no version found."
+		return ERROR_NO_VERSION_FOUND
+	
+	candidates = []
+	regexp = ""
+	for border in borders :
+		lBorder, rBorder = border
+		
+		# remove part of border if version is found in it
+		if version in lBorder :
+			lBorder = lBorder[lBorder.find(version)+len(version):]
+		if version in rBorder :
+			rBorder = rBorder[:lBorder.find(version)]
+			
+		# escape characters so they can be used in regexp
+		lBorder = re.escape(lBorder)
+		rBorder = re.escape(rBorder)
+		
+		# create regexp candidate
+		candidate = r'%s([^<>\n]{1,30})%s' % (lBorder, rBorder)
+	
+		# select regexp... actually, the best is the largest
+		if len(candidate) > len(regexp) :
+			regexp = candidate
+			
+		candidates.append(candidate)
+	
+	candidates.sort()
+
+	if opts.choose :
+		print >> sys.stderr, "Avaible candidates: "
+		for i, candidate in enumerate(candidates) :
+			print >> sys.stderr, "%i. %s" % (i, candidate)
+			print >> sys.stderr, '    %s' % repr(re.findall(candidate, urlData))
+			print >> sys.stderr
+		# get number
+		selectRegExp = -1
+		while selectRegExp == -1 :
+			print >> sys.stderr, "Choose a regexp candidate: ",
+			try :
+				selectRegExp = int(sys.stdin.readline())
+				if selectRegExp < 0 or selectRegExp >= len(candidates) :
+					selectRegExp = -1
+			except ValueError :
+				pass
+		regexp = candidates[selectRegExp]
+
+	current = list(set(re.findall(regexp, urlData)))
+
 	# test if a version can be found
 	if len(current) != 0 :
 		conf.add_section(module)
@@ -410,6 +461,7 @@ COMMANDS = {'add': commandAdd,
 	    'display': commandDisplay,
 	    'copy': commandCopy,
 	    'rename': commandRename,
+	    'auto': commandAuto,
 	    }
 
 comString = ""
