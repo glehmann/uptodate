@@ -212,6 +212,28 @@ def commandCopy(options, conf, out) :
 
 	
 	
+def commandRename(options, conf, out) :
+	parser = OptionParser(usage="uptodate [options] rename name newName", description="")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module.")
+	opts, args = parser.parse_args(options.argv)
+
+	if len(args) != 2 :
+		parser.print_usage(sys.stderr)
+		return
+
+	module, new = args
+	if conf.has_section(module) and not conf.has_section(new) :
+		conf.add_section(new)
+		for prop in conf.options(module) :
+			conf.set(new, prop, conf.get(module, prop))
+		conf.remove_section(module)
+		if opts.verbose :
+			printModule(conf, new, out, True)
+	else :
+		print >> sys.stderr, "Unknown or already present module."
+
+	
+	
 def printModule(conf, module, out, verbose=False) :
 	"""
 	printModule(conf, module, out, verbose)
@@ -245,6 +267,7 @@ COMMANDS = {'add': commandAdd,
 	    'remove': commandRemove,
 	    'display': commandDisplay,
 	    'copy': commandCopy,
+	    'rename': commandRename,
 	    }
 
 DESCRIPTION="Commands :"
