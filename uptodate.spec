@@ -3,13 +3,13 @@
 %define release		1
 
 Name:		%{name}
-Summary:	uptodate helps you to keep your system uptodate
+Summary:	Uptodate helps you to keep your system uptodate
 Version:	%{version}
 Release:	%mkrel %{release}
-URL:		http://gleh.dyndns.org/ncsmtp/
-Source0:	http://gleh.dyndns.org/ncsmtp/ncsmtp-%{version}.tar.bz2
+URL:		http://gleh.dyndns.org/uptodate/
+Source0:	http://gleh.dyndns.org/uptodate/uptodate-%{version}.tar.bz2
 License:	GPL
-Group:		System/Servers
+Group:		Networking/Other
 Requires:	python >= 2.4
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
@@ -51,6 +51,7 @@ if versions found in the text have changed.
 
 
 %install
+mkdir -p %buildroot%{_bindir}
 cp uptodate %buildroot%{_bindir}
 
 %clean
