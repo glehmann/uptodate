@@ -228,7 +228,7 @@ def parse_options(argv):
     parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help="configuration file ")
     parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help="do not modify config file.")
     opts, args = parser.parse_args()
-    if args:
+    if args and args[0] in COMMANDS.keys() :
         opts.command = args[0]
         opts.argv = args[1:]
     else:
