@@ -83,7 +83,7 @@ def commandAdd(options, conf, out) :
 		urlData = urlFile.read()
 		urlFile.close()
 
-		borders = re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData)
+		borders = set(re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData))
 		
 		if len(borders) == 0 :
 			print >> sys.stderr, "Error: no version found."
@@ -91,13 +91,16 @@ def commandAdd(options, conf, out) :
 		
 		# keep border which gives the maximum of versions.
 		regexp = ""
-		number = 0
-		for border in borders :
+		for border in sorted(borders) :
 			candidate = r'%s(.{1,30})%s' % (re.escape(border[0]), re.escape(border[1]))
-			candNum = len(re.findall(candidate, urlData))
+			if opts.verbose :
+				print >> sys.stderr, "regexp candidate= %s" % candidate
+				print >> sys.stderr, '\t', re.findall(candidate, urlData)
 			if len(candidate) > len(regexp) :
 				regexp = candidate
-				number = candNum
+		if opts.verbose :
+			print >> sys.stderr
+
 	else :
 		regexp = args[2]
 
