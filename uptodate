@@ -44,7 +44,7 @@ def commandAdd(options, conf, out) :
 		parser.print_usage(sys.stderr)
 		return
 
-	module, url, regexp = args[0]
+	module = args[0]
 	url = args[1]
 	regexp = args[2]
 	comment = " ".join(args[3:])
@@ -257,7 +257,7 @@ def getVersions(module, url, regexp) :
     urlData = urlFile.read()
     urlFile.close()
     new = re.findall(regexp, urlData)
-    return new
+    return list(set(new))
 
 
 
