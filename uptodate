@@ -33,7 +33,7 @@ from optparse import OptionParser
 
 def commandAdd(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] add name url regexp [comment]", description="")
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="TODO")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module.")
 	opts, args = parser.parse_args(options.argv)
 
 	if len(args) < 3 :
