@@ -36,7 +36,7 @@ from optparse import OptionParser
 # following functions are commands
 
 def commandAdd(options, conf, out) :
-	parser = OptionParser(usage="uptodate [options] add name url regexp [comment]", description="")
+	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]", description="")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module.")
 	opts, args = parser.parse_args(options.argv)
 
@@ -67,7 +67,7 @@ def commandAdd(options, conf, out) :
 
 
 def commandCheck(options, conf, out) :
-	parser = OptionParser(usage="uptodate [options] usage [options] [name] ...", description="")
+	parser = OptionParser(usage="uptodate [options] check [options] [name] ...", description="")
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="check all modules.")
 	parser.add_option("-r", "--removed", action="store_true", dest="removed", help="display removed versions.")
 	parser.add_option("-A", "--added", action="store_true", dest="added", help="display added versions.")
@@ -114,7 +114,7 @@ def commandCheck(options, conf, out) :
 		
 
 def commandEdit(options, conf, out) :
-	parser = OptionParser(usage="uptodate [options] edit name property value", description="")
+	parser = OptionParser(usage="uptodate [options] edit [options] name property value", description="")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display modified module.")
 	opts, args = parser.parse_args(options.argv)
 
