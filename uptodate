@@ -104,7 +104,7 @@ def commandCheck(options, conf, out) :
 	
 	modules = args
 	if opts.all :
-		modules = conf.sections()
+		modules = sorted(conf.sections())
 
 	if len(modules) == 0 :
 		# no module to check... print usage and exit
