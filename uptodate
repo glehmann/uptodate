@@ -390,6 +390,7 @@ def commandCopy(options, conf, out) :
 	"Copy a module"
 	parser = OptionParser(usage="uptodate [options] copy name name", description=commandCopy.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -408,7 +409,11 @@ def commandCopy(options, conf, out) :
 	if module not in conf.sections() :
 		print >> sys.stderr, "Error: %s doesn't exist." % module
 		return ERROR_MODULE_NOT_FOUND
-	
+
+	# remove new section if it already exist and --force is used
+	if opts.force and  conf.has_section(new) :
+		conf.remove_section(new)
+
 	if not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
@@ -425,6 +430,7 @@ def commandRename(options, conf, out) :
 	"Rename a module"
 	parser = OptionParser(usage="uptodate [options] rename name newName", description=commandRename.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="rename module even if new name already exist")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -444,6 +450,10 @@ def commandRename(options, conf, out) :
 		print >> sys.stderr, "Error: %s doesn't exist." % module
 		return ERROR_MODULE_NOT_FOUND
 	
+	# remove new section if it already exist and --force is used
+	if opts.force and  conf.has_section(new) :
+		conf.remove_section(new)
+
 	if not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
