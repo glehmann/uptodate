@@ -202,7 +202,7 @@ def commandAuto(options, conf, out) :
 	# find candidates with module name in it
 	bestCandidates = [c for c in candidates if module in c]
 	# define a function able to give distance from module to version
-	def lenModuleVersion(s) :
+	def disModuleVersion(s) :
 		vPos = s.find(versionRegExp)
 		mPos = s.find(module)
 		if vPos > mPos :
@@ -210,7 +210,11 @@ def commandAuto(options, conf, out) :
 		else :
 			return mPos - (vPos + len(versionRegExp))
 
-	# use this function to sort bestCandidates
+	# define another method which add -length, so it can be used as a second sort parameter (largest is the best)
+	def lenModuleVersion(s) :
+		return (disModuleVersion(s), -len(s))
+	
+	# use this second function to sort bestCandidates
 	bestCandidates.sort(key=lenModuleVersion)
 
 	# sort the other candidate (largest is the best)	
