@@ -120,6 +120,11 @@ def commandCheck(options, conf, out) :
 	modules = args
 	if opts.all :
 		modules = sorted(conf.sections())
+	else :
+		wrongModules = set(modules) - set(conf.sections())
+		if wrongModules :
+			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+			sys.exit(1)
 
 	if len(modules) == 0 :
 		# no module to check... print usage and exit
@@ -170,6 +175,10 @@ def commandEdit(options, conf, out) :
 		return
 
 	module, prop, value = args
+	if module not in conf.sections() :
+		print >> sys.stderr, "Error: %s doesn't exist." % module
+		sys.exit(1)
+	
 	if conf.has_option(module, prop) :
 		conf.set(module, prop, value)
 		if opts.verbose :
@@ -194,7 +203,13 @@ def commandRemove(options, conf, out) :
     
 	modules = args
 	if opts.all :
-		modules = conf.sections()
+		modules = sorted(conf.sections())
+	else :
+		wrongModules = set(modules) - set(conf.sections())
+		if wrongModules :
+			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+			sys.exit(1)
+
 
 	if len(modules) == 0 :
 		parser.print_usage(sys.stderr)
@@ -224,6 +239,11 @@ def commandDisplay(options, conf, out) :
 	modules = args
 	if opts.all :
 		modules = sorted(conf.sections())
+	else :
+		wrongModules = set(modules) - set(conf.sections())
+		if wrongModules :
+			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+			sys.exit(1)
 
 	if len(modules) == 0 :
 		parser.print_usage(sys.stderr)
@@ -252,6 +272,10 @@ def commandCopy(options, conf, out) :
 		return
 
 	module, new = args
+	if module not in conf.sections() :
+		print >> sys.stderr, "Error: %s doesn't exist." % module
+		sys.exit(1)
+	
 	if conf.has_section(module) and not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
@@ -282,6 +306,10 @@ def commandRename(options, conf, out) :
 		return
 
 	module, new = args
+	if module not in conf.sections() :
+		print >> sys.stderr, "Error: %s doesn't exist." % module
+		sys.exit(1)
+	
 	if conf.has_section(module) and not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
@@ -463,8 +491,21 @@ def main(argv) :
 
 
 if __name__ == '__main__':
-        import sys
-	sys.exit(main(sys.argv[1:]))
+	import sys
+	try :
+		sys.exit(main(sys.argv[1:]))
+
+	except IOError, e:
+		sys.stderr.write(sys.argv[0]+": ")
+		if e.filename :
+			sys.stderr.write(e.filename+": ")
+		sys.stderr.write(str(e.strerror)+"\n")
+		sys.exit(e.errno)
+
+	except KeyboardInterrupt, e :
+		sys.stderr.write(str(e)+"\n")
+		sys.exit(130)
+		
 
 
 
