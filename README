@@ -1,0 +1,75 @@
+DESCRIPTION:
+uptodate helps you to keep your system uptodate
+
+uptodate can tell you when a new version of a programm is avaible. To
+do that, you have to add a module. Lets try with zope :
+
+   uptodate add zope \
+      http://www.zope.org/Products/ \
+      'Download Zope (.{1,10})\s*</a>' \
+      A leading open source application server
+
+uptodate add command takes three arguments:
+ + a name
+ + url where it will search version
+ + a regular expression to locate version in the text
+ + an optional comment
+
+Future release will try to find the regular expression for you.
+
+You can now check for new versions with
+
+   uptodate check zope
+
+it will display something like
+
+   zope: '2.7.4' removed.
+   zope: '2.7.5' added.
+
+if versions found in the text have changed.
+
+To keep your programs uptodate, add them to uptodate, and add the
+following line in your crontab (crontab -e) to check version each
+night:
+
+    01 20 * * * uptodate check -aA
+
+You will receive an email when a new version will be avaible.
+
+uptodate let you use more command than add and check. Try 
+
+	 uptodate --help
+
+to have details
+
+
+TODO:
+ + try to automagicaly find a matching regular expression
+ + define error codes
+ + manage errors such as unreachable network
+ + be able to check versions on ftp servers
+ + what you want to add here. Fill free to send patch (see below)
+ + enhance options usage
+ + enhance help message
+
+
+AUTHOR: Gaetan Lehmann
+
+WEBSITE: http://gleh.dyndns.org/uptodate/
+
+EMAIL: gaetan.lehmann@jouy.inra.fr
+
+LICENSE: GPL (see COPYING file)
+
+DARCS :
+uptodate source code is available in a Darcs repository.
+http://darcs.net/
+Fill free to get it with
+
+     darcs get --partial http://gleh.dyndns.org/uptodate/
+
+and to send me patches with
+
+    darcs send
+
+happy uptodating :o)
