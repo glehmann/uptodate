@@ -1,7 +1,7 @@
 DESCRIPTION:
 uptodate helps you to keep your system uptodate
 
-uptodate can tell you when a new version of a programm is avaible. To
+uptodate can tell you when a new version of a program is avaible. To
 do that, you have to add a module. Lets try with zope :
 
    uptodate add zope \
@@ -48,9 +48,10 @@ TODO:
  + define error codes
  + manage errors such as unreachable network
  + be able to check versions on ftp servers
- + what you want to add here. Fill free to send patch (see below)
  + enhance options usage
  + enhance help message
+ + use bash completion
+ + what you want to add here. Fill free to send patch (see below)
 
 
 AUTHOR: Gaetan Lehmann
