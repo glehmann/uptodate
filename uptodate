@@ -89,16 +89,33 @@ def commandAdd(options, conf, out) :
 			print >> sys.stderr, "Error: no version found."
 			return ERROR_NO_VERSION_FOUND
 		
-		# keep border which gives the maximum of versions.
 		regexp = ""
 		for border in sorted(borders) :
-			candidate = r'%s(.{1,30})%s' % (re.escape(border[0]), re.escape(border[1]))
+			lBorder, rBorder = border
+			
+			# remove part of border if version is found in it
+			if version in lBorder :
+				lBorder = lBorder[lBorder.find(version)+len(version):]
+			if version in rBorder :
+				rBorder = rBorder[:lBorder.find(version)]
+				
+			# escape characters so they can be used in regexp
+			lBorder = re.escape(lBorder)
+			rBorder = re.escape(rBorder)
+			
+			# create regexp candidate
+			candidate = r'%s([^<>\n]{1,30})%s' % (lBorder, rBorder)
 			if opts.verbose :
 				print >> sys.stderr, "regexp candidate= %s" % candidate
 				print >> sys.stderr, '\t', re.findall(candidate, urlData)
+				print >> sys.stderr
+			
+			# select regexp... actually, the best is the largest
 			if len(candidate) > len(regexp) :
 				regexp = candidate
+			
 		if opts.verbose :
+			# print a blank line after regexp candidates
 			print >> sys.stderr
 
 	else :
