@@ -308,29 +308,32 @@ def commandCheck(options, conf, out) :
 		for module in conf.sections() :
 			print module
 		return 0
+
     
 	if not opts.added and not opts.removed :
 		# by default, both removed and added are displayed
 		opts.added = True
 		opts.removed = True
 	
-	modules = args
-	if opts.all :
-		modules = sorted(conf.sections())
-	else :
-		wrongModules = set(modules) - set(conf.sections())
-		if not opts.force and wrongModules :
-			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
-			return ERROR_MODULE_NOT_FOUND
-		else :
-			modules = set(modules) - wrongModules
-
-	if len(modules) == 0 :
+	if len(args) == 0 and not opts.all :
 		# no module to check... print usage and exit
 		parser.print_usage(sys.stderr)
 		return
 	
-	for module in modules :
+	if opts.all :
+		modules = conf.sections()
+	else :
+		modules = set(args)
+		wrongModules = modules - set(conf.sections())
+		if wrongModules :
+			if opts.force :
+				modules -= wrongModules
+			else :
+				print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+				return ERROR_MODULE_NOT_FOUND
+
+
+	for module in sorted(modules) :
 		if opts.verbose :
 			print >> sys.stderr, "Checking %s" % module
 		# get module properties
@@ -435,25 +438,26 @@ def commandRemove(options, conf, out) :
 		for module in conf.sections() :
 			print module
 		return 0
+
     
-	modules = args
+	if len(args) == 0 and not opts.all :
+		parser.print_usage(sys.stderr)
+		return ERROR_INVALID_NB_OF_ARGS
+	
 	if opts.all :
-		modules = sorted(conf.sections())
+		modules = conf.sections()
 	else :
-		wrongModules = set(modules) - set(conf.sections())
+		modules = set(args)
+		wrongModules = modules - set(conf.sections())
 		if wrongModules :
 			if opts.force :
-				modules =  list(set(modules) - wrongModules)
+				modules -= wrongModules
 			else :
 				print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
 				return ERROR_MODULE_NOT_FOUND
 
 
-	if len(modules) == 0 and not opts.force :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
-	
-	for module in modules :
+	for module in sorted(modules) :
 		if opts.force or yes("Remove %s?" % module) :
 			if opts.verbose :
 				printModule(conf, module, out, True)
@@ -475,20 +479,25 @@ def commandDisplay(options, conf, out) :
 			print module
 		return 0
     
-	modules = args
-	if opts.all :
-		modules = sorted(conf.sections())
-	else :
-		wrongModules = set(modules) - set(conf.sections())
-		if wrongModules :
-			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
-			return ERROR_MODULE_NOT_FOUND
-
-	if len(modules) == 0 :
+    
+	if len(args) == 0 and not opts.all :
 		parser.print_usage(sys.stderr)
 		return ERROR_INVALID_NB_OF_ARGS
 	
-	for module in modules :
+	if opts.all :
+		modules = conf.sections()
+	else :
+		modules = set(args)
+		wrongModules = modules - set(conf.sections())
+		if wrongModules :
+			if opts.force :
+				modules -= wrongModules
+			else :
+				print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+				return ERROR_MODULE_NOT_FOUND
+
+
+	for module in sorted(modules) :
 		printModule(conf, module, out, opts.verbose)
 
 
