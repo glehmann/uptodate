@@ -151,7 +151,7 @@ def commandAuto(options, conf, out) :
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 	
-	versionRegExp = r'([^<>\n]+)'
+	versionRegExp = r'([^<>\n\r]+)'
 
 	if opts.listOption :
 		for opt in parser.option_list :
