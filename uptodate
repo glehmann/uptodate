@@ -23,12 +23,11 @@
 VERSION = "0.1"
 
 
-import ConfigParser
 import urllib
-import os.path
-import sys
 import re
 import __builtin__
+import sys
+import os.path
 from optparse import OptionParser, IndentedHelpFormatter
 
 
@@ -41,8 +40,14 @@ def commandAdd(options, conf, out) :
 		+"uptodate [options] add --auto [options] name url version [comment]""", description=commandAdd.__doc__)
 	parser.add_option("-a", "--auto", action="store_true", dest="auto", help="find automatically the regular expression")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		sys.exit(0)
+    
 	if len(args) < 3 :
 		parser.print_usage(sys.stderr)
 		return
@@ -97,8 +102,16 @@ def commandCheck(options, conf, out) :
 	parser.add_option("-r", "--removed", action="store_true", dest="removed", help="display removed versions")
 	parser.add_option("-A", "--added", action="store_true", dest="added", help="display added versions")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display what is done")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="display what is done")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		for module in conf.sections() :
+			print module
+		sys.exit(0)
+    
 	if not opts.added and not opts.removed :
 		# by default, both removed and added are displayed
 		opts.added = True
@@ -142,8 +155,16 @@ def commandEdit(options, conf, out) :
 	"Edit module properties"
 	parser = OptionParser(usage="uptodate [options] edit [options] name property value", description=commandEdit.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display modified module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		for module in conf.sections() :
+			print module
+		sys.exit(0)
+    
 	if len(args) != 3 :
 		parser.print_usage(sys.stderr)
 		return
@@ -161,8 +182,16 @@ def commandRemove(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description=commandRemove.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="remove all modules")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display what is done")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		for module in conf.sections() :
+			print module
+		sys.exit(0)
+    
 	modules = args
 	if opts.all :
 		modules = conf.sections()
@@ -182,8 +211,16 @@ def commandDisplay(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] display [options] [name] ...", description=commandDisplay.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="display all modules")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display more info")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		for module in conf.sections() :
+			print module
+		sys.exit(0)
+    
 	modules = args
 	if opts.all :
 		modules = sorted(conf.sections())
@@ -200,8 +237,16 @@ def commandCopy(options, conf, out) :
 	"Copy a module"
 	parser = OptionParser(usage="uptodate [options] copy name name", description=commandCopy.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		for module in conf.sections() :
+			print module
+		sys.exit(0)
+    
 	if len(args) != 2 :
 		parser.print_usage(sys.stderr)
 		return
@@ -222,8 +267,16 @@ def commandRename(options, conf, out) :
 	"Rename a module"
 	parser = OptionParser(usage="uptodate [options] rename name newName", description=commandRename.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
+	if opts.listOption :
+		for opt in parser.option_list :
+			print opt.get_opt_string()
+		for module in conf.sections() :
+			print module
+		sys.exit(0)
+    
 	if len(args) != 2 :
 		parser.print_usage(sys.stderr)
 		return
@@ -298,7 +351,16 @@ def parse_options(argv):
     parser.add_option("-o", "--output", dest="outputPath", default="-", metavar="FILE", help="write output to FILE")
     parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help="configuration file")
     parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help="do not modify config file")
+    parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
     opts, args = parser.parse_args()
+    
+    if opts.listOption :
+    	for opt in parser.option_list :
+		print opt.get_opt_string()
+	for command in COMMANDS :
+		print command
+	sys.exit(0)
+    
     if args and args[0] in COMMANDS.keys() :
         opts.command = args[0]
         opts.argv = args[1:]
@@ -370,6 +432,7 @@ def main(argv) :
 	options = parse_options(argv)
 
 	# load config in a file to be able to load it from stdin
+	import ConfigParser
 	conf = ConfigParser.SafeConfigParser()
 	try :
 		# try to load config

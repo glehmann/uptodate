@@ -1,0 +1,35 @@
+# uptodate command line completion.
+_uptodate()
+{
+    local cur
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    COMPREPLY=()
+
+    if (($COMP_CWORD == 1)); then
+        COMPREPLY=( $( /home/gaetan/uptodate/uptodate --list-option | grep "^$cur" ) )
+        return 0
+    fi
+
+    local IFS=$'\n' # So that the following "command-output to array" operation splits only at newlines, not at each space, tab or newline.
+    COMPREPLY=( $( /home/gaetan/uptodate/uptodate ${COMP_WORDS[1]} --list-option | grep "^$cur") )
+
+	# Then, we adapt the resulting strings to be reusable by bash. If we don't
+	# do this, in the case where we have two repositories named
+	# ~/space in there-0.1 and ~/space in there-0.2, the first completion will
+	# give us:
+	# bash> darcs push ~/space in there-0.
+	# ~/space in there-0.1 ~/space in there-0.2
+	# and we have introduced two spaces in the command line (if we try to
+	# recomplete that, it won't find anything, as it doesn't know anything
+	# starting with "there-0.").
+	# printf %q will gracefully add the necessary backslashes.
+    local i=${#COMPREPLY[*]}
+    while [ $((--i)) -ge 0 ]; do
+      COMPREPLY[$i]=`printf %q "${COMPREPLY[$i]}"`
+    done
+    return 0
+
+}
+complete -F _uptodate uptodate
+
