@@ -103,19 +103,24 @@ def commandCheck(options, conf, out) :
 
 
 def commandEdit(options, conf, out) :
-	parser = OptionParser(usage="", description="")
-	parser.add_option("-a", "--all", action="store_true", dest="all", help="")
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="")
+	parser = OptionParser(usage="uptodate [options] edit name property value", description="")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display modified module.")
 	opts, args = parser.parse_args(options.argv)
 
-	modules = args
-	if opts.all :
-		modules = conf.sections()
+	if len(args) != 3 :
+		parser.print_usage(sys.stderr)
+		return
 
-	for module in modules :
+	module = args[0]
+	prop = args[1]
+	value = args[2]
+	
+	if conf.has_option(module, prop) :
+		conf.set(module, prop, value)
 		if opts.verbose :
-			pass
-
+			printModule(conf, module, out, True)
+	else :
+		print >> sys.stderr, "Unknown module or property."
 
 def commandRemove(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description="")
