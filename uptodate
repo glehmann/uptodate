@@ -53,6 +53,7 @@ def commandAdd(options, conf, out) :
 	"Add a new module"
 	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=commandAdd.__doc__)
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exit")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
 
@@ -70,7 +71,7 @@ def commandAdd(options, conf, out) :
 	regexp = args[2]
 	comment = " ".join(args[3:])
 	
-	if conf.has_section(module) :
+	if not opts.force and conf.has_section(module) :
 		print >> sys.stderr, "Module %s already exists." % module
 		return ERROR_MODULE_EXISTS
 	
@@ -78,6 +79,8 @@ def commandAdd(options, conf, out) :
 	
 	# test if a version can be found
 	if len(current) != 0 :
+		if opts.force and conf.has_section(module) :
+			conf.remove_section(module)
 		conf.add_section(module)
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
@@ -96,6 +99,7 @@ def commandAuto(options, conf, out) :
 	"Search for a regexp and a new module"
 	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=commandAdd.__doc__)
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exit")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
@@ -114,7 +118,7 @@ def commandAuto(options, conf, out) :
 	comment = " ".join(args[3:])
 	version = args[2]
 	
-	if conf.has_section(module) :
+	if not opts.force and conf.has_section(module) :
 		print >> sys.stderr, "Module %s already exists." % module
 		return ERROR_MODULE_EXISTS
 	
@@ -176,6 +180,8 @@ def commandAuto(options, conf, out) :
 
 	# test if a version can be found
 	if len(current) != 0 :
+		if opts.force and conf.has_section(module) :
+			conf.remove_section(module)
 		conf.add_section(module)
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
