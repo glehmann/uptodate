@@ -41,14 +41,14 @@ def runCommand(opts, args, conf, out) :
 		module, prop = args
 		if module not in conf.sections() :
 			raise ModuleNotFoundException(module)
-		if not conf.has_option(module, prop) :
+		if not prop in properties :
 			raise PropertyNotFound(prop)
 
 		import readline
 		# arghhh
 		# readline.insert_text() seems to so nothing :-(
 		# how to set an initial value ??
-		readline.insert_text(conf.get(module, prop))
+		# readline.insert_text(conf.get(module, prop))
 		value = raw_input(_('%s value : ') % prop)
 		
 	elif len(args) >= 3 :
@@ -58,7 +58,7 @@ def runCommand(opts, args, conf, out) :
 		value = " ".join(args[2:])
 		if module not in conf.sections() :
 			raise ModuleNotFoundException(wrongModules)
-		if not conf.has_option(module, prop) :
+		if not prop in properties :
 			raise PropertyNotFound(prop)
 		
 	else :

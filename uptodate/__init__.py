@@ -380,4 +380,12 @@ def initCommands() :
 	
 
 
-
+properties = [	"current",
+		"added",
+		"removed",
+		"comment",
+		"regexp",
+		"url",
+		"add-command",
+		"remove-command",
+]
