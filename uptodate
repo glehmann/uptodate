@@ -59,14 +59,14 @@ def commandAdd(options, conf, out) :
 		urlData = urlFile.read()
 		urlFile.close()
 
-		borders = re.findall(r'([>"\'][^>"\']*)%s([^>"]*[<"\'])' % re.escape(version), urlData)
+		borders = re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData)
 		# keep border which gives the maximum of versions.
-		regexp = None
+		regexp = ""
 		number = 0
 		for border in borders :
 			candidate = r'%s(.{1,30})%s' % (re.escape(border[0]), re.escape(border[1]))
 			candNum = len(re.findall(candidate, urlData))
-			if candNum > number or (candNum >= number and len(candidate) > len(regexp)):
+			if len(candidate) > len(regexp) :
 				regexp = candidate
 				number = candNum
 	else :
