@@ -209,6 +209,13 @@ def commandEdit(options, conf, out) :
 	else :
 		print >> sys.stderr, "Error: %s property doesn't exist." % prop
 		return ERROR_PROPERTY_NOT_FOUND
+		
+	if prop in ["regexp", "url"] :
+		current = getVersions(module, conf.get(module, 'url'), conf.get(module, 'regexp'))
+		if len(current) == 0 :
+			print >> sys.stderr, "Error: no version found."
+			return ERROR_NO_VERSION_FOUND
+		conf.set(module, 'current', repr(current))
 
 def commandRemove(options, conf, out) :
 	"Remove a module"
