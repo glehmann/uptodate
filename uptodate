@@ -36,7 +36,9 @@ from optparse import OptionParser
 # following functions are commands
 
 def commandAdd(options, conf, out) :
-	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]", description="")
+	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n"
+		+"uptodate [options] add --auto [options] name url version [comment]""", description="")
+	parser.add_option("-a", "--auto", action="store_true", dest="auto", help="find automatically the regular expression.")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module.")
 	opts, args = parser.parse_args(options.argv)
 
@@ -46,10 +48,31 @@ def commandAdd(options, conf, out) :
 
 	module = args[0]
 	url = args[1]
-	regexp = args[2]
+	# regexp = args[2]
 	comment = " ".join(args[3:])
-	current = getVersions(module, url, regexp)
+	
+	if opts.auto :
+		version = args[2]
+		
+		urlFile = urllib.urlopen(url)
+		urlData = urlFile.read()
+		urlFile.close()
 
+		borders = re.findall(r'([>"\'][^>"\']*)%s([^>"]*[<"\'])' % re.escape(version), urlData)
+		# keep border which gives the maximum of versions.
+		regexp = None
+		number = 0
+		for border in borders :
+			candidate = r'%s(.{1,30})%s' % (re.escape(border[0]), re.escape(border[1]))
+			candNum = len(re.findall(candidate, urlData))
+			if candNum > number or (candNum >= number and len(candidate) > len(regexp)):
+				regexp = candidate
+				number = candNum
+	else :
+		regexp = args[2]
+
+	current = getVersions(module, url, regexp)
+	
 	# test if a version can be found
 	if len(current) != 0 :
 		conf.add_section(module)
@@ -221,7 +244,7 @@ COMMANDS = {'add': commandAdd,
 	    'edit': commandEdit,
 	    'remove': commandRemove,
 	    'display': commandDisplay,
-	    'copy' : commandCopy
+	    'copy': commandCopy,
 	    }
 
 DESCRIPTION="Commands :"
