@@ -40,6 +40,32 @@ import sys
 import os.path
 from optparse import OptionParser, IndentedHelpFormatter
 
+# python 2.3 compatibility
+if sys.version < '2.4' :
+	# set compatibility
+	import sets
+	set = sets.Set
+	# sorted function
+	def sorted(iterable, cmp=None, key=None, reverse=False) :
+		i = list(iterable)
+		if key :
+			d = {}
+			for v in iterable :
+				k = key(v)
+				if not d.has_key(k) :
+					d[k] = []
+				d[k].append(v)
+			keys = d.keys()
+			keys.sort(cmp)
+			i = []
+			for k in keys :
+				i += d[k]
+		else :
+			i.sort(cmp)
+		if reverse :
+			i.reverse()
+		return i
+	
 
 # error codes
 
@@ -215,7 +241,8 @@ def commandAuto(options, conf, out) :
 		return (disModuleVersion(s), -len(s))
 	
 	# use this second function to sort bestCandidates
-	bestCandidates.sort(key=lenModuleVersion)
+	# don't use it for python 2.3 : bestCandidates.sort(key=lenModuleVersion)
+	bestCandidates = sorted(bestCandidates, key=lenModuleVersion)
 
 	# sort the other candidate (largest is the best)	
 	otherCandidates = sorted(candidates - set(bestCandidates), key=len, reverse=True)
