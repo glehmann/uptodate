@@ -31,6 +31,10 @@ import re
 import __builtin__
 from optparse import OptionParser
 
+
+
+# following functions are commands
+
 def commandAdd(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] add name url regexp [comment]", description="")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module.")
@@ -40,12 +44,13 @@ def commandAdd(options, conf, out) :
 		parser.print_usage(sys.stderr)
 		return
 
-	module = args[0]
+	module, url, regexp = args[0]
 	url = args[1]
 	regexp = args[2]
 	comment = " ".join(args[3:])
 	current = getVersions(module, url, regexp)
 
+	# test if a version can be found
 	if len(current) != 0 :
 		conf.add_section(module)
 		conf.set(module, 'url', url)
@@ -56,6 +61,7 @@ def commandAdd(options, conf, out) :
 		if opts.verbose :
 			printModule(conf, module, out, True)
 	else :
+		# no version found... exit
 		print >> sys.stderr, "Error: no version found."
 		return
 
@@ -69,6 +75,7 @@ def commandCheck(options, conf, out) :
 	opts, args = parser.parse_args(options.argv)
 
 	if not opts.added and not opts.removed :
+		# by default, both removed and added are displayed
 		opts.added = True
 		opts.removed = True
 	
@@ -77,18 +84,20 @@ def commandCheck(options, conf, out) :
 		modules = conf.sections()
 
 	if len(modules) == 0 :
+		# no module to check... print usage and exit
 		parser.print_usage(sys.stderr)
 		return
 	
 	for module in modules :
 		if opts.verbose :
 			print >> sys.stderr, "Checking %s" % module
+		# get module properties
 		url = conf.get(module, 'url')
 		regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
 		currentVersions = eval(conf.get(module, 'current'))
-		
+		# get new versions
 		newVersions = getVersions(module, url, regexp)
-
+		# test if a version can be found
 		if len(newVersions) != 0 :
 			conf.set(module, 'current', repr(newVersions))
 			
@@ -99,8 +108,10 @@ def commandCheck(options, conf, out) :
 			if removed and opts.removed :
 				print >> out, "%s: %s removed." % (module, ", ".join(map(repr, removed)))
 		else :
+			# no version found ... exit
 			print >> sys.stderr, "Warning, no version found for %s. Nothing will be stored." % module
-
+			return
+		
 
 def commandEdit(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] edit name property value", description="")
@@ -111,10 +122,7 @@ def commandEdit(options, conf, out) :
 		parser.print_usage(sys.stderr)
 		return
 
-	module = args[0]
-	prop = args[1]
-	value = args[2]
-	
+	module, prop, value = args
 	if conf.has_option(module, prop) :
 		conf.set(module, prop, value)
 		if opts.verbose :
@@ -169,21 +177,24 @@ def commandCopy(options, conf, out) :
 		parser.print_usage(sys.stderr)
 		return
 
-	module = args[0]
-	new = args[1]
-	
-	if conf.has_section(module) :
+	module, new = args
+	if conf.has_section(module) and not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
 			conf.set(new, prop, conf.get(module, prop))
 		if opts.verbose :
 			printModule(conf, new, out, True)
 	else :
-		print >> sys.stderr, "Unknown module."
+		print >> sys.stderr, "Unknown or already present module."
 
 	
 	
 def printModule(conf, module, out, verbose=False) :
+	"""
+	printModule(conf, module, out, verbose)
+
+	print module info to out file. Infos comes from conf object.
+	"""
 	url = conf.get(module, 'url')
 	regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
 	current = conf.get(module, 'current')
@@ -203,7 +214,7 @@ def printModule(conf, module, out, verbose=False) :
 		
 
 
-USAGE="uptodate command [options] [arguments]"
+USAGE="uptodate [options] command [options] [arguments]"
 
 COMMANDS = {'add': commandAdd,
 	    'check': commandCheck,
@@ -238,6 +249,15 @@ def parse_options(argv):
         parser.print_help()
         sys.exit(1)
     return opts
+
+
+
+def getVersions(module, url, regexp) :
+    urlFile = urllib.urlopen(url)
+    urlData = urlFile.read()
+    urlFile.close()
+    new = re.findall(regexp, urlData)
+    return new
 
 
 
@@ -284,12 +304,13 @@ def file(fName, output=False, notNone=False, append=False) :
 def main(argv) :
 	options = parse_options(argv)
 
-	# load config file
+	# load config in a file to be able to load it from stdin
 	conf = ConfigParser.SafeConfigParser()
 	try :
+		# try to load config
 		confFile = file(options.configPath)
 	except :
-		# try to create file
+		# load fail... try to create it
 		file(options.configPath, True).close()
 		confFile = file(options.configPath)
 	conf.readfp(confFile)
@@ -306,15 +327,6 @@ def main(argv) :
 		confFile = file(options.configPath, 'w')
 		conf.write(confFile)
 		confFile.close()
-
-
-
-def getVersions(module, url, regexp) :
-    urlFile = urllib.urlopen(url)
-    urlData = urlFile.read()
-    urlFile.close()
-    new = re.findall(regexp, urlData)
-    return new
 
 
 
