@@ -185,7 +185,7 @@ def commandAuto(options, conf, out) :
 	# versin string is escaped to avoid problem with regexp. Without escape, "2.7.4" can match "217a4" for example.
 	bordersRegexps.append(('', r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])', ''))
 	# for ftp listing
-	bordersRegexps.append((r'[drwxl\-]{10}\s+' + r'\S+\s+' * 7, r'(\S+)%s(\S+)', ''))
+	bordersRegexps.append((r'[drwxl\-]{10}\s+' + r'\S+\s+' * 7, r'(\S*)%s(\S*)', ''))
 	# finally, use what we can find
 	bordersRegexps.append(('', '(.*)%s(.*)', ''))
 		
