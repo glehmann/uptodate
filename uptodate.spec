@@ -1,5 +1,5 @@
 %define name		uptodate
-%define version		0.1
+%define version		0.2
 %define release		1
 
 Name:		%{name}
@@ -52,7 +52,10 @@ if versions found in the text have changed.
 
 %install
 mkdir -p %buildroot%{_bindir}
+mkdir -p %buildroot%{_sysconfdir}/bash_completion.d
+
 cp uptodate %buildroot%{_bindir}
+cp uptodate.bash_completion %buildroot%{_sysconfdir}/bash_completion.d
 
 %clean
 /bin/rm -Rf %buildroot
@@ -65,6 +68,9 @@ cp uptodate %buildroot%{_bindir}
 
 
 %changelog
+* Mon Mar 28 2005 Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr> 0.2-1mdk
+- 0.2
+
 * Sat Mar 26 2005 Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr> 0.1-1mdk
 - initial contrib
 
