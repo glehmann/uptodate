@@ -31,7 +31,22 @@ import os.path
 from optparse import OptionParser, IndentedHelpFormatter
 
 
+# error codes
+ERROR_INVALID_NB_OF_ARGS = 1
+ERROR_NO_VERSION_FOUND = 2
+ERROR_MODULE_NOT_FOUND = 3
+ERROR_PROPERTY_NOT_FOUND = 4
+ERROR_MODULE_EXISTS = 5
+ERROR_UNKNOWN_COMMAND = 5
 
+ERRORS = {
+	ERROR_INVALID_NB_OF_ARGS: "Invalid number of arguments",
+	ERROR_NO_VERSION_FOUND: "No version found",
+	ERROR_MODULE_NOT_FOUND: "Module not found",
+	ERROR_PROPERTY_NOT_FOUND: "Property not found",
+	ERROR_MODULE_EXISTS: "Module already exists",
+	ERROR_UNKNOWN_COMMAND: "Unknown command",
+}
 # following functions are commands
 
 def commandAdd(options, conf, out) :
@@ -46,16 +61,20 @@ def commandAdd(options, conf, out) :
 	if opts.listOption :
 		for opt in parser.option_list :
 			print opt.get_opt_string()
-		sys.exit(0)
+		return 0
     
 	if len(args) < 3 :
 		parser.print_usage(sys.stderr)
-		return
+		return ERROR_INVALID_NB_OF_ARGS
 
 	module = args[0]
 	url = args[1]
 	# regexp = args[2]
 	comment = " ".join(args[3:])
+	
+	if conf.has_section(module) :
+		print >> sys.stderr, "Module %s already exists." % module
+		return ERROR_MODULE_EXISTS
 	
 	if opts.auto :
 		version = args[2]
@@ -65,6 +84,10 @@ def commandAdd(options, conf, out) :
 		urlFile.close()
 
 		borders = re.findall(r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])' % re.escape(version), urlData)
+		
+		if len(borders) == 0 :
+			return ERROR_NO_VERSION_FOUND
+		
 		# keep border which gives the maximum of versions.
 		regexp = ""
 		number = 0
@@ -92,7 +115,7 @@ def commandAdd(options, conf, out) :
 	else :
 		# no version found... exit
 		print >> sys.stderr, "Error: no version found."
-		return
+		return ERROR_NO_VERSION_FOUND
 
 
 def commandCheck(options, conf, out) :
@@ -110,7 +133,7 @@ def commandCheck(options, conf, out) :
 			print opt.get_opt_string()
 		for module in conf.sections() :
 			print module
-		sys.exit(0)
+		return 0
     
 	if not opts.added and not opts.removed :
 		# by default, both removed and added are displayed
@@ -124,7 +147,7 @@ def commandCheck(options, conf, out) :
 		wrongModules = set(modules) - set(conf.sections())
 		if wrongModules :
 			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
-			sys.exit(1)
+			return ERROR_MODULE_NOT_FOUND
 
 	if len(modules) == 0 :
 		# no module to check... print usage and exit
@@ -153,7 +176,7 @@ def commandCheck(options, conf, out) :
 		else :
 			# no version found ... exit
 			print >> sys.stderr, "Warning, no version found for %s. Nothing will be stored." % module
-			return
+			# return
 		
 
 def commandEdit(options, conf, out) :
@@ -168,23 +191,24 @@ def commandEdit(options, conf, out) :
 			print opt.get_opt_string()
 		for module in conf.sections() :
 			print module
-		sys.exit(0)
+		return 0
     
 	if len(args) != 3 :
 		parser.print_usage(sys.stderr)
-		return
+		return ERROR_INVALID_NB_OF_ARGS
 
 	module, prop, value = args
 	if module not in conf.sections() :
 		print >> sys.stderr, "Error: %s doesn't exist." % module
-		sys.exit(1)
+		return ERROR_MODULE_NOT_FOUND
 	
 	if conf.has_option(module, prop) :
 		conf.set(module, prop, value)
 		if opts.verbose :
 			printModule(conf, module, out, True)
 	else :
-		print >> sys.stderr, "Unknown module or property."
+		print >> sys.stderr, "Error: %s property doesn't exist." % prop
+		return ERROR_PROPERTY_NOT_FOUND
 
 def commandRemove(options, conf, out) :
 	"Remove a module"
@@ -199,7 +223,7 @@ def commandRemove(options, conf, out) :
 			print opt.get_opt_string()
 		for module in conf.sections() :
 			print module
-		sys.exit(0)
+		return 0
     
 	modules = args
 	if opts.all :
@@ -208,12 +232,12 @@ def commandRemove(options, conf, out) :
 		wrongModules = set(modules) - set(conf.sections())
 		if wrongModules :
 			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
-			sys.exit(1)
+			return ERROR_MODULE_NOT_FOUND
 
 
 	if len(modules) == 0 :
 		parser.print_usage(sys.stderr)
-		return
+		return ERROR_INVALID_NB_OF_ARGS
 	
 	for module in modules :
 		if opts.verbose :
@@ -234,7 +258,7 @@ def commandDisplay(options, conf, out) :
 			print opt.get_opt_string()
 		for module in conf.sections() :
 			print module
-		sys.exit(0)
+		return 0
     
 	modules = args
 	if opts.all :
@@ -243,11 +267,11 @@ def commandDisplay(options, conf, out) :
 		wrongModules = set(modules) - set(conf.sections())
 		if wrongModules :
 			print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
-			sys.exit(1)
+			return ERROR_MODULE_NOT_FOUND
 
 	if len(modules) == 0 :
 		parser.print_usage(sys.stderr)
-		return
+		return ERROR_INVALID_NB_OF_ARGS
 	
 	for module in modules :
 		printModule(conf, module, out, opts.verbose)
@@ -265,25 +289,26 @@ def commandCopy(options, conf, out) :
 			print opt.get_opt_string()
 		for module in conf.sections() :
 			print module
-		sys.exit(0)
+		return 0
     
 	if len(args) != 2 :
 		parser.print_usage(sys.stderr)
-		return
+		return ERROR_INVALID_NB_OF_ARGS
 
 	module, new = args
 	if module not in conf.sections() :
 		print >> sys.stderr, "Error: %s doesn't exist." % module
-		sys.exit(1)
+		return ERROR_MODULE_NOT_FOUND
 	
-	if conf.has_section(module) and not conf.has_section(new) :
+	if not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
 			conf.set(new, prop, conf.get(module, prop))
 		if opts.verbose :
 			printModule(conf, new, out, True)
 	else :
-		print >> sys.stderr, "Unknown or already present module."
+		print >> sys.stderr, "Module %s already exists." % new
+		return ERROR_MODULE_EXISTS
 
 	
 	
@@ -299,18 +324,18 @@ def commandRename(options, conf, out) :
 			print opt.get_opt_string()
 		for module in conf.sections() :
 			print module
-		sys.exit(0)
+		return 0
     
 	if len(args) != 2 :
 		parser.print_usage(sys.stderr)
-		return
+		return ERROR_INVALID_NB_OF_ARGS
 
 	module, new = args
 	if module not in conf.sections() :
 		print >> sys.stderr, "Error: %s doesn't exist." % module
-		sys.exit(1)
+		return ERROR_MODULE_NOT_FOUND
 	
-	if conf.has_section(module) and not conf.has_section(new) :
+	if not conf.has_section(new) :
 		conf.add_section(new)
 		for prop in conf.options(module) :
 			conf.set(new, prop, conf.get(module, prop))
@@ -318,7 +343,8 @@ def commandRename(options, conf, out) :
 		if opts.verbose :
 			printModule(conf, new, out, True)
 	else :
-		print >> sys.stderr, "Unknown or already present module."
+		print >> sys.stderr, "Module %s already exists." % new
+		return ERROR_MODULE_EXISTS
 
 	
 	
@@ -363,11 +389,18 @@ fill = max([len(c) for c in COMMANDS.keys()])
 for command in sorted(COMMANDS.keys()) :
 	comString += "  %s  %s\n" % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
 
+errString = ""
+fill = max([len(str(c)) for c in ERRORS.keys()])
+for error in sorted(ERRORS.keys()) :
+	errString += "  %s  %s\n" % (str(error).ljust(fill), ERRORS[error])
+
 DESCRIPTION='''Commands:
 %s
 Run "uptodate command --help" for more information.
 
-''' % comString
+Exit codes:
+%s
+''' % (comString, errString)
 
 
 def parse_options(argv):
@@ -387,7 +420,7 @@ def parse_options(argv):
 		print opt.get_opt_string()
 	for command in COMMANDS :
 		print command
-	sys.exit(0)
+	raise Exception(0)
     
     if args and args[0] in COMMANDS.keys() :
         opts.command = args[0]
@@ -397,7 +430,7 @@ def parse_options(argv):
         opts.argv = []
     if not opts.command:
         parser.print_usage()
-        sys.exit(1)
+        raise Exception(ERROR_UNKNOWN_COMMAND)
     return opts
 
 
@@ -457,8 +490,11 @@ class UptodateHelpFormatter(IndentedHelpFormatter) :
 
 
 def main(argv) :
-	options = parse_options(argv)
-
+	try :
+		options = parse_options(argv)
+	except Exception, e :
+		return e.args[0]
+	
 	# load config in a file to be able to load it from stdin
 	import ConfigParser
 	conf = ConfigParser.SafeConfigParser()
@@ -476,14 +512,17 @@ def main(argv) :
 	out = file(options.outputPath, True)
 	
 	# execute command
-	COMMANDS[options.command](options, conf, out)
-    
-	# save config file, if needed
-	if not options.dryRun :
-		confFile = file(options.configPath, 'w')
-		conf.write(confFile)
-		confFile.close()
-
+	retVal = COMMANDS[options.command](options, conf, out)
+	
+	if retVal :
+		return retVal
+	else :
+		# save config file, if needed
+		if not options.dryRun :
+			confFile = file(options.configPath, 'w')
+			conf.write(confFile)
+			confFile.close()
+		return 0
 
 
 
