@@ -196,11 +196,11 @@ def commandAuto(options, conf, out) :
 			print >> sys.stderr, '    %s' % repr(re.findall(candidate, urlData))
 			print >> sys.stderr
 		# get number
+		import readline
 		selectRegExp = -1
 		while selectRegExp == -1 :
-			print >> sys.stderr, "Choose a regexp candidate: ",
 			try :
-				selectRegExp = int(sys.stdin.readline())
+				selectRegExp = int(raw_input("Choose a regexp candidate: "))
 				if selectRegExp < 0 or selectRegExp >= len(candidates) :
 					selectRegExp = -1
 			except ValueError :
