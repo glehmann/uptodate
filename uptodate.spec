@@ -55,15 +55,16 @@ mkdir -p %buildroot%{_bindir}
 mkdir -p %buildroot%{_sysconfdir}/bash_completion.d
 
 cp uptodate %buildroot%{_bindir}
-cp uptodate.bash_completion %buildroot%{_sysconfdir}/bash_completion.d
+cp uptodate.bash_completion %buildroot%{_sysconfdir}/bash_completion.d/uptodate
 
 %clean
 /bin/rm -Rf %buildroot
 
 
 %files
-%defattr(0755, root, root, 0755)
-%{_bindir}/*
+%defattr(0644, root, root, 0755)
+%attr(0755,root,root) %{_bindir}/*
+%config(noreplace) %{_sysconfdir}/bash_completion.d/uptodate
 %doc COPYING README version
 
 
