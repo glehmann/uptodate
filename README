@@ -1,24 +1,35 @@
 DESCRIPTION:
-uptodate helps you to keep your system uptodate
+uptodate helps you to know when a new version of what you want is out
 
-uptodate can tell you when a new version of a program is avaible. To
-do that, you have to add a module. Lets try with zope :
+uptodate is powerful and user friendly command line tool which helps
+you to know when a new version of a program is avaible. It search for
+versions in a web page, a ftp directory, etc, and show you added and
+removed version since the last search.
+If you update some soft by hand, if you are a package maintainer, or
+if you simply want to now when the new version of your favorite
+game (or everything else with a version) is out, uptodate is for you !
+
+USAGE:
+To be able to search for new versions, you must ask uptodate to add a
+module to his config. For example, if you want to search zope's new
+version, you can do:
 
    uptodate auto zope \
       http://www.zope.org/Products/ \
       2.7.4 \
       A leading open source application server
    
- uptodate auto command takes three arguments:
+uptodate auto try to find a regular expression which will be used
+to find new versions. Most of the time, you don't need to find regular
+expression; uptodate do it for you.
+uptodate auto command need informations to find versions:
  + a name
- + url where it will search version
+ + the url where it will search version
  + the current version number
  + an optional comment
 
-uptodate auto try to find a regular expression which will be used
-to find new versions. If uptodate auto can't find a regular
-expression, or if the regular expression isn't good enough for you, you
-can use uptodate add :
+If uptodate auto can't find a regular expression, or if the regular
+expression isn't good enough for you, you can use uptodate add :
 
    uptodate add zope \
       http://www.zope.org/Products/ \
@@ -32,32 +43,53 @@ You can now check for new versions with
 
    uptodate check zope
 
-it will display something like
+it will display something like:
 
    zope: '2.7.4' removed.
    zope: '2.7.5' added.
 
 if versions found in the text have changed.
 
-To keep your programs uptodate, add them to uptodate, and add the
-following line in your crontab (crontab -e) to check version each
-night:
+To be automatically warned for new versions, add the following line in
+your crontab (crontab -e):
 
     01 20 * * * uptodate check -aA
 
-You will receive an email when a new version will be avaible.
+It will search new versions each nigth, and you will receive an email
+if a new version is be avaible.
 
 uptodate let you use more command than add and check. Try 
 
 	 uptodate --help
 
-to have details. uptodate supports bash completion, so you can also
-use completion to remember avaible options, commands and modules.
+to have details. It also supports bash completion, so you can use
+"uptodate <tab>" or "uptodate command <tab>" to list avaible options,
+commands and modules.
+
+
+EXAMPLES:
++ InsightToolkit, from sourceforge downlod page :
+uptodate auto InsightToolkit \
+	 'http://sourceforge.net/project/showfiles.php?group_id=108122&package_id=116777' \
+	 2.0.1
+
++ jpackage non free files, from a ftp folder :
+uptodate auto jpackage \
+	 ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/1.6/generic/SRPMS.non-free/ \
+	 j2ee-connector-1.5-3jpp.nosrc.rpm
+
++ jpackage releases, from a ftp forlder :
+uptodate auto jpackage-release \
+	 ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ \
+	 1.6
+
++ tailor, from a darcs repository on a web site :
+uptodate auto tailor-test \
+	 http://nautilus.homeip.net/~lele/projects/cvsync/_darcs/patches/ \
+	 20041231193529-97f81-93e5a45cc1a163ae07b173142b061b1ecdeb99e8
 
 
 TODO:
- + be able to check versions on ftp servers
- + enhance options usage
  + add more details in help message
  + what you want to add here. Fill free to send patch (see below)
 
