@@ -460,6 +460,7 @@ def commandDisplay(options, conf, out) :
 	"Display configured modules"
 	parser = OptionParser(usage="uptodate [options] display [options] [name] ...", description=commandDisplay.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="display all modules")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display more info")
 	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
 	opts, args = parser.parse_args(options.argv)
