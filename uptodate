@@ -173,9 +173,7 @@ def commandAuto(options, conf, out) :
 			opts.force = True
 	
 	# load data which will be used to search regexp
-	urlFile = urllib.urlopen(url)
-	urlData = urlFile.read()
-	urlFile.close()
+	urlData = loadData(url)
 
 	# find text around version string given by user
 	bordersRegexps = []
@@ -649,11 +647,28 @@ def listModules(conf) :
 		print module
 	
 
+def loadData(url) :
+    try :
+	    urlFile = urllib.urlopen(url)
+	    urlData = urlFile.read()
+	    urlFile.close()
+    except IOError, e :
+	    if e.errno == 21 :
+		    # url is a directory !
+		    # we use 'ls -l' to have the same output than a ftp dir
+		    import commands
+		    (retVal, urlData) = commands.getstatusoutput('ls -l %s' % url)
+		    if retVal != 0 :
+			    # something goes wrong...
+			    raise urlData
+	    else :
+		    # re-throw exception :-)
+		    raise e
+    return urlData
+
 
 def getVersions(module, url, regexp) :
-    urlFile = urllib.urlopen(url)
-    urlData = urlFile.read()
-    urlFile.close()
+    urlData = loadData(url)
     new = re.findall(regexp, urlData)
     return list(set(new))
 
@@ -795,7 +810,6 @@ if __name__ == '__main__':
 	import sys
 	try :
 		sys.exit(main(sys.argv[1:]))
-
 	except IOError, e:
 		sys.stderr.write(sys.argv[0]+": ")
 		if e.filename :
