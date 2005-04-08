@@ -114,7 +114,7 @@ def commandAdd(options, conf, out) :
 	comment = " ".join(args[3:])
 	
 	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes("Do you want to remove existing %s module?" % module) :
+		if opts.batch or not yes("Do you want to remove existing %s module?" % module, False) :
 			print >> sys.stderr, "Module %s already exists." % module
 			return ERROR_MODULE_EXISTS
 		else :
@@ -166,7 +166,7 @@ def commandAuto(options, conf, out) :
 	comment = " ".join(args[3:])
 	
 	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes("Do you want to remove existing %s module?" % module) :
+		if opts.batch or not yes("Do you want to remove existing %s module?" % module, False) :
 			print >> sys.stderr, "Module %s already exists." % module
 			return ERROR_MODULE_EXISTS
 		else :
@@ -450,7 +450,7 @@ def commandRemove(options, conf, out) :
 
 
 	for module in sorted(modules) :
-		if opts.force or yes("Remove %s?" % module) :
+		if opts.force or yes("Remove %s?" % module, False) :
 			if opts.verbose :
 				printModule(conf, module, out, True)
 			conf.remove_section(module)
@@ -516,7 +516,7 @@ def commandCopy(options, conf, out) :
 		return ERROR_MODULE_NOT_FOUND
 
 	if not opts.force and conf.has_section(new) :
-		if opts.batch or not yes("Do you want to remove existing %s module?" % new) :
+		if opts.batch or not yes("Do you want to remove existing %s module?" % new, False) :
 			print >> sys.stderr, "Module %s already exists." % new
 			return ERROR_MODULE_EXISTS
 		else :
@@ -560,7 +560,7 @@ def commandRename(options, conf, out) :
 	
 	# remove new section if it already exist and --force is used
 	if not opts.force and conf.has_section(new) :
-		if opts.batch or not yes("Do you want to remove existing %s module?" % new) :
+		if opts.batch or not yes("Do you want to remove existing %s module?" % new, False) :
 			print >> sys.stderr, "Module %s already exists." % new
 			return ERROR_MODULE_EXISTS
 		else :
@@ -618,15 +618,23 @@ def printModule(conf, module, out, verbose=False) :
 		print >> out, s
 		
 
-def yes(question) :
+def yes(question, default=None) :
 	import readline
-	ret = raw_input(question + " ").lower()
+	if default != None and default :
+		values = 'Y/n'
+	elif default != None and not default :
+		values = 'y/N'
+	else :
+		values = 'y/n'
+	ret = raw_input("%s (%s) " % (question, values)).lower()
 	if ret in ["n", "no"] :
 		return False
 	if ret in ["y", "yes"] :
 		return True
+	if default != None and ret == "" :
+		return default
 	# invalid answer... reask the question
-	return yes(question)
+	return yes(question, default)
 
 
 def listOptions(parser) :
