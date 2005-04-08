@@ -74,7 +74,9 @@ ERROR_NO_VERSION_FOUND = 2
 ERROR_MODULE_NOT_FOUND = 3
 ERROR_PROPERTY_NOT_FOUND = 4
 ERROR_MODULE_EXISTS = 5
-ERROR_UNKNOWN_COMMAND = 5
+ERROR_UNKNOWN_COMMAND = 6
+ERROR_IO = 7
+ERROR_KB_INTERRUPT = 8
 
 ERRORS = {
 	ERROR_INVALID_NB_OF_ARGS: "Invalid number of arguments",
@@ -83,6 +85,8 @@ ERRORS = {
 	ERROR_PROPERTY_NOT_FOUND: "Property not found",
 	ERROR_MODULE_EXISTS: "Module already exists",
 	ERROR_UNKNOWN_COMMAND: "Unknown command",
+	ERROR_IO: "Input/Output error",
+	ERROR_KB_INTERRUPT: "keyboard interrupt",
 }
 
 
@@ -265,6 +269,9 @@ def commandAuto(options, conf, out) :
 			except ValueError :
 				if userAnwser == "" :
 				    selectRegExp = 0
+			except EOFError :
+				# transform EOF in keyboard interrupt
+				raise KeyboardInterrupt()
 		# replace automatically selected regexp with user one
 		regexp = candidates[selectRegExp]
 
@@ -626,7 +633,13 @@ def yes(question, default=None) :
 		values = 'y/N'
 	else :
 		values = 'y/n'
-	ret = raw_input("%s (%s) " % (question, values)).lower()
+		
+	try :
+		ret = raw_input("%s (%s) " % (question, values)).lower()
+	except EOFError :
+		# transform EOF in keyboard interrupt
+		raise KeyboardInterrupt()
+	
 	if ret in ["n", "no"] :
 		return False
 	if ret in ["y", "yes"] :
@@ -815,11 +828,11 @@ if __name__ == '__main__':
 		if e.filename :
 			sys.stderr.write(e.filename+": ")
 		sys.stderr.write(str(e.strerror)+"\n")
-		sys.exit(e.errno)
+		sys.exit(ERROR_IO)
 
 	except (KeyboardInterrupt, EOFError), e :
 		sys.stderr.write(str(e)+"\n")
-		sys.exit(130)
+		sys.exit(ERROR_KB_INTERRUPT)
 		
 
 
