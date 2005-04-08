@@ -260,11 +260,13 @@ def commandAuto(options, conf, out) :
 		selectRegExp = -1
 		while selectRegExp == -1 :
 			try :
-				selectRegExp = int(raw_input("Choose a regexp candidate: "))
+			        userAnwser = raw_input("Choose a regexp candidate: ")
+				selectRegExp = int(userAnwser)
 				if selectRegExp < 0 or selectRegExp >= len(candidates) :
 					selectRegExp = -1
 			except ValueError :
-				pass
+				if userAnwser == "" :
+				    selectRegExp = 0
 		# replace automatically selected regexp with user one
 		regexp = candidates[selectRegExp]
 
