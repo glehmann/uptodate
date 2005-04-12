@@ -101,7 +101,7 @@ def commandAdd(options, conf, out) :
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -137,7 +137,7 @@ def commandAdd(options, conf, out) :
 		conf.set(module, 'current', repr(current))
 		
 		if opts.verbose :
-			printModule(conf, module, out, True)
+			printModule(conf, module, sys.stderr, True)
 	else :
 		# no version found... exit
 		print >> sys.stderr, "Error: no version found."
@@ -151,7 +151,7 @@ def commandAuto(options, conf, out) :
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options")
 	opts, args = parser.parse_args(options.argv)
 	
 	versionRegExp = r'([^<>\n\r]+)'
@@ -289,7 +289,7 @@ def commandAuto(options, conf, out) :
 		conf.set(module, 'current', repr(current))
 		
 		if opts.verbose :
-			printModule(conf, module, out, True)
+			printModule(conf, module, sys.stderr, True)
 	else :
 		# no version found... exit
 		print >> sys.stderr, "Error: no version found."
@@ -304,7 +304,7 @@ def commandCheck(options, conf, out) :
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="ignore missing modules")
 	parser.add_option("-r", "--removed", action="store_true", dest="removed", help="display removed versions")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display what is done")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="display what is done")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -367,7 +367,7 @@ def commandEdit(options, conf, out) :
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="don't test if new value allows to find versions")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display modified module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -412,7 +412,7 @@ def commandEdit(options, conf, out) :
 	# modify prop value
 	conf.set(module, prop, value)
 	if opts.verbose :
-		printModule(conf, module, out, True)
+		printModule(conf, module, sys.stderr, True)
 
 	# test if everything is ok
 	if not opts.force and prop in ["regexp", "url"] :
@@ -429,8 +429,8 @@ def commandRemove(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description=commandRemove.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="remove all modules")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="remove modules without questions and ignore missing modules")
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display what is done")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display removed modules")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -459,7 +459,7 @@ def commandRemove(options, conf, out) :
 	for module in sorted(modules) :
 		if opts.force or yes("Remove %s?" % module, False) :
 			if opts.verbose :
-				printModule(conf, module, out, True)
+				printModule(conf, module, sys.stderr, True)
 			conf.remove_section(module)
 		
 
@@ -467,9 +467,9 @@ def commandDisplay(options, conf, out) :
 	"Display configured modules"
 	parser = OptionParser(usage="uptodate [options] display [options] [name] ...", description=commandDisplay.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="display all modules")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="ignore missing modules")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display more info")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -505,7 +505,7 @@ def commandCopy(options, conf, out) :
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="copy module even if destination already exist")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display copied module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -537,7 +537,7 @@ def commandCopy(options, conf, out) :
 	for prop in conf.options(module) :
 		conf.set(new, prop, conf.get(module, prop))
 	if opts.verbose :
-		printModule(conf, new, out, True)
+		printModule(conf, new, sys.stderr, True)
 
 
 	
@@ -548,7 +548,7 @@ def commandRename(options, conf, out) :
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
 	parser.add_option("-f", "--force", action="store_true", dest="force", help="rename module even if new name already exist")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
@@ -582,7 +582,7 @@ def commandRename(options, conf, out) :
 		conf.set(new, prop, conf.get(module, prop))
 	conf.remove_section(module)
 	if opts.verbose :
-		printModule(conf, new, out, True)
+		printModule(conf, new, sys.stderr, True)
 
 	
 	
@@ -591,21 +591,16 @@ def commandImport(options, conf, out) :
 	parser = OptionParser(usage="uptodate [options] import filename [name] ...", description=commandRename.__doc__)
 	parser.add_option("-a", "--all", action="store_true", dest="all", help="import all modules in filename")
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="rename module even if new name already exist")
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display renamed module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and commands")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="import modules even if the module already exist")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display imported module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options")
 	opts, args = parser.parse_args(options.argv)
 
 	if opts.listOption :
 		listOptions(parser)
-		listModules(conf)
 		return 0
     
-	if len(args) < 1 :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
-
-	# load config to import
+        # load config to import
 	import ConfigParser
 	importConf = ConfigParser.SafeConfigParser()
 	importFile = file(args[0])
@@ -618,7 +613,7 @@ def commandImport(options, conf, out) :
 		return ERROR_INVALID_NB_OF_ARGS
 	
 	if opts.all :
-		modules = conf.sections()
+		modules = importConf.sections()
 	else :
 		modules = set(args[1:])
 		wrongModules = modules - set(importConf.sections())
@@ -649,8 +644,57 @@ def commandImport(options, conf, out) :
 			for prop in importConf.options(module) :
 				conf.set(module, prop, importConf.get(module, prop))
 			if opts.verbose :
-				printModule(conf, module, out, True)
+				printModule(conf, module, sys.stderr, True)
 
+	return 0
+
+
+	
+	
+def commandExport(options, conf, out) :
+	"Export modules"
+	parser = OptionParser(usage="uptodate [options] export [name] ...", description=commandRename.__doc__)
+	parser.add_option("-a", "--all", action="store_true", dest="all", help="export all modules")
+	parser.add_option("-f", "--force", action="store_true", dest="force", help="ignore missing modules")
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display exported module")
+	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options and modules")
+	opts, args = parser.parse_args(options.argv)
+
+	if opts.listOption :
+		listOptions(parser)
+		listModules(conf)
+		return 0
+    
+	import ConfigParser
+	exportConf = ConfigParser.SafeConfigParser()
+
+	if len(args) == 0 and not opts.all :
+		parser.print_usage(sys.stderr)
+		return ERROR_INVALID_NB_OF_ARGS
+	
+	if opts.all :
+		modules = conf.sections()
+	else :
+		modules = set(args)
+		wrongModules = modules - set(conf.sections())
+		if wrongModules :
+			if opts.force :
+				modules -= wrongModules
+			else :
+				print >> sys.stderr, "Error: %s doesn't exist." % ", ".join(wrongModules)
+				return ERROR_MODULE_NOT_FOUND
+	
+	
+	# now iterate modules
+	for module in sorted(modules) :
+		# copy section
+		exportConf.add_section(module)
+		for prop in conf.options(module) :
+			exportConf.set(module, prop, conf.get(module, prop))
+		if opts.verbose :
+			printModule(exportConf, module, sys.stderr, True)
+
+	exportConf.write(out)
 	return 0
 
 
@@ -665,6 +709,7 @@ COMMANDS = {'add': commandAdd,
 	    'rename': commandRename,
 	    'auto': commandAuto,
 	    'import': commandImport,
+	    'export': commandExport,
 	    }
 
 
