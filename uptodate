@@ -34,8 +34,7 @@ DESCRIPTION=_('''Commands:
 Run "uptodate command --help" for more information.
 
 Exit codes:
-%s
-''')
+%s''')
 
 
 import urllib
@@ -120,8 +119,18 @@ class PropertyNotFoundException(Exception) :
 # next lines are used in command description
 
 def commandAdd(argv, conf, out) :
-	"Add a new module"
-	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=_(commandAdd.__doc__))
+	"""Add a new module
+
+	Add est utilisé pour ajouter un nouveau module. Un module posssède un nom et contient les informations nécessaires pour aller chercher les nouvelles versions :
+	+ une URL d'un fichier ou d'un repertoire. Le fichier ou le répertoire peuvent être distant (site web, site ftp) ou local
+	+ une expression régulière permettant de trouver les versions dans les informations récupérées grâce à l'URL précédente
+	Vous pouvez également ajouter un commentaire pour décrire le module, pour garder la page d'accueil du programme dont vous voulez suivre la version, etc.
+	Ces informations doivent être fournie sur la ligne de commande.
+
+	Ex:
+	TODO
+	"""
+	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=_(commandAdd.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("add module even if it already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display added module"))
@@ -167,7 +176,7 @@ def commandAdd(argv, conf, out) :
 
 def commandAuto(argv, conf, out) :
 	"Search for a regexp and a new module"
-	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=_(commandAdd.__doc__))
+	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=_(commandAdd.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("add module even if it already exist"))
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help=_("choose a regexp"))
@@ -315,7 +324,7 @@ def commandAuto(argv, conf, out) :
 
 def commandCheck(argv, conf, out) :
 	"Check version"
-	parser = OptionParser(usage="uptodate [options] check [options] [name] ...", description=_(commandCheck.__doc__))
+	parser = OptionParser(usage="uptodate [options] check [options] [name] ...", description=_(commandCheck.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("check all modules"))
 	parser.add_option("-A", "--added", action="store_true", dest="added", help=_("display added versions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore missing modules"))
@@ -378,7 +387,7 @@ def commandCheck(argv, conf, out) :
 
 def commandEdit(argv, conf, out) :
 	"Edit module properties"
-	parser = OptionParser(usage="uptodate [options] edit [options] name property [value]", description=_(commandEdit.__doc__))
+	parser = OptionParser(usage="uptodate [options] edit [options] name property [value]", description=_(commandEdit.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("don't test if new value allows to find versions"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display modified module"))
@@ -435,7 +444,7 @@ def commandEdit(argv, conf, out) :
 
 def commandRemove(argv, conf, out) :
 	"Remove a module"
-	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description=_(commandRemove.__doc__))
+	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description=_(commandRemove.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("remove all modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("remove modules without questions and ignore missing modules"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display removed modules"))
@@ -472,7 +481,7 @@ def commandRemove(argv, conf, out) :
 
 def commandDisplay(argv, conf, out) :
 	"Display configured modules"
-	parser = OptionParser(usage="uptodate [options] display [options] [name] ...", description=_(commandDisplay.__doc__))
+	parser = OptionParser(usage="uptodate [options] display [options] [name] ...", description=_(commandDisplay.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("display all modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore missing modules"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display more info"))
@@ -506,7 +515,7 @@ def commandDisplay(argv, conf, out) :
 
 def commandCopy(argv, conf, out) :
 	"Copy a module"
-	parser = OptionParser(usage="uptodate [options] copy name name", description=_(commandCopy.__doc__))
+	parser = OptionParser(usage="uptodate [options] copy name name", description=_(commandCopy.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("copy module even if destination already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display copied module"))
@@ -546,7 +555,7 @@ def commandCopy(argv, conf, out) :
 	
 def commandRename(argv, conf, out) :
 	"Rename a module"
-	parser = OptionParser(usage="uptodate [options] rename name newName", description=_(commandRename.__doc__))
+	parser = OptionParser(usage="uptodate [options] rename name newName", description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("rename module even if new name already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display renamed module"))
@@ -587,7 +596,7 @@ def commandRename(argv, conf, out) :
 	
 def commandImport(argv, conf, out) :
 	"Import modules"
-	parser = OptionParser(usage="uptodate [options] import filename [name] ...", description=_(commandRename.__doc__))
+	parser = OptionParser(usage="uptodate [options] import filename [name] ...", description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("import all modules in filename"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("import modules even if the module already exist"))
@@ -649,7 +658,7 @@ def commandImport(argv, conf, out) :
 	
 def commandExport(argv, conf, out) :
 	"Export modules"
-	parser = OptionParser(usage="uptodate [options] export [name] ...", description=_(commandRename.__doc__))
+	parser = OptionParser(usage="uptodate [options] export [name] ...", description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("export all modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore missing modules"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display exported module"))
@@ -838,8 +847,24 @@ def file(fName, output=False, notNone=False, append=False) :
 
 
 class UptodateHelpFormatter(IndentedHelpFormatter) :
-	def format_description(self, description):
-		return description.strip()
+	def format_description(self, description) :
+		return description
+
+
+class UptodateHelpFormatter2(IndentedHelpFormatter) :
+	def format_description(self, description) :
+		if not description :
+			return ""
+		import textwrap
+		desc_width = self.width - self.current_indent
+		indent = " "*self.current_indent
+		newDesc = ""
+		for line in description.splitlines() :
+			newDesc += textwrap.fill(line.strip(),
+						 desc_width,
+						 initial_indent=indent+'  ',
+						 subsequent_indent=indent) + "\n"
+		return newDesc
 
 
 
