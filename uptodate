@@ -94,28 +94,46 @@ ERRORS = {
 	ERROR_KB_INTERRUPT: _("keyboard interrupt"),
 }
 
+# define uptodate internals exceptions
+
+class InvalidNbOfArgs(Exception) :
+	pass
+
+class NoVersionFound(Exception) :
+	pass
+
+class ModuleNotFoundException(Exception) :
+	pass
+
+class ModuleExistsException(Exception) :
+	pass
+
+class UnknownCommandException(Exception) :
+	pass
+
+class PropertyNotFoundException(Exception) :
+	pass
 
 
 # following functions are commands
 # first line of docstring is used as command short description
 # next lines are used in command description
 
-def commandAdd(options, conf, out) :
+def commandAdd(argv, conf, out) :
 	"Add a new module"
 	parser = OptionParser(usage="uptodate [options] add [options] name url regexp [comment]\n", description=_(commandAdd.__doc__))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("add module even if it already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display added module"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
 		return 0
     
 	if len(args) < 3 :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 
 	module = args[0]
 	url = args[1]
@@ -124,8 +142,7 @@ def commandAdd(options, conf, out) :
 	
 	if not opts.force and conf.has_section(module) :
 		if opts.batch or not yes(_("Do you want to remove existing %s module?") % module, False) :
-			print >> sys.stderr, _("Module %s already exists.") % module
-			return ERROR_MODULE_EXISTS
+			raise ModuleExistsException(module)
 		else :
 			opts.force = True
 	
@@ -145,19 +162,18 @@ def commandAdd(options, conf, out) :
 			printModule(conf, module, sys.stderr, True)
 	else :
 		# no version found... exit
-		print >> sys.stderr, "Error: no version found."
-		return ERROR_NO_VERSION_FOUND
+		raise NoVersionFound()
 
 
-def commandAuto(options, conf, out) :
+def commandAuto(argv, conf, out) :
 	"Search for a regexp and a new module"
-	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=commandAdd.__doc__)
-	parser.add_option("-b", "--batch", action="store_true", dest="batch", help="don't ask questions")
-	parser.add_option("-f", "--force", action="store_true", dest="force", help="add module even if it already exist")
-	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help="choose a regexp")
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="display added module")
-	parser.add_option("--list-option", action="store_true", dest="listOption", help="list avaible options")
-	opts, args = parser.parse_args(options.argv)
+	parser = OptionParser(usage="uptodate [options] auto [options] name url version [comment]""", description=_(commandAdd.__doc__))
+	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
+	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("add module even if it already exist"))
+	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help=_("choose a regexp"))
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display added module"))
+	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options"))
+	opts, args = parser.parse_args(argv)
 	
 	versionRegExp = r'([^<>\n\r]+)'
 
@@ -166,8 +182,7 @@ def commandAuto(options, conf, out) :
 		return 0
     
 	if len(args) < 3 :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgsException(parser.get_usage())
 
 	module = args[0]
 	url = args[1]
@@ -176,8 +191,7 @@ def commandAuto(options, conf, out) :
 	
 	if not opts.force and conf.has_section(module) :
 		if opts.batch or not yes(_("Do you want to remove existing %s module?") % module, False) :
-			print >> sys.stderr, _("Module %s already exists.") % module
-			return ERROR_MODULE_EXISTS
+			raise ModuleExistsException(module)
 		else :
 			opts.force = True
 	
@@ -202,8 +216,7 @@ def commandAuto(options, conf, out) :
 			break
 	
 	if len(borders) == 0 :
-		print >> sys.stderr, _("Error: no version found.")
-		return ERROR_NO_VERSION_FOUND
+		raise NoVersionFound()
 
 	# generate regexp candidates, and select the best one
 	candidates = set()
@@ -297,11 +310,10 @@ def commandAuto(options, conf, out) :
 			printModule(conf, module, sys.stderr, True)
 	else :
 		# no version found... exit
-		print >> sys.stderr, _("Error: no version found.")
-		return ERROR_NO_VERSION_FOUND
+		raise NoVersionFound()
 
 
-def commandCheck(options, conf, out) :
+def commandCheck(argv, conf, out) :
 	"Check version"
 	parser = OptionParser(usage="uptodate [options] check [options] [name] ...", description=_(commandCheck.__doc__))
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("check all modules"))
@@ -310,7 +322,7 @@ def commandCheck(options, conf, out) :
 	parser.add_option("-r", "--removed", action="store_true", dest="removed", help=_("display removed versions"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display what is done"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -325,8 +337,7 @@ def commandCheck(options, conf, out) :
 	
 	if len(args) == 0 and not opts.all :
 		# no module to check... print usage and exit
-		parser.print_usage(sys.stderr)
-		return
+		raise InvalidNbOfArgs(parser.get_usage())
 
 	if opts.all :
 		modules = conf.sections()
@@ -337,8 +348,7 @@ def commandCheck(options, conf, out) :
 			if opts.force :
 				modules -= wrongModules
 			else :
-				print >> sys.stderr, _("Error: %s doesn't exist.") % ", ".join(wrongModules)
-				return ERROR_MODULE_NOT_FOUND
+				raise ModuleNotFoundException(wrongModules)
 
 
 	for module in sorted(modules) :
@@ -366,14 +376,14 @@ def commandCheck(options, conf, out) :
 			# return
 		
 
-def commandEdit(options, conf, out) :
+def commandEdit(argv, conf, out) :
 	"Edit module properties"
 	parser = OptionParser(usage="uptodate [options] edit [options] name property [value]", description=_(commandEdit.__doc__))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("don't test if new value allows to find versions"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display modified module"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -384,11 +394,9 @@ def commandEdit(options, conf, out) :
 		# interactive edit
 		module, prop = args
 		if module not in conf.sections() :
-			print >> sys.stderr, _("Error: %s doesn't exist.") % module
-			return ERROR_MODULE_NOT_FOUND
+			raise ModuleNotFoundException(module)
 		if not conf.has_option(module, prop) :
-			print >> sys.stderr, _("Error: %s property doesn't exist.") % prop
-			return ERROR_PROPERTY_NOT_FOUND
+			raise PropertyNotFound(prop)
 
 		import readline
 		# arghhh
@@ -403,16 +411,13 @@ def commandEdit(options, conf, out) :
 		prop = args[1]
 		value = " ".join(args[2:])
 		if module not in conf.sections() :
-			print >> sys.stderr, _("Error: %s doesn't exist.") % module
-			return ERROR_MODULE_NOT_FOUND
+			raise ModuleNotFoundException(wrongModules)
 		if not conf.has_option(module, prop) :
-			print >> sys.stderr, _("Error: %s property doesn't exist.") % prop
-			return ERROR_PROPERTY_NOT_FOUND
+			raise PropertyNotFound(prop)
 		
 	else :
 		# invalid number of arguments !
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 	
 	# modify prop value
 	conf.set(module, prop, value)
@@ -423,20 +428,19 @@ def commandEdit(options, conf, out) :
 	if not opts.force and prop in ["regexp", "url"] :
 		current = getVersions(module, conf.get(module, 'url'), conf.get(module, 'regexp'))
 		if len(current) == 0 :
-			print >> sys.stderr, _("Error: no version found.")
-			return ERROR_NO_VERSION_FOUND
+			raise NoVersionFound()
 		conf.set(module, 'current', repr(current))
 
 
 
-def commandRemove(options, conf, out) :
+def commandRemove(argv, conf, out) :
 	"Remove a module"
 	parser = OptionParser(usage="uptodate [options] remove [options] [name] ...", description=_(commandRemove.__doc__))
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("remove all modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("remove modules without questions and ignore missing modules"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display removed modules"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -445,8 +449,7 @@ def commandRemove(options, conf, out) :
 
     
 	if len(args) == 0 and not opts.all :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 	
 	if opts.all :
 		modules = conf.sections()
@@ -457,8 +460,7 @@ def commandRemove(options, conf, out) :
 			if opts.force :
 				modules -= wrongModules
 			else :
-				print >> sys.stderr, _("Error: %s doesn't exist.") % ", ".join(wrongModules)
-				return ERROR_MODULE_NOT_FOUND
+				raise ModuleNotFoundException(wrongModules)
 
 
 	for module in sorted(modules) :
@@ -468,14 +470,14 @@ def commandRemove(options, conf, out) :
 			conf.remove_section(module)
 		
 
-def commandDisplay(options, conf, out) :
+def commandDisplay(argv, conf, out) :
 	"Display configured modules"
 	parser = OptionParser(usage="uptodate [options] display [options] [name] ...", description=_(commandDisplay.__doc__))
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("display all modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore missing modules"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display more info"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -484,8 +486,7 @@ def commandDisplay(options, conf, out) :
     
     
 	if len(args) == 0 and not opts.all :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 	
 	if opts.all :
 		modules = conf.sections()
@@ -496,22 +497,21 @@ def commandDisplay(options, conf, out) :
 			if opts.force :
 				modules -= wrongModules
 			else :
-				print >> sys.stderr, _("Error: %s doesn't exist.") % ", ".join(wrongModules)
-				return ERROR_MODULE_NOT_FOUND
+				raise ModuleNotFoundException(wrongModules)
 
 
 	for module in sorted(modules) :
 		printModule(conf, module, out, opts.verbose)
 
 
-def commandCopy(options, conf, out) :
+def commandCopy(argv, conf, out) :
 	"Copy a module"
 	parser = OptionParser(usage="uptodate [options] copy name name", description=_(commandCopy.__doc__))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("copy module even if destination already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display copied module"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -519,18 +519,15 @@ def commandCopy(options, conf, out) :
 		return 0
     
 	if len(args) != 2 :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 
 	module, new = args
 	if module not in conf.sections() :
-		print >> sys.stderr, _("Error: %s doesn't exist.") % module
-		return ERROR_MODULE_NOT_FOUND
+		raise ModuleNotFoundException(module)
 
 	if not opts.force and conf.has_section(new) :
 		if opts.batch or not yes(_("Do you want to remove existing %s module?") % new, False) :
-			print >> sys.stderr, _("Module %s already exists.") % new
-			return ERROR_MODULE_EXISTS
+			raise ModuleExistsException(new)
 		else :
 			opts.force = True
 	
@@ -547,14 +544,14 @@ def commandCopy(options, conf, out) :
 
 	
 	
-def commandRename(options, conf, out) :
+def commandRename(argv, conf, out) :
 	"Rename a module"
 	parser = OptionParser(usage="uptodate [options] rename name newName", description=_(commandRename.__doc__))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask questions"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("rename module even if new name already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display renamed module"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -562,19 +559,16 @@ def commandRename(options, conf, out) :
 		return 0
     
 	if len(args) != 2 :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 
 	module, new = args
 	if module not in conf.sections() :
-		print >> sys.stderr, _("Error: %s doesn't exist.") % module
-		return ERROR_MODULE_NOT_FOUND
+		raise ModuleNotFoundException(module)
 	
 	# remove new section if it already exist and --force is used
 	if not opts.force and conf.has_section(new) :
 		if opts.batch or not yes(_("Do you want to remove existing %s module?") % new, False) :
-			print >> sys.stderr, _("Module %s already exists.") % new
-			return ERROR_MODULE_EXISTS
+			raise ModuleExistsException(new)
 		else :
 			opts.force = True
 	
@@ -591,7 +585,7 @@ def commandRename(options, conf, out) :
 
 	
 	
-def commandImport(options, conf, out) :
+def commandImport(argv, conf, out) :
 	"Import modules"
 	parser = OptionParser(usage="uptodate [options] import filename [name] ...", description=_(commandRename.__doc__))
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("import all modules in filename"))
@@ -599,7 +593,7 @@ def commandImport(options, conf, out) :
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("import modules even if the module already exist"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display imported module"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -614,8 +608,7 @@ def commandImport(options, conf, out) :
 
 	# module to import
 	if len(args) <= 1 and not opts.all :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 	
 	if opts.all :
 		modules = importConf.sections()
@@ -626,8 +619,7 @@ def commandImport(options, conf, out) :
 			if opts.force :
 				modules -= wrongModules
 			else :
-				print >> sys.stderr, _("Error: %s doesn't exist.") % ", ".join(wrongModules)
-				return ERROR_MODULE_NOT_FOUND
+				raise ModuleNotFoundException(wrongModules)
 	
 	
 	# now iterate sections
@@ -637,8 +629,7 @@ def commandImport(options, conf, out) :
 			if opts.force :
 				conf.remove_section(module)
 			elif opts.batch :
-				print >> sys.stderr, _("Module %s already exists.") % module
-				return ERROR_MODULE_EXISTS
+				raise ModuleExistsException(module)
 			elif yes(_("Do you want to remove existing %s module?") % module, False) :
 				conf.remove_section(module)
 			else :
@@ -656,14 +647,14 @@ def commandImport(options, conf, out) :
 
 	
 	
-def commandExport(options, conf, out) :
+def commandExport(argv, conf, out) :
 	"Export modules"
 	parser = OptionParser(usage="uptodate [options] export [name] ...", description=_(commandRename.__doc__))
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("export all modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore missing modules"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display exported module"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and modules"))
-	opts, args = parser.parse_args(options.argv)
+	opts, args = parser.parse_args(argv)
 
 	if opts.listOption :
 		listOptions(parser)
@@ -674,8 +665,7 @@ def commandExport(options, conf, out) :
 	exportConf = ConfigParser.SafeConfigParser()
 
 	if len(args) == 0 and not opts.all :
-		parser.print_usage(sys.stderr)
-		return ERROR_INVALID_NB_OF_ARGS
+		raise InvalidNbOfArgs(parser.get_usage())
 	
 	if opts.all :
 		modules = conf.sections()
@@ -686,8 +676,7 @@ def commandExport(options, conf, out) :
 			if opts.force :
 				modules -= wrongModules
 			else :
-				print >> sys.stderr, _("Error: %s doesn't exist.") % ", ".join(wrongModules)
-				return ERROR_MODULE_NOT_FOUND
+				raise ModuleNotFoundException(wrongModules)
 	
 	
 	# now iterate modules
@@ -847,52 +836,6 @@ def file(fName, output=False, notNone=False, append=False) :
 
 
 
-def parse_options(argv):
-    # generate command description
-    comString = ""
-    fill = max([len(c) for c in COMMANDS.keys()])
-    for command in sorted(COMMANDS.keys()) :
-	    comString += _("  %s  %s\n") % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
-
-    # generate exit code description
-    errString = ""
-    fill = max([len(str(c)) for c in ERRORS.keys()])
-    for error in sorted(ERRORS.keys()) :
-	    errString += _("  %s  %s\n") % (str(error).ljust(fill), ERRORS[error])
-
-    # generate complete description
-    fullDesc = DESCRIPTION % (comString, errString)
-
-    # and create option parser
-    parser = OptionParser(usage=USAGE,
-                          description=fullDesc,
-                          version="uptodate %s" % VERSION,
-			  formatter=UptodateHelpFormatter())
-    parser.disable_interspersed_args()
-    parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar="FILE", help=_("configuration file"))
-    parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("do not modify config file"))
-    parser.add_option("-o", "--output", dest="outputPath", default="-", metavar="FILE", help=_("write output to FILE"))
-    parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and commands"))
-    opts, args = parser.parse_args()
-    
-    if opts.listOption :
-        listOptions(parser)
-	for command in COMMANDS :
-		print command
-	raise Exception(0)
-    
-    if args and args[0] in COMMANDS.keys() :
-        opts.command = args[0]
-        opts.argv = args[1:]
-    else:
-        opts.command = None
-        opts.argv = []
-    if not opts.command:
-        parser.print_usage()
-        raise Exception(ERROR_UNKNOWN_COMMAND)
-    return opts
-
-
 
 class UptodateHelpFormatter(IndentedHelpFormatter) :
 	def format_description(self, description):
@@ -901,39 +844,76 @@ class UptodateHelpFormatter(IndentedHelpFormatter) :
 
 
 def main(argv) :
-	try :
-		options = parse_options(argv)
-	except Exception, e :
-		return e.args[0]
+	# generate command description
+	comString = ""
+	fill = max([len(c) for c in COMMANDS.keys()])
+	for command in sorted(COMMANDS.keys()) :
+		comString += _("  %s  %s\n") % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
+
+	# generate exit code description
+	errString = ""
+	fill = max([len(str(c)) for c in ERRORS.keys()])
+	for error in sorted(ERRORS.keys()) :
+		errString += _("  %s  %s\n") % (str(error).ljust(fill), ERRORS[error])
+		
+	# generate complete description
+	fullDesc = DESCRIPTION % (comString, errString)
+
+	# and create option parser
+	parser = OptionParser(usage=USAGE,
+			      description=fullDesc,
+			      version="uptodate %s" % VERSION,
+			      formatter=UptodateHelpFormatter())
+	parser.disable_interspersed_args()
+	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("configuration file"))
+	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("do not modify config file"))
+	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FILE"), help=_("write output to FILE"))
+	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and commands"))
+	opts, args = parser.parse_args()
+    
+	if opts.listOption :
+		listOptions(parser)
+		# also display commands !
+		for command in COMMANDS :
+			print command
+		return
+    
+	if len(args) > 0 :
+		command = args[0]
+		args = args[1:]
+		if command not in COMMANDS.keys() :
+			raise UnknownCommandException(command)
+	else:
+		parser.print_usage()
+		raise InvalidNbOfArgs()
+	
 	
 	# load config in a file to be able to load it from stdin
 	import ConfigParser
 	conf = ConfigParser.SafeConfigParser()
 	try :
 		# try to load config
-		confFile = file(options.configPath)
+		confFile = file(opts.configPath)
 	except :
 		# load fail... try to create it
-		file(options.configPath, True).close()
-		confFile = file(options.configPath)
+		file(opts.configPath, True).close()
+		confFile = file(opts.configPath)
 	conf.readfp(confFile)
 	confFile.close()
 
 	# set output file
-	out = file(options.outputPath, True)
+	out = file(opts.outputPath, True)
 	
 	# execute command
-	retVal = COMMANDS[options.command](options, conf, out)
+	retVal = COMMANDS[command](args, conf, out)
 	
-	if retVal :
-		return retVal
-	else :
-		# save config file, if needed
-		if not options.dryRun :
-			confFile = file(options.configPath, 'w')
-			conf.write(confFile)
-			confFile.close()
-		return 0
+	# save config file, if needed
+	if not opts.dryRun :
+		confFile = file(opts.configPath, 'w')
+		conf.write(confFile)
+		confFile.close()
+
+	return 0
 
 
 
@@ -944,6 +924,7 @@ if __name__ == '__main__':
 	import sys
 	try :
 		sys.exit(main(sys.argv[1:]))
+		
 	except IOError, e:
 		sys.stderr.write(sys.argv[0]+": ")
 		if e.filename :
@@ -951,11 +932,41 @@ if __name__ == '__main__':
 		sys.stderr.write(str(e.strerror)+"\n")
 		sys.exit(ERROR_IO)
 
-	except (KeyboardInterrupt, EOFError), e :
+	except KeyboardInterrupt, e :
 		sys.stderr.write(str(e)+"\n")
 		sys.exit(ERROR_KB_INTERRUPT)
 		
+	except InvalidNbOfArgs, e :
+		sys.exit(ERROR_INVALID_NB_OF_ARGS)
 
+	except ModuleExistsException, e :
+		print >> sys.stderr, _("Module %s already exists.") % e.args[0]
+		sys.exit(ERROR_MODULE_EXISTS)
+
+	except NoVersionFound, e :
+		print >> sys.stderr, _("Error: no version found.")
+		sys.exit(ERROR_NO_VERSION_FOUND)
+
+	except ModuleNotFoundException, e :
+		sing = _("Error: module %s not found")
+		plur = _("Error: modules %s not found")
+		last = _(" and ")
+		sep = _(", ")
+		args = e.args[0]
+		if isinstance(args, str) :
+			msg = sing % args
+		elif len(args) == 1 :
+			args = list(args)
+			msg = sing % args[0]
+		else :
+			args = list(args)
+			msg = plur % (sep.join(args[:-1])+last+args[-1])
+		print >> sys.stderr, msg
+		sys.exit(ERROR_MODULE_NOT_FOUND)
+
+	except PropertyNotFoundException, e :
+		print >> sys.stderr, _("Error: %s property doesn't exist.") % e.args[0]
+		sys.exit(ERROR_PROPERTY_NOT_FOUND)
 
 
 
