@@ -84,7 +84,7 @@ ERROR_KB_INTERRUPT = 8
 
 ERRORS = {
 	ERROR_INVALID_NB_OF_ARGS: _("Nombre d'arguments invalide"),
-	ERROR_NO_VERSION_FOUND: _("Pas de version trouvée"),
+	ERROR_NO_VERSION_FOUND: _("Aucune version trouvée"),
 	ERROR_MODULE_NOT_FOUND: _("Impossible de trouver le module"),
 	ERROR_PROPERTY_NOT_FOUND: _("Impossible de trouver la propriété"),
 	ERROR_MODULE_EXISTS: _("Le module existe déjà"),
@@ -703,17 +703,17 @@ def commandExport(argv, conf, out) :
 
 	
 	
-COMMANDS = {'add': commandAdd,
-	    'check': commandCheck,
-	    'edit': commandEdit,
-	    'remove': commandRemove,
-	    'display': commandDisplay,
-	    'copy': commandCopy,
-	    'rename': commandRename,
-	    'auto': commandAuto,
-	    'import': commandImport,
-	    'export': commandExport,
-	    }
+COMMANDS = [(['add'], commandAdd),
+	    (['check'], commandCheck),
+	    (['edit'], commandEdit),
+	    (['remove', 'rm', 'del'], commandRemove),
+	    (['display'], commandDisplay),
+	    (['copy', 'cp'], commandCopy),
+	    (['rename', 'mv'], commandRename),
+	    (['auto'], commandAuto),
+	    (['import'], commandImport),
+	    (['export'], commandExport),
+	    ]
 
 
 
@@ -870,10 +870,21 @@ class UptodateHelpFormatter2(IndentedHelpFormatter) :
 
 def main(argv) :
 	# generate command description
+	formattedCommands = {}
+	fill = 0
+	for names, function in COMMANDS :
+		namesString = names[0]
+		if len(names) > 1 :
+			namesString += ' (%s)' % ', '.join(names[1:])
+		formattedCommands[namesString] = function.__doc__.splitlines()[0].strip()
+		namesLen = len(namesString)
+		if namesLen > fill :
+			fill = namesLen
 	comString = ""
-	fill = max([len(c) for c in COMMANDS.keys()])
-	for command in sorted(COMMANDS.keys()) :
-		comString += _("  %s  %s\n") % (command.ljust(fill), COMMANDS[command].__doc__.splitlines()[0].strip())
+	fill = max([len(c) for c in formattedCommands.keys()])
+	for names in sorted(formattedCommands.keys()) :
+                comString += "  %s  %s\n" % (names.ljust(fill), formattedCommands[names])
+
 
 	# generate exit code description
 	errString = ""
@@ -891,22 +902,28 @@ def main(argv) :
 			      formatter=UptodateHelpFormatter())
 	parser.disable_interspersed_args()
 	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("configuration file"))
-	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("do not modify config file"))
-	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FILE"), help=_("write output to FILE"))
-	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("list avaible options and commands"))
+	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("ne pas sauvegarder les changements"))
+	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FICHIER"), help=_("sauver les changements dans FICHIER"))
+	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("afficher les options et les commandes disponibles"))
 	opts, args = parser.parse_args()
-    
+
+	# create a dict to have easy access to command names and functions
+	commands = {}
+	for names, function in COMMANDS :
+		for name in names :
+			commands[name] = function
+        
 	if opts.listOption :
 		listOptions(parser)
 		# also display commands !
-		for command in COMMANDS :
+		for command in commands.keys() :
 			print command
 		return
     
 	if len(args) > 0 :
 		command = args[0]
 		args = args[1:]
-		if command not in COMMANDS.keys() :
+		if command not in commands.keys() :
 			raise UnknownCommandException(command)
 	else:
 		parser.print_usage()
@@ -930,7 +947,7 @@ def main(argv) :
 	out = file(opts.outputPath, True)
 	
 	# execute command
-	retVal = COMMANDS[command](args, conf, out)
+	retVal = commands[command](args, conf, out)
 	
 	# save config file, if needed
 	if not opts.dryRun :
