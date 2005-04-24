@@ -844,16 +844,24 @@ def printModule(conf, module, out, verbose=False) :
   URL : %(url)s
   expression régulière : %(regexp)s
   versions actuelles : %(current)s
-  versions ajoutées : %(added)s
-  versions supprimées : %(removed)s
+  historique : %(history)s
 """)
 		
-		if added :
-			addedString = ""
-			for t in sorted(added.keys(), reverse=True) :
-				addedString += _('\n      + %s : %s') % (makeTime(t), andJoin(map(repr, added[t])))
+		if added or removed:
+			# create a list with added and removed versions
+			hList = []
+			for t, versions in added.iteritems() :
+				hList.append((t, True))
+			for t, versions in removed.iteritems() :
+				hList.append((t, False))
+			historyString = ""
+			for t, a in sorted(hList, reverse=True) :
+				if a :
+					historyString += _('\n    + %s : %s') % (makeTime(t), andJoin(map(repr, added[t])))
+				else :
+					historyString += _('\n    - %s : %s') % (makeTime(t), andJoin(map(repr, removed[t])))
 		else :
-			addedString = _('aucune')
+			historyString = _('aucun')
 		
 		if removed :
 			removedString = ""	
@@ -862,7 +870,7 @@ def printModule(conf, module, out, verbose=False) :
 		else :
 			removedString = _('aucune')
 		
-		print >> out, template % {'module': module, 'comment': comment, 'url': url, 'regexp': regexp, 'current': andJoin(map(repr, current)), 'added': addedString, 'removed': removedString}
+		print >> out, template % {'module': module, 'comment': comment, 'url': url, 'regexp': regexp, 'current': andJoin(map(repr, current)), 'history': historyString}
 	else :
 		s = module
 		if comment :
