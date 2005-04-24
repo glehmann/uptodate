@@ -840,10 +840,10 @@ def printModule(conf, module, out, verbose=False) :
 		template = _(
 """%(module)s
   commentaire : %(comment)s
+  historique : %(history)s
+  versions actuelles : %(current)s
   URL : %(url)s
   expression régulière : %(regexp)s
-  versions actuelles : %(current)s
-  historique : %(history)s
 """)
 		
 		if added or removed:
