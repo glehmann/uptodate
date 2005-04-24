@@ -144,7 +144,7 @@ def commandAdd(argv, conf, out) :
 	Exemple :
         uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' A leading open source application server"""
 	
-	parser = OptionParser(usage=_("uptodate [options] add [options] nom url regexp [commentaire]"), description=_(commandAdd.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] add [options] nom url regexp [commentaire]"), description=_(commandAdd.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ajouter le module même si il existe déjà"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module après l'avoir ajouté"))
@@ -213,7 +213,7 @@ def commandAuto(argv, conf, out) :
 	+ jpackage releases, depuis un repertoire ftp :
 	uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"""
 	
-	parser = OptionParser(usage=_("uptodate [options] auto [options] nom url version [commentaire]"), description=_(commandAuto.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] auto [options] nom url version [commentaire]"), description=_(commandAuto.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ajouter le module même si il existe déjà"))
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help=_("choisir une expression régulière dans la liste proposée par uptodate"))
@@ -372,7 +372,7 @@ def commandCheck(argv, conf, out) :
 	zope : '2.7.5' ajoutée.
 	zope : '2.7.4' supprimée."""
 	
-	parser = OptionParser(usage=_("uptodate [options] check [options] [nom] ..."), description=_(commandCheck.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] check [options] [nom] ..."), description=_(commandCheck.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("rechercher les nouvelles versions de tous les modules"))
 	parser.add_option("-A", "--added", action="store_true", dest="added", help=_("afficher les versions ajoutées depuis la dernière recherche"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les modules inexistants"))
@@ -447,7 +447,7 @@ def commandEdit(argv, conf, out) :
 
 	Exemple :
 	uptodate edit itk-app comment des applications utilisant InsightToolkit"""
-	parser = OptionParser(usage=_("uptodate [options] edit [options] nom propriété [valeur]"), description=_(commandEdit.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] edit [options] nom propriété [valeur]"), description=_(commandEdit.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ne pas verifier que les nouvelles valeurs permettent de trouver des versions"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module après avoir modifier le module"))
@@ -511,7 +511,7 @@ def commandRemove(argv, conf, out) :
 	Exemple :
 	uptodate remove itk-app"""
 	
-	parser = OptionParser(usage=_("uptodate [options] remove [options] [nom] ..."), description=_(commandRemove.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] remove [options] [nom] ..."), description=_(commandRemove.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("supprimer tous les modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("supprimer les modules sans poser de question et ignorer les modules inexistants"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher les modules supprimés"))
@@ -554,7 +554,7 @@ def commandDisplay(argv, conf, out) :
 	Exemple :
 	uptodate display itk-app"""
 	
-	parser = OptionParser(usage="uptodate [options] display [options] [nom] ...", description=_(commandDisplay.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage="uptodate [options] display [options] [nom] ...", description=_(commandDisplay.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("afficher tous les modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les modules inexistants"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher plus d'informations"))
@@ -594,7 +594,7 @@ def commandCopy(argv, conf, out) :
 	Exemple :
 	uptodate copy itk-app InsightToolkit-Applications"""
 	
-	parser = OptionParser(usage=_("uptodate [options] copy nom nom"), description=_(commandCopy.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] copy nom nom"), description=_(commandCopy.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas de poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("copier le module même si le nom existe déjà"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module copié"))
@@ -640,7 +640,7 @@ def commandRename(argv, conf, out) :
 	Exemple :
 	uptodate rename itk-app InsightToolkit-Applications"""
 	
-	parser = OptionParser(usage=_("uptodate [options] rename nom nouveau_nom"), description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] rename nom nouveau_nom"), description=_(commandRename.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("renommer le module même si le nom existe déjà"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module renommé"))
@@ -687,7 +687,7 @@ def commandImport(argv, conf, out) :
 	Exemple :
 	uptodate import config"""
 	
-	parser = OptionParser(usage=_("uptodate [options] import fichier [name] ..."), description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] import fichier [name] ..."), description=_(commandRename.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("importer tous les modules du fichier"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("importer les modules même si les noms existent déjà"))
@@ -756,7 +756,7 @@ def commandExport(argv, conf, out) :
 	uptodate -o config export -a
 	uptodate export itk-app > config"""
 	
-	parser = OptionParser(usage=_("uptodate [options] export [name] ..."), description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
+	parser = OptionParser(usage=_("uptodate [options] export [name] ..."), description=_(commandRename.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("exporter tous les modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les modules inexistant"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher les modules exportés"))
@@ -1040,7 +1040,7 @@ class UptodateHelpFormatter(IndentedHelpFormatter) :
 		return description
 
 
-class UptodateHelpFormatter2(IndentedHelpFormatter) :
+class UptodateCommandHelpFormatter(IndentedHelpFormatter) :
 	def format_description(self, description) :
 		if not description :
 			return ""
