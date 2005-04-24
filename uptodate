@@ -41,6 +41,7 @@ nouvelle version de votre jeu favori (ou de tout autre chose avec une version)
 est disponible, uptodate est fait pour vous !
 
 Auteur : Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>
+Site web: http://gleh.dyndns.org/uptodate/
 
 Commandes :
 %s
@@ -140,8 +141,8 @@ def commandAdd(argv, conf, out) :
 	Vous pouvez également ajouter un commentaire pour décrire le module, pour garder la page d'accueil du programme dont vous voulez suivre la version, etc.
 	Ces informations doivent être fournie sur la ligne de commande.
 
-	Ex :
-	A faire"""
+	Exemple :
+        uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' A leading open source application server"""
 	
 	parser = OptionParser(usage=_("uptodate [options] add [options] nom url regexp [commentaire]"), description=_(commandAdd.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
@@ -198,8 +199,18 @@ def commandAuto(argv, conf, out) :
 	Vous pouvez également ajouter un commentaire pour décrire le module, pour garder la page d'accueil du programme dont vous voulez suivre la version, etc.
 	Ces informations doivent être fournie sur la ligne de commande.
 
-	Ex :
-	A faire"""
+	Exemples :
+	+ zope
+	uptodate auto zope http://www.zope.org/Products/ 2.7.4
+	
+	+ InsightToolkit, depuis la page de téléchargement de sourceforge :
+	uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?group_id=108122&package_id=116777' 2.0.1
+	
+	+ jpackage non free files, depuis un répertoire ftp :
+	uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm
+	
+	+ jpackage releases, depuis un repertoire ftp :
+	uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"""
 	
 	parser = OptionParser(usage=_("uptodate [options] auto [options] nom url version [commentaire]"), description=_(commandAuto.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
@@ -224,7 +235,7 @@ def commandAuto(argv, conf, out) :
 	comment = " ".join(args[3:])
 	
 	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes(_("Do you want to remove existing %s module?") % module, False) :
+		if opts.batch or not yes(_("Voulez vous supprimer le module %s ?") % module, False) :
 			raise ModuleExistsException(module)
 		else :
 			opts.force = True
@@ -350,12 +361,15 @@ def commandAuto(argv, conf, out) :
 def commandCheck(argv, conf, out) :
 	"""Cherche les nouvelles versions
 
-	Cherche les nouvelles versions des modules donnés en paramètres. Par défaut, les nouvelles versions et les versions supprimées sont affichées.
+	Check est utilisé pour chercher les nouvelles versions des modules donnés en paramètres. Par défaut, les nouvelles versions et les versions supprimées sont affichées.
 	Les versions trouvées sont enregistrées afin de pouvoir afficher les modifications à la prochaine éxécution de cette commande.
 	Vous pouvez exectuer cette commande périodiquement (avec cron par exemple) pour suivre l'évolution des versions.
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate check zope 
+	zope : '2.7.5' ajoutée.
+	zope : '2.7.4' supprimée."""
+	
 	parser = OptionParser(usage=_("uptodate [options] check [options] [nom] ..."), description=_(commandCheck.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("rechercher les nouvelles versions de tous les modules"))
 	parser.add_option("-A", "--added", action="store_true", dest="added", help=_("afficher les versions ajoutées depuis la dernière recherche"))
@@ -426,10 +440,10 @@ def commandCheck(argv, conf, out) :
 def commandEdit(argv, conf, out) :
 	"""Modifie les propriétés d'un module
 
-	Les propriétés modifiables sont : url, regexp et comment. Si url ou regexp sont modifiées, uptodate vérifie qu'il peut obtenir des versions avant de valider les changements.
+	Edit est utilisé pour modifier les propriétés d'un module. Les propriétés modifiables sont : url, regexp et comment. Si url ou regexp sont modifiées, uptodate vérifie qu'il peut obtenir des versions avant de valider les changements.
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate edit itk-app comment des applications utilisant InsightToolkit"""
 	parser = OptionParser(usage=_("uptodate [options] edit [options] nom propriété [valeur]"), description=_(commandEdit.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ne pas verifier que les nouvelles valeurs permettent de trouver des versions"))
@@ -488,10 +502,11 @@ def commandEdit(argv, conf, out) :
 def commandRemove(argv, conf, out) :
 	"""Supprimer des modules
 
-	Suprime les modules fournis en paramètre.
+	Remove est utilisé pour supprimer les modules fournis en paramètre.
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate remove itk-app"""
+	
 	parser = OptionParser(usage=_("uptodate [options] remove [options] [nom] ..."), description=_(commandRemove.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("supprimer tous les modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("supprimer les modules sans poser de question et ignorer les modules inexistants"))
@@ -530,10 +545,11 @@ def commandRemove(argv, conf, out) :
 def commandDisplay(argv, conf, out) :
 	"""Affiche les informations sur les modules
 
-	Affiche les informations sur les modules fournis en paramètre.
+	Display est utilisé pour afficher les informations sur les modules fournis en paramètre.
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate display itk-app"""
+	
 	parser = OptionParser(usage="uptodate [options] display [options] [nom] ...", description=_(commandDisplay.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("afficher tous les modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les modules inexistants"))
@@ -569,10 +585,11 @@ def commandDisplay(argv, conf, out) :
 def commandCopy(argv, conf, out) :
 	"""Copie un module
 
-	Copie un module.
+	Copy est utilisé pour copier un module.
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate copy itk-app InsightToolkit-Applications"""
+	
 	parser = OptionParser(usage=_("uptodate [options] copy nom nom"), description=_(commandCopy.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas de poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("copier le module même si le nom existe déjà"))
@@ -614,10 +631,11 @@ def commandCopy(argv, conf, out) :
 def commandRename(argv, conf, out) :
 	"""Renomme un module
 
-	Renomme un module
+	Rename est utilisé pour renommer un module
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate rename itk-app InsightToolkit-Applications"""
+	
 	parser = OptionParser(usage=_("uptodate [options] rename nom nouveau_nom"), description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("renommer le module même si le nom existe déjà"))
@@ -660,10 +678,11 @@ def commandRename(argv, conf, out) :
 def commandImport(argv, conf, out) :
 	"""Importe des modules
 
-	Importe des modules.
+	Import est utilisé pour importer des modules.
 
-	Ex :
-	A faire"""
+	Exemple :
+	uptodate import config"""
+	
 	parser = OptionParser(usage=_("uptodate [options] import fichier [name] ..."), description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("importer tous les modules du fichier"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
@@ -727,10 +746,12 @@ def commandImport(argv, conf, out) :
 def commandExport(argv, conf, out) :
 	"""Exporte des modules
 
-	Exporte des modules.
+	Export est utilisé pour exporter des modules.
 
 	Ex :
-	A faire"""
+	uptodate -o config export -a
+	uptodate export itk-app > config"""
+	
 	parser = OptionParser(usage=_("uptodate [options] export [name] ..."), description=_(commandRename.__doc__), formatter=UptodateHelpFormatter2())
 	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("exporter tous les modules"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les modules inexistant"))
@@ -986,9 +1007,9 @@ def main(argv) :
 			      version="uptodate %s" % VERSION,
 			      formatter=UptodateHelpFormatter())
 	parser.disable_interspersed_args()
-	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("configuration file"))
+	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FICHIER"), help=_("fichier de configuration (%default)"))
 	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("ne pas sauvegarder les changements"))
-	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FICHIER"), help=_("sauver les changements dans FICHIER"))
+	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FICHIER"), help=_("ecrire dans FICHIER (sortie standard par défaut)"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("afficher les options et les commandes disponibles"))
 	opts, args = parser.parse_args()
 
@@ -1071,12 +1092,12 @@ if __name__ == '__main__':
 		sys.exit(ERROR_MODULE_EXISTS)
 
 	except NoVersionFound, e :
-		print >> sys.stderr, _("Erreur : aucune version trouvée")
+		print >> sys.stderr, _("Erreur : Aucune version trouvée")
 		sys.exit(ERROR_NO_VERSION_FOUND)
 
 	except ModuleNotFoundException, e :
-		sing = _("Erreur : le module %s n'existe pas.")
-		plur = _("Erreur : les modules % n'existent pas.")
+		sing = _("Erreur : Le module %s n'existe pas.")
+		plur = _("Erreur : Les modules % n'existent pas.")
 		args = e.args[0]
 		if isinstance(args, str) :
 			msg = sing % args
@@ -1090,8 +1111,9 @@ if __name__ == '__main__':
 		sys.exit(ERROR_MODULE_NOT_FOUND)
 
 	except PropertyNotFoundException, e :
-		print >> sys.stderr, _("Erreur : la propriété %s n'existe pas.") % e.args[0]
+		print >> sys.stderr, _("Erreur : La propriété %s n'existe pas.") % e.args[0]
 		sys.exit(ERROR_PROPERTY_NOT_FOUND)
 
-
-
+	except UnknownCommandException, e :
+		print >> sys.stderr, _("Erreur : La commande %s n'existe pas.") % e.args[0]
+		sys.exit(ERROR_UNKNOWN_COMMAND)
