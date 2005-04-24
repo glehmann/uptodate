@@ -179,7 +179,8 @@ def commandAdd(argv, conf, out) :
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
 		conf.set(module, 'comment', comment)
-		conf.set(module, 'current', repr(current))
+		updateVersions(conf, module, current)
+		# conf.set(module, 'current', repr(current))
 		
 		if opts.verbose :
 			printModule(conf, module, sys.stderr, True)
@@ -349,7 +350,8 @@ def commandAuto(argv, conf, out) :
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
 		conf.set(module, 'comment', comment)
-		conf.set(module, 'current', repr(current))
+		updateVersions(conf, module, current)
+		# conf.set(module, 'current', repr(current))
 		
 		if opts.verbose :
 			printModule(conf, module, sys.stderr, True)
@@ -417,7 +419,8 @@ def commandCheck(argv, conf, out) :
 		newVersions = getVersions(module, url, regexp)
 		# test if a version can be found
 		if len(newVersions) != 0 :
-			conf.set(module, 'current', repr(newVersions))
+			updateVersions(conf, module, newVersions)
+			# conf.set(module, 'current', repr(newVersions))
 			
 			added = set(newVersions) - set(currentVersions)
 			removed = set(currentVersions) - set(newVersions)
@@ -495,7 +498,8 @@ def commandEdit(argv, conf, out) :
 		current = getVersions(module, conf.get(module, 'url'), conf.get(module, 'regexp'))
 		if len(current) == 0 :
 			raise NoVersionFound()
-		conf.set(module, 'current', repr(current))
+		updateVersions(conf, module, current)
+		# conf.set(module, 'current', repr(current))
 
 
 
@@ -822,21 +826,62 @@ def printModule(conf, module, out, verbose=False) :
 	"""
 	url = conf.get(module, 'url')
 	regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
-	current = conf.get(module, 'current')
+	current = eval(conf.get(module, 'current'))
 	comment = conf.get(module, 'comment')
+	if conf.has_option(module, 'added') :
+		added = eval(conf.get(module, 'added'))
+	else :
+		added = {}
+	if conf.has_option(module, 'removed') :
+		removed = eval(conf.get(module, 'removed'))
+	else :
+		removed = {}
 	
 	if verbose :
-		print >> out, module
-		print >> out, _("\tcomment= ")+comment
-		print >> out, _("\turl= ")+url
-		print >> out, _("\tregexp= ")+regexp
-		print >> out, _("\tcurrent= ")+current
+		template = _(
+"""%(module)s
+  commentaire : %(comment)s
+  URL : %(url)s
+  expression régulière : %(regexp)s
+  versions actuelles : %(current)s
+  versions ajoutées : %(added)s
+  versions supprimées : %(removed)s
+""")
+		
+		if added :
+			addedString = ""
+			for t in sorted(added.keys(), reverse=True) :
+				addedString += _('\n      + %s : %s') % (makeTime(t), andJoin(map(repr, added[t])))
+		else :
+			addedString = _('aucune')
+		
+		if removed :
+			removedString = ""	
+			for t in sorted(removed.keys(), reverse=True) :
+				removedString += _('\n      - %s : %s') % (makeTime(t), andJoin(map(repr, removed[t])))
+		else :
+			removedString = _('aucune')
+		
+		print >> out, template % {'module': module, 'comment': comment, 'url': url, 'regexp': regexp, 'current': andJoin(map(repr, current)), 'added': addedString, 'removed': removedString}
 	else :
 		s = module
 		if comment :
 			s += " (%s)" % comment
+		if added :
+			lastTime = sorted(added.keys(), reverse=True)[0]
+			s += '  + %s (%s)' % (andJoin(map(repr, added[lastTime])), makeTime(lastTime))
+		if removed :
+			lastTime = sorted(removed.keys(), reverse=True)[0]
+			s += '  - %s (%s)' % (andJoin(map(repr, removed[lastTime])), makeTime(lastTime))
+		
 		print >> out, s
 		
+def makeTime(t) :
+	import time
+	template = _('%(d)i/%(M)i/%(y)i %(h)ih%(m)i')
+	tTuple = time.gmtime(t)
+	tDict = {'y': tTuple[0], 'M': tTuple[1], 'd': tTuple[2], 'h': tTuple[3], 'm': tTuple[4], 's': tTuple[5]}
+	return template % tDict
 
 def andJoin(iterable) :
 	last = _(" et ")
@@ -911,6 +956,36 @@ def getVersions(module, url, regexp) :
     return list(set(new))
 
 
+def updateVersions(conf, name, newVersions) :
+	import time
+	
+	if not conf.has_option(name, 'current') :
+		conf.set(name, 'current', repr([]))
+	if not conf.has_option(name, 'added') :
+		conf.set(name, 'added', repr({}))
+	if not conf.has_option(name, 'removed') :
+		conf.set(name, 'removed', repr({}))
+	
+	current = set(eval(conf.get(name, 'current')))
+	added = eval(conf.get(name, 'added'))
+	removed = eval(conf.get(name, 'removed'))
+	
+	newAdded = list(set(newVersions) - current)
+	newRemoved = list(current - set(newVersions))
+	newVersions = list(newVersions)
+	# print current, added, removed
+	# print newVersions, newAdded, newRemoved
+
+	currentTime = time.time()
+
+	conf.set(name, 'current', repr(newVersions))
+	if newAdded != [] :
+		added[currentTime] = newAdded
+		conf.set(name, 'added', repr(added))
+	if newRemoved != [] :
+		removed[currentTime] = newRemoved
+		conf.set(name, 'removed', repr(removed))
+	
 
 def file(fName, output=False, notNone=False, append=False) :
         """Renvoi un fichier en fonction du nom de fichier passé en paramètre.
