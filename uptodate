@@ -247,7 +247,6 @@ def commandAuto(argv, conf, out) :
 	# find text around version string given by user
 	bordersRegexps = []
 	# text is keep from version to ', " or < (or >, depending of side)
-	# versin string is escaped to avoid problem with regexp. Without escape, "2.7.4" can match "217a4" for example.
 	bordersRegexps.append(('', r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])', ''))
 	# for ftp listing
 	bordersRegexps.append((r'[drwxls\-]{10}\s+' + r'\S+\s+' * 7, r'(\S*)%s(\S*)', ''))
@@ -257,7 +256,7 @@ def commandAuto(argv, conf, out) :
 	borders = []
 	# select borders
 	for (prefix, bRegexp, suffix) in bordersRegexps :
-		borders = re.findall(prefix + bRegexp % re.escape(version) + suffix, urlData)
+		borders = re.findall(prefix + bRegexp % escape(version) + suffix, urlData)
 		if borders != [] :
 			break
 	
@@ -277,8 +276,8 @@ def commandAuto(argv, conf, out) :
 			rBorder = rBorder[:lBorder.find(version)]
 			
 		# escape characters so they can be used in regexp
-		lBorder = re.escape(lBorder)
-		rBorder = re.escape(rBorder)
+		lBorder = escape(lBorder)
+		rBorder = escape(rBorder)
 		
 		# create regexp candidate
 		candidate = prefix + lBorder + versionRegExp + rBorder + suffix
@@ -1033,6 +1032,10 @@ def file(fName, output=False, notNone=False, append=False) :
                         return __builtin__.file(fName)
 
 
+def escape(s) :
+	for c in '\\{}[]()?.' :
+		s = s.replace(c, '\\'+c)
+	return s
 
 
 class UptodateHelpFormatter(IndentedHelpFormatter) :
