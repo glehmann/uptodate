@@ -109,7 +109,7 @@ ERRORS = {
 
 # define uptodate internals exceptions
 
-class InvalidNbOfArgs(Exception) :
+class InvalidNbOfArgsException(Exception) :
 	pass
 
 class NoVersionFound(Exception) :
@@ -156,7 +156,7 @@ def commandAdd(argv, conf, out) :
 		return 0
     
 	if len(args) < 3 :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 
 	module = args[0]
 	url = args[1]
@@ -393,7 +393,7 @@ def commandCheck(argv, conf, out) :
 	
 	if len(args) == 0 and not opts.all :
 		# no module to check... print usage and exit
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 
 	if opts.all :
 		modules = conf.sections()
@@ -485,7 +485,7 @@ def commandEdit(argv, conf, out) :
 		
 	else :
 		# invalid number of arguments !
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 	
 	# modify prop value
 	conf.set(module, prop, value)
@@ -524,7 +524,7 @@ def commandRemove(argv, conf, out) :
 
     
 	if len(args) == 0 and not opts.all :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 	
 	if opts.all :
 		modules = conf.sections()
@@ -567,7 +567,7 @@ def commandDisplay(argv, conf, out) :
     
     
 	if len(args) == 0 and not opts.all :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 	
 	if opts.all :
 		modules = conf.sections()
@@ -606,7 +606,7 @@ def commandCopy(argv, conf, out) :
 		return 0
     
 	if len(args) != 2 :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 
 	module, new = args
 	if module not in conf.sections() :
@@ -652,7 +652,7 @@ def commandRename(argv, conf, out) :
 		return 0
     
 	if len(args) != 2 :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 
 	module, new = args
 	if module not in conf.sections() :
@@ -707,7 +707,7 @@ def commandImport(argv, conf, out) :
 
 	# module to import
 	if len(args) <= 1 and not opts.all :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 	
 	if opts.all :
 		modules = importConf.sections()
@@ -771,7 +771,7 @@ def commandExport(argv, conf, out) :
 	exportConf = ConfigParser.SafeConfigParser()
 
 	if len(args) == 0 and not opts.all :
-		raise InvalidNbOfArgs(parser.get_usage())
+		raise InvalidNbOfArgsException(parser.get_usage())
 	
 	if opts.all :
 		modules = conf.sections()
@@ -1119,7 +1119,7 @@ def main(argv) :
 			raise UnknownCommandException(command)
 	else:
 		parser.print_usage()
-		raise InvalidNbOfArgs()
+		raise InvalidNbOfArgsException()
 	
 	
 	# load config in a file to be able to load it from stdin
@@ -1170,7 +1170,8 @@ if __name__ == '__main__':
 		sys.stderr.write(str(e)+"\n")
 		sys.exit(ERROR_KB_INTERRUPT)
 		
-	except InvalidNbOfArgs, e :
+	except InvalidNbOfArgsException, e :
+		print >> sys.stderr, e.args[0]
 		sys.exit(ERROR_INVALID_NB_OF_ARGS)
 
 	except ModuleExistsException, e :
