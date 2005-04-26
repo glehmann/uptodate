@@ -247,7 +247,7 @@ def commandAuto(argv, conf, out) :
 	# find text around version string given by user
 	bordersRegexps = []
 	# text is keep from version to ', " or < (or >, depending of side)
-	bordersRegexps.append(('', r'([>"\'][^>"\']*)%s([^>"]{0,15}[<"\'])', ''))
+	bordersRegexps.append(('', r'([>"\'][^>"\']*)%s([^>"]{0,20}[<"\'])', ''))
 	# for ftp listing
 	bordersRegexps.append((r'[drwxls\-]{10}\s+' + r'\S+\s+' * 7, r'(\S*)%s(\S*)', ''))
 	# finally, use what we can find
@@ -318,7 +318,7 @@ def commandAuto(argv, conf, out) :
 		print >> sys.stderr, _("Les expressions régulières disponibles sont :")
 		for i, candidate in enumerate(candidates) :
 			print >> sys.stderr, "%i. %s" % (i, candidate)
-			print >> sys.stderr, '    %s' % repr(re.findall(candidate, urlData))
+			print >> sys.stderr, '    %s' % andJoin(map(repr, set(re.findall(candidate, urlData))))
 			print >> sys.stderr
 		# get number
 		import readline
