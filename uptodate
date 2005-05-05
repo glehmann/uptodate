@@ -799,7 +799,68 @@ def commandExport(argv, conf, out) :
 
 
 	
+def commandHistory(argv, conf, out) :
+	"""Affiche l'historique des versions
 	
+	History es utilis pour afficher l'historiques des versions des modules pass en parametre.
+	
+	Ex :
+	uptodate history itk-app --last 3"""
+	
+	parser = OptionParser(usage=_("uptodate [options] history [name] ..."), description=_(commandRename.__doc__), formatter=UptodateCommandHelpFormatter())
+	parser.add_option("-a", "--all", action="store_true", dest="all", help=_("exporter tous les modules"))
+	parser.add_option("-A", "--added", action="store_true", dest="added", help=_("afficher l'historique des ajouts de versions"))
+	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les modules inexistant"))
+	parser.add_option("-r", "--removed", action="store_true", dest="removed", help=_("afficher l'historique des suppressions de versions"))
+	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("afficher les options et les modules disponibles"))
+	opts, args = parser.parse_args(argv)
+	
+	if opts.listOption :
+		listOptions(parser)
+		listModules(conf)
+		return 0
+	
+	if not opts.added and not opts.removed :
+		# by default, both removed and added are displayed
+		opts.added = True
+		opts.removed = True
+	
+	if len(args) == 0 and not opts.all :
+		raise InvalidNbOfArgsException(parser.get_usage())
+	
+	if opts.all :
+		modules = conf.sections()
+	else :
+		modules = set(args)
+		wrongModules = modules - set(conf.sections())
+		if wrongModules :
+			if opts.force :
+				modules -= wrongModules
+			else :
+				raise ModuleNotFoundException(wrongModules)
+
+	# create a list with added and removed versions for all given modules
+	hList = []
+	for module in modules :
+		if opts.added :
+			added = eval(conf.get(module, 'added'))
+			for t, versions in added.iteritems() :
+				hList.append((t, True, module, versions))
+		if opts.removed :
+			removed = eval(conf.get(module, 'removed'))
+			for t, versions in removed.iteritems() :
+				hList.append((t, False, module, versions))
+
+	addedTemp = _('  + %s : %s (%s)')
+	removedTemp = _('  - %s : %s (%s)')
+	for t, add, module, versions in sorted(hList, reverse = True) :
+	    if add :
+		print >> out, addedTemp % (module, andJoin(map(repr, versions)), makeTime(t)) 
+	    else :
+		print >> out, removedTemp % (module, andJoin(map(repr, versions)), makeTime(t)) 
+
+
+														
 COMMANDS = [(['add'], commandAdd),
 	    (['check'], commandCheck),
 	    (['edit'], commandEdit),
@@ -810,6 +871,7 @@ COMMANDS = [(['add'], commandAdd),
 	    (['auto'], commandAuto),
 	    (['import'], commandImport),
 	    (['export'], commandExport),
+	    (['history'], commandHistory),
 	    ]
 
 
