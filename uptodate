@@ -802,7 +802,7 @@ def commandExport(argv, conf, out) :
 def commandHistory(argv, conf, out) :
 	"""Affiche l'historique des versions
 	
-	History es utilis pour afficher l'historiques des versions des modules pass en parametre.
+	History est utilisé pour afficher l'historique des versions des modules passés en parametre.
 	
 	Ex :
 	uptodate history itk-app --last 3"""
