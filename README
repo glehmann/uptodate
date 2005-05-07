@@ -16,8 +16,7 @@ version, you can do:
 
    uptodate auto zope \
       http://www.zope.org/Products/ \
-      2.7.4 \
-      A leading open source application server
+      2.7.4
    
 uptodate auto try to find a regular expression which will be used
 to find new versions. Most of the time, you don't need to find regular
@@ -26,15 +25,13 @@ uptodate auto command need informations to find versions:
  + a name
  + the url where it will search version
  + the current version number
- + an optional comment
 
 If uptodate auto can't find a regular expression, or if the regular
 expression isn't good enough for you, you can use uptodate add :
 
    uptodate add zope \
       http://www.zope.org/Products/ \
-      'Download Zope (.{1,10})\s*</a>' \
-      A leading open source application server
+      'Download Zope (.{1,10})\s*</a>'
       
 arguments are the same, but the third is regular expression instead of 
 version.

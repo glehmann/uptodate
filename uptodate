@@ -142,10 +142,11 @@ def commandAdd(argv, conf, out) :
 	Ces informations doivent être fournie sur la ligne de commande.
 
 	Exemple :
-        uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' A leading open source application server"""
+        uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' -c 'A leading open source application server'"""
 	
-	parser = OptionParser(usage=_("uptodate [options] add [options] nom url regexp [commentaire]"), description=_(commandAdd.__doc__), formatter=UptodateCommandHelpFormatter())
+	parser = OptionParser(usage=_("uptodate [options] add [options] nom url regexp"), description=_(commandAdd.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
+        parser.add_option("-c", "--comment", dest="comment", default="", metavar="COMMENT", help=_("associe le commentaire au module"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ajouter le module même si il existe déjà"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module après l'avoir ajouté"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("affiche les options disponibles"))
@@ -155,13 +156,10 @@ def commandAdd(argv, conf, out) :
 		listOptions(parser)
 		return 0
     
-	if len(args) < 3 :
+	if len(args) != 3 :
 		raise InvalidNbOfArgsException(parser.get_usage())
 
-	module = args[0]
-	url = args[1]
-	regexp = args[2]
-	comment = " ".join(args[3:])
+	module, url, regexp = args
 	
 	if not opts.force and conf.has_section(module) :
 		if opts.batch or not yes(_("Voulez vous supprimer le module %s ?") % module, False) :
@@ -178,7 +176,7 @@ def commandAdd(argv, conf, out) :
 		conf.add_section(module)
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
-		conf.set(module, 'comment', comment)
+		conf.set(module, 'comment', opts.comment)
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
 		
@@ -213,8 +211,9 @@ def commandAuto(argv, conf, out) :
 	+ jpackage releases, depuis un repertoire ftp :
 	uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"""
 	
-	parser = OptionParser(usage=_("uptodate [options] auto [options] nom url version [commentaire]"), description=_(commandAuto.__doc__), formatter=UptodateCommandHelpFormatter())
+	parser = OptionParser(usage=_("uptodate [options] auto [options] nom url version"), description=_(commandAuto.__doc__), formatter=UptodateCommandHelpFormatter())
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
+        parser.add_option("-c", "--comment", dest="comment", default="", metavar="COMMENT", help=_("associe le commentaire au module"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ajouter le module même si il existe déjà"))
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help=_("choisir une expression régulière dans la liste proposée par uptodate"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module après l'avoir ajouté"))
@@ -227,13 +226,10 @@ def commandAuto(argv, conf, out) :
 		listOptions(parser)
 		return 0
     
-	if len(args) < 3 :
+	if len(args) != 3 :
 		raise InvalidNbOfArgsException(parser.get_usage())
 
-	module = args[0]
-	url = args[1]
-	version = args[2]
-	comment = " ".join(args[3:])
+	module, url, version = args
 	
 	if not opts.force and conf.has_section(module) :
 		if opts.batch or not yes(_("Voulez vous supprimer le module %s ?") % module, False) :
@@ -348,7 +344,7 @@ def commandAuto(argv, conf, out) :
 		conf.add_section(module)
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
-		conf.set(module, 'comment', comment)
+		conf.set(module, 'comment', opts.comment)
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
 		
