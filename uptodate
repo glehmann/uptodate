@@ -145,9 +145,11 @@ def commandAdd(argv, conf, out) :
         uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' -c 'A leading open source application server'"""
 	
 	parser = OptionParser(usage=_("uptodate [options] add [options] nom url regexp"), description=_(commandAdd.__doc__), formatter=UptodateCommandHelpFormatter())
+        parser.add_option("-A", "--add-command", dest="addCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de l'ajout d'une version"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
         parser.add_option("-c", "--comment", dest="comment", default="", metavar="COMMENT", help=_("associe le commentaire au module"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ajouter le module même si il existe déjà"))
+        parser.add_option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de la suppression d'une version"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module après l'avoir ajouté"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("affiche les options disponibles"))
 	opts, args = parser.parse_args(argv)
@@ -177,6 +179,8 @@ def commandAdd(argv, conf, out) :
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
 		conf.set(module, 'comment', opts.comment)
+		conf.set(module, 'add command', opts.addCommand)
+		conf.set(module, 'remove command', opts.removeCommand)
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
 		
@@ -212,10 +216,12 @@ def commandAuto(argv, conf, out) :
 	uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"""
 	
 	parser = OptionParser(usage=_("uptodate [options] auto [options] nom url version"), description=_(commandAuto.__doc__), formatter=UptodateCommandHelpFormatter())
+        parser.add_option("-A", "--add-command", dest="addCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de l'ajout d'une version"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
         parser.add_option("-c", "--comment", dest="comment", default="", metavar="COMMENT", help=_("associe le commentaire au module"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ajouter le module même si il existe déjà"))
 	parser.add_option("-i", "--interactive", action="store_true", dest="choose", help=_("choisir une expression régulière dans la liste proposée par uptodate"))
+        parser.add_option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de la suppression d'une version"))
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher le module après l'avoir ajouté"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("affiche les options disponibles"))
 	opts, args = parser.parse_args(argv)
@@ -345,6 +351,8 @@ def commandAuto(argv, conf, out) :
 		conf.set(module, 'url', url)
 		conf.set(module, 'regexp', regexp)
 		conf.set(module, 'comment', opts.comment)
+		conf.set(module, 'add command', opts.addCommand)
+		conf.set(module, 'remove command', opts.removeCommand)
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
 		
