@@ -21,6 +21,8 @@
 #
 
 from uptodate import *
+import os
+from string import Template
 
 usage = _("uptodate [options] check [nom] ...")
 
@@ -71,6 +73,15 @@ def runCommand(opts, args, conf, out) :
 		url = conf.get(module, 'url')
 		regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
 		currentVersions = eval(conf.get(module, 'current'))
+		if conf.has_option(module, 'add-command') :
+			addCommand = Template(conf.get(module, 'add-command'))
+		else :
+			addCommand = Template("")
+		if conf.has_option(module, 'remove-command') :
+			removeCommand = Template(conf.get(module, 'remove-command'))
+		else :
+			removeCommand = Template("")
+		
 		# get new versions
 		newVersions = getVersions(module, url, regexp)
 		# test if a version can be found
@@ -80,6 +91,8 @@ def runCommand(opts, args, conf, out) :
 			
 			added = set(newVersions) - set(currentVersions)
 			removed = set(currentVersions) - set(newVersions)
+			
+			# display added and removed versions
 			if added and opts.added :
 				if len(added) == 1 :
 					print >> out, _("%s : %s ajoutée.") % (module, repr(added.pop()))
@@ -90,6 +103,22 @@ def runCommand(opts, args, conf, out) :
 					print >> out, _("%s : %s supprimée.") % (module, repr(removed.pop()))
 				else :
 					print >> out, _("%s : %s supprimées.") % (module, andJoin(map(repr, removed)))
+					
+			# execute commands
+			if not opts.dryRun :
+				if addCommand.template :
+					for version in added :
+						d = {'module': module, 'version': version}
+						command = addCommand.substitute(d)
+						if opts.verbose :
+							print >> sys.stderr,  _("%s : exécute + : %s") % (module, command)
+						os.system(command)
+				if removeCommand.template :
+					for version in removed :
+						command = removeCommand.substitute(d)
+						if opts.verbose :
+							print >> sys.stderr, _("%s : exécute - : %s") % (module, command)
+						os.system(command)
 		else :
 			# no version found
 			print >> sys.stderr, _("Attention : aucune version trouvée pour %s. Les versions actuellement connues sont conservées.") % module

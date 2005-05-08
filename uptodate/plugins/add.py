@@ -81,8 +81,8 @@ def createModule(conf, module, url, regexp, comment='', addCommand='', remComman
 	conf.set(module, 'url', url)
 	conf.set(module, 'regexp', regexp)
 	conf.set(module, 'comment', comment)
-	conf.set(module, 'add command', addCommand)
-	conf.set(module, 'remove command', remCommand)
+	conf.set(module, 'add-command', addCommand)
+	conf.set(module, 'remove-command', remCommand)
 	updateVersions(conf, module, versions)
 
 	
