@@ -63,7 +63,7 @@ def add(module, url, regexp, opts, conf, out) :
 	if len(current) != 0 :
 		if opts.force and conf.has_section(module) :
 			conf.remove_section(module)
-		createModule(conf, url, regexp, opts.comment, opts.addCommand, opts.removeCommand)
+		createModule(conf, module, url, regexp, opts.comment, opts.addCommand, opts.removeCommand)
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
 		
@@ -74,15 +74,15 @@ def add(module, url, regexp, opts, conf, out) :
 		raise NoVersionFound()
 	
 
-def createModule(conf, name, url, regexp, comment='', addCom='', remCom='', versions=[]) :
+def createModule(conf, module, url, regexp, comment='', addCommand='', remCommand='', versions=[]) :
 	"""Create a new module in config file
 	"""
 	conf.add_section(module)
 	conf.set(module, 'url', url)
 	conf.set(module, 'regexp', regexp)
-	conf.set(module, 'comment', opts.comment)
-	conf.set(module, 'add command', opts.addCommand)
-	conf.set(module, 'remove command', opts.removeCommand)
-	updateVersions(conf, module, current)
+	conf.set(module, 'comment', comment)
+	conf.set(module, 'add command', addCommand)
+	conf.set(module, 'remove command', remCommand)
+	updateVersions(conf, module, versions)
 
 	

@@ -21,6 +21,7 @@
 #
 
 from uptodate import *
+import add
 
 usage = _("uptodate [options] auto nom url version")
 
@@ -49,10 +50,7 @@ uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux
 
 names = ["auto"]
 
-options = [Option("-A", "--add-command", dest="addCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de l'ajout d'une version")),
-	Option("-C", "--comment", dest="comment", default="", metavar="COMMENTAIRE", help=_("associe le commentaire au module")),
-	Option("-i", "--interactive", action="store_true", dest="choose", help=_("choisir une expression régulière dans la liste proposée par uptodate")),
-	Option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de la suppression d'une version")),
+options = add.options + [Option("-i", "--interactive", action="store_true", dest="choose", help=_("choisir une expression régulière dans la liste proposée par uptodate")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -173,12 +171,7 @@ def runCommand(opts, args, conf, out) :
 	if len(current) != 0 :
 		if opts.force and conf.has_section(module) :
 			conf.remove_section(module)
-		conf.add_section(module)
-		conf.set(module, 'url', url)
-		conf.set(module, 'regexp', regexp)
-		conf.set(module, 'comment', opts.comment)
-		conf.set(module, 'add command', opts.addCommand)
-		conf.set(module, 'remove command', opts.removeCommand)
+		add.createModule(conf, module, url, regexp, opts.comment, opts.addCommand, opts.removeCommand)
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
 		
