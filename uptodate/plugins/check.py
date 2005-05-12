@@ -22,7 +22,7 @@
 
 from uptodate import *
 import os
-from string import Template
+# from string import Template
 
 usage = _("uptodate [options] check [nom] ...")
 
@@ -91,16 +91,15 @@ def runCommand(opts, args, conf, out) :
 			
 			added = set(newVersions) - set(currentVersions)
 			removed = set(currentVersions) - set(newVersions)
-			
 			# display added and removed versions
 			if added and opts.added :
 				if len(added) == 1 :
-					print >> out, _("%s : %s ajoutée.") % (module, repr(added.pop()))
+					print >> out, _("%s : %s ajoutée.") % (module, repr(list(added)[0]))
 				else :
 					print >> out, _("%s : %s ajoutées.") % (module, andJoin(map(repr, added)))
 			if removed and opts.removed :
 				if len(removed) == 1 :
-					print >> out, _("%s : %s supprimée.") % (module, repr(removed.pop()))
+					print >> out, _("%s : %s supprimée.") % (module, repr(list(removed)[0]))
 				else :
 					print >> out, _("%s : %s supprimées.") % (module, andJoin(map(repr, removed)))
 					
