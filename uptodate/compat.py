@@ -55,7 +55,7 @@ def sorted(iterable, cmp=None, key=None, reverse=False) :
 # string.Template allow us to create templated command without problem : 
 # configparser use standard substitution, so an error in template can make the config file invalid. With the new template, we avoid this problem
 # thoses classes are stollen from python 2.4 string module
-
+import re
 class _TemplateMetaclass(type):
 	pattern = r"""
 	%(delim)s(?:
