@@ -28,14 +28,17 @@ summary = _("Display versions history")
 
 description = _("""History is used in order to display versions history.
 
-Example:
-uptodate history itk-app""")
+Examples:
+uptodate history itk-app
+
+uptodate history --all --last 10""")
 
 names = ['history']
 
 options = [Option("-a", "--all", action="store_true", dest="all", help=_("export all modules")),
 	Option("-A", "--added", action="store_true", dest="added", help=_("display added versions history")),
 	Option("-r", "--removed", action="store_true", dest="removed", help=_("display removed versions history")),
+	Option("-l", "--last", dest="last", default=None, type="int", help=_("display last modifications"))
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -72,6 +75,12 @@ def runCommand(opts, args, conf, out) :
 
 	addedTemp = _('  + %s: %s (%s)')
 	removedTemp = _('  - %s: %s (%s)')
+	# sort history
+	hList = sorted(hList, reverse = True)
+	# select only last changes (if needed)
+	if opts.last :
+		hList = hList[:opts.last]
+	# display history
 	for t, add, module, versions in sorted(hList, reverse = True) :
 	    if add :
 		print >> out, addedTemp % (module, andJoin(map(repr, versions)), makeTime(t)) 
