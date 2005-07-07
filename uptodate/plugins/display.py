@@ -22,18 +22,18 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] display [nom] ...")
+usage = _("uptodate [options] display [name] ...")
 
-summary = _("Affiche les informations sur les modules")
+summary = _("Display informations about modules")
 
-description = _("""Display est utilisé pour afficher les informations sur les modules fournis en paramètre.
+description = _("""Display is used in order to display informations about modules.
 
-Exemple :
+Example:
 uptodate display itk-app""")
 
 names = ['display']
 
-options = [Option("-a", "--all", action="store_true", dest="all", help=_("afficher tous les modules")),
+options = [Option("-a", "--all", action="store_true", dest="all", help=_("display all modules")),
 	]
 
 def runCommand(opts, args, conf, out) :

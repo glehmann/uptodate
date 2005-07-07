@@ -22,24 +22,24 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] add nom url regexp")
+usage = _("uptodate [options] add name url regexp")
 
-summary = _("Ajoute un nouveau module")
+summary = _("Add a new module")
 
-description = _("""Add est utilisé pour ajouter un nouveau module. Un module posssède un nom et contient les informations nécessaires pour aller chercher les nouvelles versions :
-+ une URL d'un fichier ou d'un repertoire. Le fichier ou le répertoire peuvent être distant (site web, site ftp) ou local
-+ une expression régulière permettant de trouver les versions dans les informations récupérées grâce à l'URL précédente
-Vous pouvez également ajouter un commentaire pour décrire le module, pour garder la page d'accueil du programme dont vous voulez suivre la version, etc.
-Ces informations doivent être fournie sur la ligne de commande.
+description = _("""Add is used to add a new module. A module has a name and contains the appropriate informations in order to search the new versions:
+- the module's name
+- the URL of a file or a directory. The file or the directory may be distant (website, ftp) or local.
+- a regular expression which find the versions in the received data from the URL.
+You can add a comment to describe the module, to store the homepage, etc.
 
-Exemple :
+Example:
 uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' -C 'A leading open source application server'""")
 
 names = ['add']
 
-options = [Option("-A", "--add-command", dest="addCommand", default="", metavar="COMMANDE", help=_("la commande à exécuter lors de l'ajout d'une version")),
-        Option("-C", "--comment", dest="comment", default="", metavar="COMMENTAIRE", help=_("associe le commentaire au module")),
-        Option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMANDE", help=_("la commande a exécuter lors de la suppression d'une version")),
+options = [Option("-A", "--add-command", dest="addCommand", default="", metavar="COMMAND", help=_("Execute this command when a new version is available")),
+        Option("-C", "--comment", dest="comment", default="", metavar="COMMENT", help=_("associate the comment with the module")),
+        Option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMAND", help=_("Execute this command when a version is no more available")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -59,7 +59,7 @@ def add(module, url, regexp, opts, conf, out) :
 		raise PropertyTypeError()
 
 	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes(_("Voulez vous supprimer le module %s ?") % module, False) :
+		if opts.batch or not yes(_("Do you to remove the module %s?") % module, False) :
 			raise ModuleExistsException(module)
 		else :
 			opts.force = True

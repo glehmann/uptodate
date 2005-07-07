@@ -22,14 +22,14 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] edit nom propriété [valeur]")
+usage = _("uptodate [options] edit name property [value]")
 
-summary = _("Modifie les propriétés d'un module")
+summary = _("Modify module's properties")
 
-description = _("""Edit est utilisé pour modifier les propriétés d'un module. Les propriétés modifiables sont : url, regexp et comment. Si url ou regexp sont modifiées, uptodate vérifie qu'il peut obtenir des versions avant de valider les changements.
+description = _("""Edit is used in order to modify module's properties. Modifiable properties are: added, removed, current, add-command, remove-command, url, regexp and comment. If url or regexp are modified, uptodate check if it can obtain versions before validating changes.
 
-Exemple :
-uptodate edit itk-app comment des applications utilisant InsightToolkit""")
+Example:
+uptodate edit itk-app comment 'applications using InsightToolkit'""")
 
 names = ["edit"]
 
@@ -49,7 +49,7 @@ def runCommand(opts, args, conf, out) :
 		# readline.insert_text() seems to so nothing :-(
 		# how to set an initial value ??
 		# readline.insert_text(conf.get(module, prop))
-		value = raw_input(_('%s value : ') % prop)
+		value = raw_input(_('%s value: ') % prop)
 		
 	elif len(args) >= 3 :
 		# command line edit

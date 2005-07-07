@@ -22,18 +22,18 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] import fichier [nom] ...")
+usage = _("uptodate [options] import file [name] ...")
 
-summary = _("Importe des modules")
+summary = _("Import modules")
 
-description = _("""Import est utilisé pour importer des modules.
+description = _("""Import is used in order to import modules.
 
-Exemple :
+Example:
 uptodate import config""")
 
 names = ['import']
 
-options = [Option("-a", "--all", action="store_true", dest="all", help=_("importer tous les modules du fichier")),
+options = [Option("-a", "--all", action="store_true", dest="all", help=_("import all modules in file")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -68,7 +68,7 @@ def runCommand(opts, args, conf, out) :
 				conf.remove_section(module)
 			elif opts.batch :
 				raise ModuleExistsException(module)
-			elif yes(_("Do you want to remove existing %s module?") % module, False) :
+			elif yes(_("Do you want to remove module %s?") % module, False) :
 				conf.remove_section(module)
 			else :
 				imp = False

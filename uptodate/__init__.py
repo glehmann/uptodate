@@ -99,11 +99,11 @@ def printModule(conf, module, out, verbose=False) :
         if verbose :
                 template = _(
 """%(module)s
-  commentaire : %(comment)s
-  historique : %(history)s
-  versions actuelles : %(current)s
-  URL : %(url)s
-  expression régulière : %(regexp)s
+  comment: %(comment)s
+  history: %(history)s
+  current versions: %(current)s
+  URL: %(url)s
+  regular expression: %(regexp)s
 """)
 
                 if added or removed:
@@ -116,18 +116,18 @@ def printModule(conf, module, out, verbose=False) :
                         historyString = ""
                         for t, a in sorted(hList, reverse=True) :
                                 if a :
-                                        historyString += _('\n    + %s : %s') % (makeTime(t), andJoin(map(repr, added[t])))
+                                        historyString += _('\n    + %s: %s') % (makeTime(t), andJoin(map(repr, added[t])))
                                 else :
-                                        historyString += _('\n    - %s : %s') % (makeTime(t), andJoin(map(repr, removed[t])))
+                                        historyString += _('\n    - %s: %s') % (makeTime(t), andJoin(map(repr, removed[t])))
                 else :
-                        historyString = _('aucun')
+                        historyString = _('none')
 
                 if removed :
                         removedString = ""
                         for t in sorted(removed.keys(), reverse=True) :
-                                removedString += _('\n      - %s : %s') % (makeTime(t), andJoin(map(repr, removed[t])))
+                                removedString += _('\n      - %s: %s') % (makeTime(t), andJoin(map(repr, removed[t])))
                 else :
-                        removedString = _('aucune')
+                        removedString = _('none')
 		
 		print >> out, template % {'module': module, 'comment': comment, 'url': url, 'regexp': regexp, 'current': andJoin(map(repr, current)), 'history': historyString}
 	else :
@@ -149,7 +149,7 @@ def makeTime(t) :
 	
 	format a time"""
 	import time
-	template = _('%(d)i/%(M)i/%(y)i %(h)ih%(m)i')
+	template = _('%(d)i/%(M)i/%(y)i %(h)i:%(m)i')
 	tTuple = time.gmtime(t)
 	tDict = {'y': tTuple[0], 'M': tTuple[1], 'd': tTuple[2], 'h': tTuple[3], 'm': tTuple[4], 's': tTuple[5]}
 	return template % tDict
@@ -161,7 +161,7 @@ def andJoin(iterable) :
 	
 	Ex: andJoin([1, 2, 3]) -> '1, 2 and 3'
 	"""
-	last = _(" et ")
+	last = _(" and ")
 	sep = _(", ")
 	if len(iterable) == 0 :
 		msg = ""

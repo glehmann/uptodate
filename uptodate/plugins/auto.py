@@ -23,34 +23,33 @@
 from uptodate import *
 import add
 
-usage = _("uptodate [options] auto nom url version")
+usage = _("uptodate [options] auto name url version")
 
-summary = _("Ajoute un nouveau module sans avoir à fournir d'expression régulière")
+summary = _("Add a new module with no need of a regular expression")
 
-description = _("""Auto est utilisé pour ajouter un nouveau module sans avoir a fournir l'expression régulière qui permet de récupérer les versions.
-Vous devez fournir :
-+ un nom. Si le nom est présent à l'URL fournie, il influencera le choix de l'expression régulière.
-+ une URL d'un fichier ou d'un repertoire. Le fichier ou le répertoire peuvent être distant (site web, site ftp) ou local
-+ un numéro de version présent à l'URL fournie. Ce numéro permet de trouver l'expression régulière qui sera utilisé pour obtenir les nouvelles versions.
-Vous pouvez également ajouter un commentaire pour décrire le module, pour garder la page d'accueil du programme dont vous voulez suivre la version, etc.
-Ces informations doivent être fournie sur la ligne de commande.
+description = _("""Auto is used in order to add a new module with no need of the regular expression used to get versions.
+You must give:
++ the module's name. If the name is in the received data from the URL, it'll influence the choice of the regular expression.
++ the URL of a file or a directory. The file or the directory may be distant (website, ftp) or local.
++ an existing version number. This version number allows to find the regular expression which will be used to obtain new versions.
+You can add a comment to describe the module, to store the homepage, etc.
 
-Exemples :
+Examples:
 + zope
 uptodate auto zope http://www.zope.org/Products/ 2.7.4
 
-+ InsightToolkit, depuis la page de téléchargement de sourceforge :
++ InsightToolkit, from the sourceforge download page:
 uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?group_id=108122&package_id=116777' 2.0.1
 
-+ jpackage non free files, depuis un répertoire ftp :
++ jpackage non free files, from a ftp directory :
 uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm
 
-+ jpackage releases, depuis un repertoire ftp :
++ jpackage releases, from a ftp directory :
 uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6""")
 
 names = ["auto"]
 
-options = add.options + [Option("-i", "--interactive", action="store_true", dest="choose", help=_("choisir une expression régulière dans la liste proposée par uptodate")),
+options = add.options + [Option("-i", "--interactive", action="store_true", dest="choose", help=_("allows to choose a regular expression in the list proposed by uptodate")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -69,7 +68,7 @@ def runCommand(opts, args, conf, out) :
 	module, url, version = args
 	
 	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes(_("Voulez vous supprimer le module %s ?") % module, False) :
+		if opts.batch or not yes(_("Do you want to remove the module %s?") % module, False) :
 			raise ModuleExistsException(module)
 		else :
 			opts.force = True
@@ -148,7 +147,7 @@ def runCommand(opts, args, conf, out) :
 	
 	if opts.choose :
 		# ask to user to select a regexp
-		print >> sys.stderr, _("Les expressions régulières disponibles sont :")
+		print >> sys.stderr, _("Available regular expressions:")
 		for i, candidate in enumerate(candidates) :
 			print >> sys.stderr, "%i. %s" % (i, candidate)
 			print >> sys.stderr, '    %s' % andJoin(map(repr, set(re.findall(candidate, urlData))))
@@ -158,7 +157,7 @@ def runCommand(opts, args, conf, out) :
 		selectRegExp = -1
 		while selectRegExp == -1 :
 			try :
-			        userAnwser = raw_input(_("Choisissez une expression régulière (0) :"))
+			        userAnwser = raw_input(_("Choose a regular expression (0):"))
 				selectRegExp = int(userAnwser)
 				if selectRegExp < 0 or selectRegExp >= len(candidates) :
 					selectRegExp = -1

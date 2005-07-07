@@ -24,11 +24,11 @@ from uptodate import *
 
 usage = _("uptodate [options] export [name] ...")
 
-summary = _("Exporte des modules")
+summary = _("Export modules")
 
-description = _("""Export est utilisé pour exporter des modules.
+description = _("""Export is used in order to export modules.
 
-Exemple :
+Examples:
 uptodate -o config export -a
 uptodate export itk-app > config""")
 

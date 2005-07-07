@@ -24,18 +24,18 @@ from uptodate import *
 
 usage = _("uptodate [options] history [name] ...")
 
-summary = _("Affiche l'historique des versions")
+summary = _("Display versions history")
 
-description = _("""History est utilisé pour afficher l'historique des versions des modules passés en parametre.
+description = _("""History is used in order to display versions history.
 
-Ex :
-uptodate history itk-app --last 3""")
+Example:
+uptodate history itk-app""")
 
 names = ['history']
 
-options = [Option("-a", "--all", action="store_true", dest="all", help=_("exporter tous les modules")),
-	Option("-A", "--added", action="store_true", dest="added", help=_("afficher l'historique des ajouts de versions")),
-	Option("-r", "--removed", action="store_true", dest="removed", help=_("afficher l'historique des suppressions de versions")),
+options = [Option("-a", "--all", action="store_true", dest="all", help=_("export all modules")),
+	Option("-A", "--added", action="store_true", dest="added", help=_("display added versions history")),
+	Option("-r", "--removed", action="store_true", dest="removed", help=_("display removed versions history")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -70,8 +70,8 @@ def runCommand(opts, args, conf, out) :
 			for t, versions in removed.iteritems() :
 				hList.append((t, False, module, versions))
 
-	addedTemp = _('  + %s : %s (%s)')
-	removedTemp = _('  - %s : %s (%s)')
+	addedTemp = _('  + %s: %s (%s)')
+	removedTemp = _('  - %s: %s (%s)')
 	for t, add, module, versions in sorted(hList, reverse = True) :
 	    if add :
 		print >> out, addedTemp % (module, andJoin(map(repr, versions)), makeTime(t)) 

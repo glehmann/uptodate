@@ -26,22 +26,22 @@ import os
 
 usage = _("uptodate [options] check [nom] ...")
 
-summary = _("Cherche les nouvelles versions")
+summary = _("Search new versions")
 
-description = _("""Check est utilisé pour chercher les nouvelles versions des modules donnés en paramètres. Par défaut, les nouvelles versions et les versions supprimées sont affichées.
-Les versions trouvées sont enregistrées afin de pouvoir afficher les modifications à la prochaine éxécution de cette commande.
-Vous pouvez exectuer cette commande périodiquement (avec cron par exemple) pour suivre l'évolution des versions.
+description = _("""Search is used in order to find new versions of the wanted modules. By default, new and removed versions are displayed.
+The found versions are stored in order to display the modification at the next search.
+You can execute this command periodically (with cron for example) to follow the versions evolution.
 
-Exemple :
+Example:
 uptodate check zope 
-zope : '2.7.5' ajoutée.
-zope : '2.7.4' supprimée.""")
+zope: '2.7.5' added.
+zope: '2.7.4' removed.""")
 
-names = ["check", "update", "up"]
+names = ["search", "check", "update", "up"]
 
-options = [Option("-a", "--all", action="store_true", dest="all", help=_("rechercher les nouvelles versions de tous les modules")),
-	Option("-A", "--added", action="store_true", dest="added", help=_("afficher les versions ajoutées depuis la dernière recherche")),
-	Option("-r", "--removed", action="store_true", dest="removed", help=_("afficher les versions supprimées depuis la dernière recherche")),
+options = [Option("-a", "--all", action="store_true", dest="all", help=_("search the new versions of all modules")),
+	Option("-A", "--added", action="store_true", dest="added", help=_("display the added versions since last search")),
+	Option("-r", "--removed", action="store_true", dest="removed", help=_("display the removed versions since last search")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -68,7 +68,7 @@ def runCommand(opts, args, conf, out) :
 
 	for module in sorted(modules) :
 		if opts.verbose :
-			print >> sys.stderr, _("%s : Recherche de nouvelles versions.") % module
+			print >> sys.stderr, _("%s: Searching new versions.") % module
 		# get module properties
 		url = conf.get(module, 'url')
 		regexp = conf.get(module, 'regexp').replace('\\\\', '\\')
@@ -94,14 +94,14 @@ def runCommand(opts, args, conf, out) :
 			# display added and removed versions
 			if added and opts.added :
 				if len(added) == 1 :
-					print >> out, _("%s : %s ajoutée.") % (module, repr(list(added)[0]))
+					print >> out, _("%s: %s added.") % (module, repr(list(added)[0]))
 				else :
-					print >> out, _("%s : %s ajoutées.") % (module, andJoin(map(repr, added)))
+					print >> out, _("%s: %s added.") % (module, andJoin(map(repr, added)))
 			if removed and opts.removed :
 				if len(removed) == 1 :
-					print >> out, _("%s : %s supprimée.") % (module, repr(list(removed)[0]))
+					print >> out, _("%s: %s removed.") % (module, repr(list(removed)[0]))
 				else :
-					print >> out, _("%s : %s supprimées.") % (module, andJoin(map(repr, removed)))
+					print >> out, _("%s: %s removed.") % (module, andJoin(map(repr, removed)))
 					
 			# execute commands
 			if not opts.dryRun :
@@ -110,15 +110,15 @@ def runCommand(opts, args, conf, out) :
 						d = {'module': module, 'version': version}
 						command = addCommand.substitute(d)
 						if opts.verbose :
-							print >> sys.stderr,  _("%s : exécute + : %s") % (module, command)
+							print >> sys.stderr,  _("%s: execute +: %s") % (module, command)
 						os.system(command)
 				if removeCommand.template :
 					for version in removed :
 						command = removeCommand.substitute(d)
 						if opts.verbose :
-							print >> sys.stderr, _("%s : exécute - : %s") % (module, command)
+							print >> sys.stderr, _("%s: execute -: %s") % (module, command)
 						os.system(command)
 		else :
 			# no version found
-			print >> sys.stderr, _("Attention : aucune version trouvée pour %s. Les versions actuellement connues sont conservées.") % module
+			print >> sys.stderr, _("Warning: No version fond for %s. The current versions are kept.") % module
 			# return

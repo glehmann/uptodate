@@ -22,13 +22,13 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] copy nom nom")
+usage = _("uptodate [options] copy name name")
 
-summary = _("Copie un module")
+summary = _("Copy a module")
 
-description = _("""Copy est utilisé pour copier un module.
+description = _("""Copy is used in order to copy a module.
 
-Exemple :
+Example:
 uptodate copy itk-app InsightToolkit-Applications""")
 
 names = ['copy', 'cp']
@@ -44,7 +44,7 @@ def runCommand(opts, args, conf, out) :
 		raise ModuleNotFoundException(module)
 
 	if not opts.force and conf.has_section(new) :
-		if opts.batch or not yes(_("Voulez-vous supprimer le module %s ?") % new, False) :
+		if opts.batch or not yes(_("Do you want to remove the module %s?") % new, False) :
 			raise ModuleExistsException(new)
 		else :
 			opts.force = True

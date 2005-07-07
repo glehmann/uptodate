@@ -24,16 +24,16 @@ from uptodate import *
 
 usage = _("uptodate [options] remove [nom] ...")
 
-summary = _("Supprimer des modules")
+summary = _("Remove modules")
 
-description = _("""Remove est utilisé pour supprimer les modules fournis en paramètre.
+description = _("""Remove is used in order to remove modules.
 
-Exemple :
+Example:
 uptodate remove itk-app""")
 
 names = ['remove', 'rm', 'del']
 
-options = [Option("-a", "--all", action="store_true", dest="all", help=_("supprimer tous les modules")),
+options = [Option("-a", "--all", action="store_true", dest="all", help=_("remove all modules")),
 	]
 
 def runCommand(opts, args, conf, out) :
@@ -53,7 +53,7 @@ def runCommand(opts, args, conf, out) :
 
 
 	for module in sorted(modules) :
-		if opts.force or yes(_("Supprimer %s ?") % module, False) :
+		if opts.force or yes(_("Do you want to remove module %s?") % module, False) :
 			if opts.verbose :
 				printModule(conf, module, sys.stderr, True)
 			conf.remove_section(module)

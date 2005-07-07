@@ -52,46 +52,43 @@ from uptodate import *
 # 	    ]
 
 def addGlobalOptions(parser) :
-	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FICHIER"), help=_("fichier de configuration (%default)"))
-	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("ne pas sauvegarder les changements"))
-	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FICHIER"), help=_("ecrire dans FICHIER (sortie standard par défaut)"))
-	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("ne pas poser de question"))
-	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignorer les ???"))
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("afficher ce qui est fait"))
-	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("afficher les options et les commandes disponibles"))
+	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("config file(%default)"))
+	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("don't save the changes"))
+	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FILE"), help=_("write in a file (default standard output)"))
+	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask question"))
+	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore the missing modules"))
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display what has been done"))
+	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("display available options and commands"))
 
 	
 def makeDescription() :
-	DESCRIPTION=_('''uptodate vous permet de suivre les versions de tout ce qui a une version
+	DESCRIPTION=_('''uptodate allows you to trace the versions of everything which has a version
 
-uptodate est un programme en ligne de commande facile à utiliser qui vous aide à
-savoir quand une nouvelle version est disponible. Il recherche les versions dans
-une page web, un repertoire ftp, etc, et vous montre les versions ajoutées et
-supprimées depuis la dernière recherche.
-Si vous mettez à jour certains logiciels à la main, si vous êtes mainteneur de
-paquetages (rpm, deb, ...), ou si vous voulez simplement savoir quand la
-nouvelle version de votre jeu favori (ou de tout autre chose avec une version)
-est disponible, uptodate est fait pour vous !
+uptodate is powerful and user friendly command line tool which helps you to know when a new version is available.
+It searches for new versions in a web page, a ftp directory, etc, and shows you added and removed version since the last search.
+If you update some softs by hand, if you are a package maintainer, or
+if you simply want to know when the new version of your favorite
+game (or everything else with a version) is out, uptodate is for you !
 
-Auteur : Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>
-Site web: http://gleh.dyndns.org/uptodate/
+Author: Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>
+Website: http://gleh.dyndns.org/uptodate/
 
-Commandes :
+Commands:
 %s
-Executez "uptodate command --help" pour plus d\'informations.
+Run "uptodate command --help" for more detailed help.
 
-Codes de sortie :
+Exit codes:
 %s''')
 	ERRORS = {
-		ERROR_INVALID_NB_OF_ARGS: _("Nombre d'arguments invalide"),
-		ERROR_NO_VERSION_FOUND: _("Aucune version trouvée"),
-		ERROR_MODULE_NOT_FOUND: _("Impossible de trouver le module"),
-		ERROR_PROPERTY_NOT_FOUND: _("Impossible de trouver la propriété"),
-		ERROR_MODULE_EXISTS: _("Le module existe déjà"),
-		ERROR_UNKNOWN_COMMAND: _("Commande inconnue"),
-		ERROR_IO: _("Erreur d'entrée/sortie"),
-		ERROR_KB_INTERRUPT: _("Interuption au clavier"),
-		ERROR_PROPERTY_TYPE: _('Type de propriété invalide'),
+		ERROR_INVALID_NB_OF_ARGS: _("Invalid arguments number"),
+		ERROR_NO_VERSION_FOUND: _("No version found"),
+		ERROR_MODULE_NOT_FOUND: _("Module not found"),
+		ERROR_PROPERTY_NOT_FOUND: _("Property not found"),
+		ERROR_MODULE_EXISTS: _("This module already exists"),
+		ERROR_UNKNOWN_COMMAND: _("Unknown command"),
+		ERROR_IO: _("IO error"),
+		ERROR_KB_INTERRUPT: _("Keyboard interrupt"),
+		ERROR_PROPERTY_TYPE: _("Invalid data"),
 	}
 
 	# generate command description
@@ -226,16 +223,16 @@ if __name__ == '__main__':
 		sys.exit(ERROR_INVALID_NB_OF_ARGS)
 
 	except ModuleExistsException, e :
-		print >> sys.stderr, _("Erreur : Le module %s existe déjà.") % e.args[0]
+		print >> sys.stderr, _("Error: The module %s already exists.") % e.args[0]
 		sys.exit(ERROR_MODULE_EXISTS)
 
 	except NoVersionFound, e :
-		print >> sys.stderr, _("Erreur : Aucune version trouvée")
+		print >> sys.stderr, _("Error: No version found")
 		sys.exit(ERROR_NO_VERSION_FOUND)
 
 	except ModuleNotFoundException, e :
-		sing = _("Erreur : Le module %s n'existe pas.")
-		plur = _("Erreur : Les modules % n'existent pas.")
+		sing = _("Error: The module %s doesn't exist.")
+		plur = _("Error: The modules %s don't exist.")
 		args = e.args[0]
 		if isinstance(args, str) :
 			msg = sing % args
@@ -249,14 +246,14 @@ if __name__ == '__main__':
 		sys.exit(ERROR_MODULE_NOT_FOUND)
 
 	except PropertyNotFoundException, e :
-		print >> sys.stderr, _("Erreur : La propriété %s n'existe pas.") % e.args[0]
+		print >> sys.stderr, _("Error: Property %s doesn't exist.") % e.args[0]
 		sys.exit(ERROR_PROPERTY_NOT_FOUND)
 
 	except UnknownCommandException, e :
-		print >> sys.stderr, _("Erreur : La commande %s n'existe pas.") % e.args[0]
+		print >> sys.stderr, _("Error: The command %s doesn't exist.") % e.args[0]
 		sys.exit(ERROR_UNKNOWN_COMMAND)
 		
 	except PropertyTypeError, e :
-		print >> sys.stderr, _("Erreur : Le type de la propriété est invalide.")
+		print >> sys.stderr, _("Error: Invalid data.")
 		sys.exit(ERROR_PROPERTY_TYPE)
 		

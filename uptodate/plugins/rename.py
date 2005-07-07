@@ -22,13 +22,13 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] rename nom nom")
+usage = _("uptodate [options] rename name name")
 
-summary = _("Renomme un module")
+summary = _("Rename a module")
 
-description = _("""Rename est utilisé pour renommer un module
+description = _("""Rename is used in order to rename a module
 
-Exemple :
+Example:
 uptodate rename itk-app InsightToolkit-Applications""")
 
 names = ['rename', 'mv']
@@ -45,7 +45,7 @@ def runCommand(opts, args, conf, out) :
 	
 	# remove new section if it already exist and --force is used
 	if not opts.force and conf.has_section(new) :
-		if opts.batch or not yes(_("Voulez-vous supprimer le module %s ?") % new, False) :
+		if opts.batch or not yes(_("Do you want to remove module %s?") % new, False) :
 			raise ModuleExistsException(new)
 		else :
 			opts.force = True
