@@ -6,8 +6,9 @@ rm -f predist.sh makedist.sh
 # chmod +x install.sh
 
 # compile translation files
-for po in find -name '*.po' ; do
-   d=dirname $po   cd $d
+for po in `find -name '*.po'` ; do
+   d=`dirname $po` 
+   cd $d
    msgfmt -c -v  uptodate.po -o uptodate.mo
    cd -
 done
