@@ -39,6 +39,7 @@ python setup.py install --root=%buildroot
 %defattr(0644, root, root, 0755)
 %attr(0755,root,root) %{_bindir}/*
 %{_libdir}/python%{pyver}/site-packages/*
+%{_datadir}/locale/*/*/*
 %config(noreplace) %{_sysconfdir}/bash_completion.d/uptodate
 %doc COPYING README version
 
