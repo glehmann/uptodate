@@ -68,7 +68,7 @@ def runCommand(opts, args, conf, out) :
 				conf.remove_section(module)
 			elif opts.batch :
 				raise ModuleExistsException(module)
-			elif yes(_("Do you want to remove module %s?") % module, False) :
+			elif yes(_("Do you want to remove the module %s?") % module, False) :
 				conf.remove_section(module)
 			else :
 				imp = False

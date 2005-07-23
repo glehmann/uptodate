@@ -59,7 +59,7 @@ def add(module, url, regexp, opts, conf, out) :
 		raise PropertyTypeError()
 
 	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes(_("Do you to remove the module %s?") % module, False) :
+		if opts.batch or not yes(_("Do you want to remove the module %s?") % module, False) :
 			raise ModuleExistsException(module)
 		else :
 			opts.force = True

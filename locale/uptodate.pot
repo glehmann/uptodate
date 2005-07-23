@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-21 18:32+0200\n"
+"POT-Creation-Date: 2005-07-23 21:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid ""
 "    - %s: %s"
 msgstr ""
 
-#: uptodate.py:116
+#: uptodate.py:117
 #, python-format
 msgid "  %s  %s\n"
 msgstr ""
@@ -77,33 +77,37 @@ msgstr ""
 msgid "%s value: "
 msgstr ""
 
-#: uptodate/plugins/check.py:97 uptodate/plugins/check.py:99
+#: uptodate/plugins/search.py:97 uptodate/plugins/search.py:99
 #, python-format
 msgid "%s: %s added."
 msgstr ""
 
-#: uptodate/plugins/check.py:102 uptodate/plugins/check.py:104
+#: uptodate/plugins/search.py:102 uptodate/plugins/search.py:104
 #, python-format
 msgid "%s: %s removed."
 msgstr ""
 
-#: uptodate/plugins/check.py:71
+#: uptodate/plugins/search.py:71
 #, python-format
 msgid "%s: Searching new versions."
 msgstr ""
 
-#: uptodate/plugins/check.py:113
+#: uptodate/plugins/search.py:113
 #, python-format
 msgid "%s: execute +: %s"
 msgstr ""
 
-#: uptodate/plugins/check.py:119
+#: uptodate/plugins/search.py:119
 #, python-format
 msgid "%s: execute -: %s"
 msgstr ""
 
 #: uptodate/__init__.py:165
 msgid ", "
+msgstr ""
+
+#: uptodate.py:212 uptodate.py:214
+msgid ": "
 msgstr ""
 
 #: uptodate/plugins/add.py:27
@@ -196,18 +200,9 @@ msgstr ""
 msgid "Display versions history"
 msgstr ""
 
-#: uptodate/plugins/add.py:62
-#, python-format
-msgid "Do you to remove the module %s?"
-msgstr ""
-
-#: uptodate/plugins/rename.py:48 uptodate/plugins/remove.py:56
-#: uptodate/plugins/import.py:71
-#, python-format
-msgid "Do you want to remove module %s?"
-msgstr ""
-
-#: uptodate/plugins/copy.py:47 uptodate/plugins/auto.py:71
+#: uptodate/plugins/copy.py:47 uptodate/plugins/add.py:62
+#: uptodate/plugins/rename.py:48 uptodate/plugins/auto.py:71
+#: uptodate/plugins/remove.py:56 uptodate/plugins/import.py:71
 #, python-format
 msgid "Do you want to remove the module %s?"
 msgstr ""
@@ -223,35 +218,35 @@ msgid ""
 "uptodate edit itk-app comment 'applications using InsightToolkit'"
 msgstr ""
 
-#: uptodate.py:257
+#: uptodate.py:258
 msgid "Error: Invalid data."
 msgstr ""
 
-#: uptodate.py:230
-msgid "Error: No version found"
+#: uptodate.py:231
+msgid "Error: No version found."
 msgstr ""
 
-#: uptodate.py:249
+#: uptodate.py:250
 #, python-format
 msgid "Error: Property %s doesn't exist."
 msgstr ""
 
-#: uptodate.py:253
+#: uptodate.py:254
 #, python-format
 msgid "Error: The command %s doesn't exist."
 msgstr ""
 
-#: uptodate.py:226
+#: uptodate.py:227
 #, python-format
 msgid "Error: The module %s already exists."
 msgstr ""
 
-#: uptodate.py:234
+#: uptodate.py:235
 #, python-format
 msgid "Error: The module %s doesn't exist."
 msgstr ""
 
-#: uptodate.py:235
+#: uptodate.py:236
 #, python-format
 msgid "Error: The modules %s don't exist."
 msgstr ""
@@ -291,7 +286,7 @@ msgid ""
 "uptodate history --all --last 10"
 msgstr ""
 
-#: uptodate.py:89
+#: uptodate.py:90
 msgid "IO error"
 msgstr ""
 
@@ -307,15 +302,15 @@ msgstr ""
 msgid "Import modules"
 msgstr ""
 
-#: uptodate.py:83
+#: uptodate.py:84
 msgid "Invalid arguments number"
 msgstr ""
 
-#: uptodate.py:91
+#: uptodate.py:92
 msgid "Invalid data"
 msgstr ""
 
-#: uptodate.py:90
+#: uptodate.py:91
 msgid "Keyboard interrupt"
 msgstr ""
 
@@ -323,15 +318,15 @@ msgstr ""
 msgid "Modify module's properties"
 msgstr ""
 
-#: uptodate.py:85
+#: uptodate.py:86
 msgid "Module not found"
 msgstr ""
 
-#: uptodate.py:84
+#: uptodate.py:85
 msgid "No version found"
 msgstr ""
 
-#: uptodate.py:86
+#: uptodate.py:87
 msgid "Property not found"
 msgstr ""
 
@@ -359,7 +354,7 @@ msgid ""
 "uptodate rename itk-app InsightToolkit-Applications"
 msgstr ""
 
-#: uptodate/plugins/check.py:31
+#: uptodate/plugins/search.py:31
 msgid ""
 "Search is used in order to find new versions of the wanted modules. By "
 "default, new and removed versions are displayed.\n"
@@ -374,19 +369,19 @@ msgid ""
 "zope: '2.7.4' removed."
 msgstr ""
 
-#: uptodate/plugins/check.py:29
+#: uptodate/plugins/search.py:29
 msgid "Search new versions"
 msgstr ""
 
-#: uptodate.py:87
+#: uptodate.py:88
 msgid "This module already exists"
 msgstr ""
 
-#: uptodate.py:88
+#: uptodate.py:89
 msgid "Unknown command"
 msgstr ""
 
-#: uptodate/plugins/check.py:123
+#: uptodate/plugins/search.py:123
 #, python-format
 msgid "Warning: No version fond for %s. The current versions are kept."
 msgstr ""
@@ -405,7 +400,7 @@ msgstr ""
 
 #: uptodate.py:55
 #, python-format
-msgid "config file(%default)"
+msgid "config file (%default)"
 msgstr ""
 
 #: uptodate/plugins/history.py:39
@@ -428,11 +423,11 @@ msgstr ""
 msgid "display removed versions history"
 msgstr ""
 
-#: uptodate/plugins/check.py:43
+#: uptodate/plugins/search.py:43
 msgid "display the added versions since last search"
 msgstr ""
 
-#: uptodate/plugins/check.py:44
+#: uptodate/plugins/search.py:44
 msgid "display the removed versions since last search"
 msgstr ""
 
@@ -476,7 +471,7 @@ msgstr ""
 msgid "remove all modules"
 msgstr ""
 
-#: uptodate/plugins/check.py:42
+#: uptodate/plugins/search.py:42
 msgid "search the new versions of all modules"
 msgstr ""
 
@@ -488,12 +483,8 @@ msgstr ""
 msgid "uptodate [options] auto name url version"
 msgstr ""
 
-#: uptodate/plugins/check.py:27
-msgid "uptodate [options] check [nom] ..."
-msgstr ""
-
-#: uptodate.py:131
-msgid "uptodate [options] commande [options] [arguments]"
+#: uptodate.py:132
+msgid "uptodate [options] command [options] [arguments]"
 msgstr ""
 
 #: uptodate/plugins/copy.py:25
@@ -521,11 +512,15 @@ msgid "uptodate [options] import file [name] ..."
 msgstr ""
 
 #: uptodate/plugins/remove.py:25
-msgid "uptodate [options] remove [nom] ..."
+msgid "uptodate [options] remove [name] ..."
 msgstr ""
 
 #: uptodate/plugins/rename.py:25
 msgid "uptodate [options] rename name name"
+msgstr ""
+
+#: uptodate/plugins/search.py:27
+msgid "uptodate [options] search [name] ..."
 msgstr ""
 
 #: uptodate.py:65
@@ -533,13 +528,15 @@ msgstr ""
 msgid ""
 "uptodate allows you to trace the versions of everything which has a version\n"
 "\n"
-"uptodate is powerful and user friendly command line tool which helps you to "
-"know when a new version is available.\n"
-"It searches for new versions in a web page, a ftp directory, etc, and shows "
-"you added and removed version since the last search.\n"
-"If you update some softs by hand, if you are a package maintainer, or\n"
-"if you simply want to know when the new version of your favorite\n"
-"game (or everything else with a version) is out, uptodate is for you !\n"
+"uptodate is powerful and user friendly command line tool which helps you to\n"
+"know when a new version is available. It searches for new versions in a web\n"
+"page, a ftp directory, etc, and shows you added and removed version since "
+"the\n"
+"last search. If you update some softs by hand, if you are a package "
+"maintainer,\n"
+"or if you simply want to know when the new version of your favorite game "
+"(or\n"
+"everything else with a version) is out, uptodate is for you !\n"
 "\n"
 "Author: Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Website: http://gleh.dyndns.org/uptodate/\n"

@@ -24,7 +24,7 @@ from uptodate import *
 import os
 # from string import Template
 
-usage = _("uptodate [options] check [nom] ...")
+usage = _("uptodate [options] search [name] ...")
 
 summary = _("Search new versions")
 

@@ -22,7 +22,7 @@
 
 from uptodate import *
 
-usage = _("uptodate [options] remove [nom] ...")
+usage = _("uptodate [options] remove [name] ...")
 
 summary = _("Remove modules")
 
@@ -53,7 +53,7 @@ def runCommand(opts, args, conf, out) :
 
 
 	for module in sorted(modules) :
-		if opts.force or yes(_("Do you want to remove module %s?") % module, False) :
+		if opts.force or yes(_("Do you want to remove the module %s?") % module, False) :
 			if opts.verbose :
 				printModule(conf, module, sys.stderr, True)
 			conf.remove_section(module)

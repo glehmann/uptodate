@@ -52,7 +52,7 @@ from uptodate import *
 # 	    ]
 
 def addGlobalOptions(parser) :
-	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("config file(%default)"))
+	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("config file (%default)"))
 	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("don't save the changes"))
 	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FILE"), help=_("write in a file (default standard output)"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask question"))
@@ -129,7 +129,7 @@ def main(argv) :
 			commands[name] = mod
         
 	# and create option parser
-	parser = OptionParser(usage = _("uptodate [options] commande [options] [arguments]"),
+	parser = OptionParser(usage = _("uptodate [options] command [options] [arguments]"),
 			      description = makeDescription(),
 			      version = "uptodate %s" % VERSION,
 			      formatter = UptodateHelpFormatter())
@@ -209,9 +209,9 @@ if __name__ == '__main__':
 		sys.exit(main(sys.argv[1:]))
 		
 	except IOError, e:
-		sys.stderr.write(sys.argv[0]+": ")
+		sys.stderr.write(sys.argv[0]+_(": "))
 		if e.filename :
-			sys.stderr.write(e.filename+": ")
+			sys.stderr.write(e.filename+_(": "))
 		sys.stderr.write(str(e.strerror)+"\n")
 		sys.exit(ERROR_IO)
 
@@ -228,7 +228,7 @@ if __name__ == '__main__':
 		sys.exit(ERROR_MODULE_EXISTS)
 
 	except NoVersionFound, e :
-		print >> sys.stderr, _("Error: No version found")
+		print >> sys.stderr, _("Error: No version found.")
 		sys.exit(ERROR_NO_VERSION_FOUND)
 
 	except ModuleNotFoundException, e :

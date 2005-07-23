@@ -45,7 +45,7 @@ def runCommand(opts, args, conf, out) :
 	
 	# remove new section if it already exist and --force is used
 	if not opts.force and conf.has_section(new) :
-		if opts.batch or not yes(_("Do you want to remove module %s?") % new, False) :
+		if opts.batch or not yes(_("Do you want to remove the module %s?") % new, False) :
 			raise ModuleExistsException(new)
 		else :
 			opts.force = True
