@@ -1,0 +1,573 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-21 18:32+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: uptodate/__init__.py:128
+#, python-format
+msgid ""
+"\n"
+"      - %s: %s"
+msgstr ""
+
+#: uptodate/__init__.py:119
+#, python-format
+msgid ""
+"\n"
+"    + %s: %s"
+msgstr ""
+
+#: uptodate/__init__.py:121
+#, python-format
+msgid ""
+"\n"
+"    - %s: %s"
+msgstr ""
+
+#: uptodate.py:116
+#, python-format
+msgid "  %s  %s\n"
+msgstr ""
+
+#: uptodate/plugins/history.py:76
+#, python-format
+msgid "  + %s: %s (%s)"
+msgstr ""
+
+#: uptodate/plugins/history.py:77
+#, python-format
+msgid "  - %s: %s (%s)"
+msgstr ""
+
+#: uptodate/__init__.py:164
+msgid " and "
+msgstr ""
+
+#: uptodate/__init__.py:152
+#, python-format
+msgid "%(d)i/%(M)i/%(y)i %(h)i:%(m)i"
+msgstr ""
+
+#: uptodate/__init__.py:101
+#, python-format
+msgid ""
+"%(module)s\n"
+"  comment: %(comment)s\n"
+"  history: %(history)s\n"
+"  current versions: %(current)s\n"
+"  URL: %(url)s\n"
+"  regular expression: %(regexp)s\n"
+msgstr ""
+
+#: uptodate/plugins/edit.py:52
+#, python-format
+msgid "%s value: "
+msgstr ""
+
+#: uptodate/plugins/check.py:97 uptodate/plugins/check.py:99
+#, python-format
+msgid "%s: %s added."
+msgstr ""
+
+#: uptodate/plugins/check.py:102 uptodate/plugins/check.py:104
+#, python-format
+msgid "%s: %s removed."
+msgstr ""
+
+#: uptodate/plugins/check.py:71
+#, python-format
+msgid "%s: Searching new versions."
+msgstr ""
+
+#: uptodate/plugins/check.py:113
+#, python-format
+msgid "%s: execute +: %s"
+msgstr ""
+
+#: uptodate/plugins/check.py:119
+#, python-format
+msgid "%s: execute -: %s"
+msgstr ""
+
+#: uptodate/__init__.py:165
+msgid ", "
+msgstr ""
+
+#: uptodate/plugins/add.py:27
+msgid "Add a new module"
+msgstr ""
+
+#: uptodate/plugins/auto.py:28
+msgid "Add a new module with no need of a regular expression"
+msgstr ""
+
+#: uptodate/plugins/add.py:29
+msgid ""
+"Add is used to add a new module. A module has a name and contains the "
+"appropriate informations in order to search the new versions:\n"
+"- the module's name\n"
+"- the URL of a file or a directory. The file or the directory may be distant "
+"(website, ftp) or local.\n"
+"- a regular expression which find the versions in the received data from the "
+"URL.\n"
+"You can add a comment to describe the module, to store the homepage, etc.\n"
+"\n"
+"Example:\n"
+"uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})"
+"\\s*</a>' -C 'A leading open source application server'"
+msgstr ""
+
+#: uptodate/plugins/auto.py:30
+msgid ""
+"Auto is used in order to add a new module with no need of the regular "
+"expression used to get versions.\n"
+"You must give:\n"
+"+ the module's name. If the name is in the received data from the URL, it'll "
+"influence the choice of the regular expression.\n"
+"+ the URL of a file or a directory. The file or the directory may be distant "
+"(website, ftp) or local.\n"
+"+ an existing version number. This version number allows to find the regular "
+"expression which will be used to obtain new versions.\n"
+"You can add a comment to describe the module, to store the homepage, etc.\n"
+"\n"
+"Examples:\n"
+"+ zope\n"
+"uptodate auto zope http://www.zope.org/Products/ 2.7.4\n"
+"\n"
+"+ InsightToolkit, from the sourceforge download page:\n"
+"uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?"
+"group_id=108122&package_id=116777' 2.0.1\n"
+"\n"
+"+ jpackage non free files, from a ftp directory :\n"
+"uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/"
+"jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm\n"
+"\n"
+"+ jpackage releases, from a ftp directory :\n"
+"uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/"
+"Linux/jpackage/ 1.6"
+msgstr ""
+
+#: uptodate/plugins/auto.py:150
+msgid "Available regular expressions:"
+msgstr ""
+
+#: uptodate/plugins/auto.py:160
+msgid "Choose a regular expression (0):"
+msgstr ""
+
+#: uptodate/plugins/copy.py:27
+msgid "Copy a module"
+msgstr ""
+
+#: uptodate/plugins/copy.py:29
+msgid ""
+"Copy is used in order to copy a module.\n"
+"\n"
+"Example:\n"
+"uptodate copy itk-app InsightToolkit-Applications"
+msgstr ""
+
+#: uptodate/plugins/display.py:27
+msgid "Display informations about modules"
+msgstr ""
+
+#: uptodate/plugins/display.py:29
+msgid ""
+"Display is used in order to display informations about modules.\n"
+"\n"
+"Example:\n"
+"uptodate display itk-app"
+msgstr ""
+
+#: uptodate/plugins/history.py:27
+msgid "Display versions history"
+msgstr ""
+
+#: uptodate/plugins/add.py:62
+#, python-format
+msgid "Do you to remove the module %s?"
+msgstr ""
+
+#: uptodate/plugins/rename.py:48 uptodate/plugins/remove.py:56
+#: uptodate/plugins/import.py:71
+#, python-format
+msgid "Do you want to remove module %s?"
+msgstr ""
+
+#: uptodate/plugins/copy.py:47 uptodate/plugins/auto.py:71
+#, python-format
+msgid "Do you want to remove the module %s?"
+msgstr ""
+
+#: uptodate/plugins/edit.py:29
+msgid ""
+"Edit is used in order to modify module's properties. Modifiable properties "
+"are: added, removed, current, add-command, remove-command, url, regexp and "
+"comment. If url or regexp are modified, uptodate check if it can obtain "
+"versions before validating changes.\n"
+"\n"
+"Example:\n"
+"uptodate edit itk-app comment 'applications using InsightToolkit'"
+msgstr ""
+
+#: uptodate.py:257
+msgid "Error: Invalid data."
+msgstr ""
+
+#: uptodate.py:230
+msgid "Error: No version found"
+msgstr ""
+
+#: uptodate.py:249
+#, python-format
+msgid "Error: Property %s doesn't exist."
+msgstr ""
+
+#: uptodate.py:253
+#, python-format
+msgid "Error: The command %s doesn't exist."
+msgstr ""
+
+#: uptodate.py:226
+#, python-format
+msgid "Error: The module %s already exists."
+msgstr ""
+
+#: uptodate.py:234
+#, python-format
+msgid "Error: The module %s doesn't exist."
+msgstr ""
+
+#: uptodate.py:235
+#, python-format
+msgid "Error: The modules %s don't exist."
+msgstr ""
+
+#: uptodate/plugins/add.py:40
+msgid "Execute this command when a new version is available"
+msgstr ""
+
+#: uptodate/plugins/add.py:42
+msgid "Execute this command when a version is no more available"
+msgstr ""
+
+#: uptodate/plugins/export.py:29
+msgid ""
+"Export is used in order to export modules.\n"
+"\n"
+"Examples:\n"
+"uptodate -o config export -a\n"
+"uptodate export itk-app > config"
+msgstr ""
+
+#: uptodate/plugins/export.py:27
+msgid "Export modules"
+msgstr ""
+
+#: uptodate.py:55 uptodate.py:57
+msgid "FILE"
+msgstr ""
+
+#: uptodate/plugins/history.py:29
+msgid ""
+"History is used in order to display versions history.\n"
+"\n"
+"Examples:\n"
+"uptodate history itk-app\n"
+"\n"
+"uptodate history --all --last 10"
+msgstr ""
+
+#: uptodate.py:89
+msgid "IO error"
+msgstr ""
+
+#: uptodate/plugins/import.py:29
+msgid ""
+"Import is used in order to import modules.\n"
+"\n"
+"Example:\n"
+"uptodate import config"
+msgstr ""
+
+#: uptodate/plugins/import.py:27
+msgid "Import modules"
+msgstr ""
+
+#: uptodate.py:83
+msgid "Invalid arguments number"
+msgstr ""
+
+#: uptodate.py:91
+msgid "Invalid data"
+msgstr ""
+
+#: uptodate.py:90
+msgid "Keyboard interrupt"
+msgstr ""
+
+#: uptodate/plugins/edit.py:27
+msgid "Modify module's properties"
+msgstr ""
+
+#: uptodate.py:85
+msgid "Module not found"
+msgstr ""
+
+#: uptodate.py:84
+msgid "No version found"
+msgstr ""
+
+#: uptodate.py:86
+msgid "Property not found"
+msgstr ""
+
+#: uptodate/plugins/remove.py:29
+msgid ""
+"Remove is used in order to remove modules.\n"
+"\n"
+"Example:\n"
+"uptodate remove itk-app"
+msgstr ""
+
+#: uptodate/plugins/remove.py:27
+msgid "Remove modules"
+msgstr ""
+
+#: uptodate/plugins/rename.py:27
+msgid "Rename a module"
+msgstr ""
+
+#: uptodate/plugins/rename.py:29
+msgid ""
+"Rename is used in order to rename a module\n"
+"\n"
+"Example:\n"
+"uptodate rename itk-app InsightToolkit-Applications"
+msgstr ""
+
+#: uptodate/plugins/check.py:31
+msgid ""
+"Search is used in order to find new versions of the wanted modules. By "
+"default, new and removed versions are displayed.\n"
+"The found versions are stored in order to display the modification at the "
+"next search.\n"
+"You can execute this command periodically (with cron for example) to follow "
+"the versions evolution.\n"
+"\n"
+"Example:\n"
+"uptodate check zope \n"
+"zope: '2.7.5' added.\n"
+"zope: '2.7.4' removed."
+msgstr ""
+
+#: uptodate/plugins/check.py:29
+msgid "Search new versions"
+msgstr ""
+
+#: uptodate.py:87
+msgid "This module already exists"
+msgstr ""
+
+#: uptodate.py:88
+msgid "Unknown command"
+msgstr ""
+
+#: uptodate/plugins/check.py:123
+#, python-format
+msgid "Warning: No version fond for %s. The current versions are kept."
+msgstr ""
+
+#: uptodate/__init__.py:182
+msgid "Y/n"
+msgstr ""
+
+#: uptodate/plugins/auto.py:52
+msgid "allows to choose a regular expression in the list proposed by uptodate"
+msgstr ""
+
+#: uptodate/plugins/add.py:41
+msgid "associate the comment with the module"
+msgstr ""
+
+#: uptodate.py:55
+#, python-format
+msgid "config file(%default)"
+msgstr ""
+
+#: uptodate/plugins/history.py:39
+msgid "display added versions history"
+msgstr ""
+
+#: uptodate/plugins/display.py:36
+msgid "display all modules"
+msgstr ""
+
+#: uptodate.py:61
+msgid "display available options and commands"
+msgstr ""
+
+#: uptodate/plugins/history.py:41
+msgid "display last modifications"
+msgstr ""
+
+#: uptodate/plugins/history.py:40
+msgid "display removed versions history"
+msgstr ""
+
+#: uptodate/plugins/check.py:43
+msgid "display the added versions since last search"
+msgstr ""
+
+#: uptodate/plugins/check.py:44
+msgid "display the removed versions since last search"
+msgstr ""
+
+#: uptodate.py:60
+msgid "display what has been done"
+msgstr ""
+
+#: uptodate.py:58
+msgid "don't ask question"
+msgstr ""
+
+#: uptodate.py:56
+msgid "don't save the changes"
+msgstr ""
+
+#: uptodate/plugins/history.py:38
+msgid "export all modules"
+msgstr ""
+
+#: uptodate.py:59
+msgid "ignore the missing modules"
+msgstr ""
+
+#: uptodate/plugins/import.py:36
+msgid "import all modules in file"
+msgstr ""
+
+#: uptodate/__init__.py:194
+msgid "n"
+msgstr ""
+
+#: uptodate/__init__.py:194
+msgid "no"
+msgstr ""
+
+#: uptodate/__init__.py:123 uptodate/__init__.py:130
+msgid "none"
+msgstr ""
+
+#: uptodate/plugins/remove.py:36
+msgid "remove all modules"
+msgstr ""
+
+#: uptodate/plugins/check.py:42
+msgid "search the new versions of all modules"
+msgstr ""
+
+#: uptodate/plugins/add.py:25
+msgid "uptodate [options] add name url regexp"
+msgstr ""
+
+#: uptodate/plugins/auto.py:26
+msgid "uptodate [options] auto name url version"
+msgstr ""
+
+#: uptodate/plugins/check.py:27
+msgid "uptodate [options] check [nom] ..."
+msgstr ""
+
+#: uptodate.py:131
+msgid "uptodate [options] commande [options] [arguments]"
+msgstr ""
+
+#: uptodate/plugins/copy.py:25
+msgid "uptodate [options] copy name name"
+msgstr ""
+
+#: uptodate/plugins/display.py:25
+msgid "uptodate [options] display [name] ..."
+msgstr ""
+
+#: uptodate/plugins/edit.py:25
+msgid "uptodate [options] edit name property [value]"
+msgstr ""
+
+#: uptodate/plugins/export.py:25
+msgid "uptodate [options] export [name] ..."
+msgstr ""
+
+#: uptodate/plugins/history.py:25
+msgid "uptodate [options] history [name] ..."
+msgstr ""
+
+#: uptodate/plugins/import.py:25
+msgid "uptodate [options] import file [name] ..."
+msgstr ""
+
+#: uptodate/plugins/remove.py:25
+msgid "uptodate [options] remove [nom] ..."
+msgstr ""
+
+#: uptodate/plugins/rename.py:25
+msgid "uptodate [options] rename name name"
+msgstr ""
+
+#: uptodate.py:65
+#, python-format
+msgid ""
+"uptodate allows you to trace the versions of everything which has a version\n"
+"\n"
+"uptodate is powerful and user friendly command line tool which helps you to "
+"know when a new version is available.\n"
+"It searches for new versions in a web page, a ftp directory, etc, and shows "
+"you added and removed version since the last search.\n"
+"If you update some softs by hand, if you are a package maintainer, or\n"
+"if you simply want to know when the new version of your favorite\n"
+"game (or everything else with a version) is out, uptodate is for you !\n"
+"\n"
+"Author: Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
+"Website: http://gleh.dyndns.org/uptodate/\n"
+"\n"
+"Commands:\n"
+"%s\n"
+"Run \"uptodate command --help\" for more detailed help.\n"
+"\n"
+"Exit codes:\n"
+"%s"
+msgstr ""
+
+#: uptodate.py:57
+msgid "write in a file (default standard output)"
+msgstr ""
+
+#: uptodate/__init__.py:196
+msgid "y"
+msgstr ""
+
+#: uptodate/__init__.py:184
+msgid "y/N"
+msgstr ""
+
+#: uptodate/__init__.py:186
+msgid "y/n"
+msgstr ""
+
+#: uptodate/__init__.py:196
+msgid "yes"
+msgstr ""

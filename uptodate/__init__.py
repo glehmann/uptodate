@@ -33,7 +33,7 @@ else :
 
 
 import gettext
-gettext.install('uptodate')
+gettext.translation("uptodate", fallback=True).install()
 
 # error codes
 
