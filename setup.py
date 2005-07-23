@@ -51,5 +51,5 @@ setup(name =             "uptodate",
       url =              "http://voxel.jouy.inra.fr/darcs/uptodate",
       packages =         ["uptodate", "uptodate.plugins"],
       scripts =          ["uptodate.py"],
-      data_files =       I18NFILES,
+      data_files =       I18NFILES + [('/etc/bash_completion.d', ['bash_completion/uptodate'])]
       )

@@ -15,57 +15,21 @@ BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 
 %description
-uptodate can tell you when a new version of a program is avaible. To
-do that, you have to add a module. Lets try with zope :
-
-   uptodate auto zope \
-      http://www.zope.org/Products/ \
-      2.7.4 \
-      A leading open source application server
-   
- uptodate auto command takes three arguments:
- + a name
- + url where it will search version
- + the current version number
- + an optional comment
-
-uptodate auto try to find a regular expression which will be used
-to find new versions. If uptodate auto can't find a regular
-expression, or if the regular expression isn't good enough for you, you
-can use uptodate add :
-
-   uptodate add zope \
-      http://www.zope.org/Products/ \
-      'Download Zope (.{1,10})\s*</a>' \
-      A leading open source application server
-      
-arguments are the same, but the third is regular expression instead of 
-version.
-
-You can now check for new versions with
-
-   uptodate check zope
-
-it will display something like
-
-   zope: '2.7.4' removed.
-   zope: '2.7.5' added.
-
-if versions found in the text have changed.
+uptodate is powerful and user friendly command line tool which helps you to
+know when a new version is available. It searches for new versions in a web
+page, a ftp directory, etc, and shows you added and removed version since the
+last search. If you update some softs by hand, if you are a package maintainer,
+or if you simply want to know when the new version of your favorite game (or
+everything else with a version) is out, uptodate is for you !
 
 %prep
-%setup
 
+%setup
 
 %build
 
-
 %install
-mkdir -p %buildroot%{_bindir}
-mkdir -p %buildroot%{_sysconfdir}/bash_completion.d
-
-cp uptodate %buildroot%{_bindir}
-cp uptodate.bash_completion %buildroot%{_sysconfdir}/bash_completion.d/uptodate
+python setup.py install --root=%buildroot
 
 %clean
 /bin/rm -Rf %buildroot
@@ -74,15 +38,7 @@ cp uptodate.bash_completion %buildroot%{_sysconfdir}/bash_completion.d/uptodate
 %files
 %defattr(0644, root, root, 0755)
 %attr(0755,root,root) %{_bindir}/*
+%{_libdir}/python%{pyver}/site-packages/*
 %config(noreplace) %{_sysconfdir}/bash_completion.d/uptodate
 %doc COPYING README version
-
-
-%changelog
-* Mon Mar 28 2005 Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr> 0.2-1mdk
-- 0.2
-
-* Sat Mar 26 2005 Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr> 0.1-1mdk
-- initial contrib
-
 

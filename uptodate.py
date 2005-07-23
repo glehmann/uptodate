@@ -64,11 +64,12 @@ def addGlobalOptions(parser) :
 def makeDescription() :
 	DESCRIPTION=_('''uptodate allows you to trace the versions of everything which has a version
 
-uptodate is powerful and user friendly command line tool which helps you to know when a new version is available.
-It searches for new versions in a web page, a ftp directory, etc, and shows you added and removed version since the last search.
-If you update some softs by hand, if you are a package maintainer, or
-if you simply want to know when the new version of your favorite
-game (or everything else with a version) is out, uptodate is for you !
+uptodate is powerful and user friendly command line tool which helps you to
+know when a new version is available. It searches for new versions in a web
+page, a ftp directory, etc, and shows you added and removed version since the
+last search. If you update some softs by hand, if you are a package maintainer,
+or if you simply want to know when the new version of your favorite game (or
+everything else with a version) is out, uptodate is for you !
 
 Author: Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>
 Website: http://gleh.dyndns.org/uptodate/
