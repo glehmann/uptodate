@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-23 21:03+0200\n"
-"PO-Revision-Date: 2005-07-24 12:29+0100\n"
+"PO-Revision-Date: 2005-07-24 12:46+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,12 +53,12 @@ msgstr "  %s  %s\n"
 #: uptodate/plugins/history.py:76
 #, python-format
 msgid "  + %s: %s (%s)"
-msgstr "  + %s: %s (%s)"
+msgstr "  + %s : %s (%s)"
 
 #: uptodate/plugins/history.py:77
 #, python-format
 msgid "  - %s: %s (%s)"
-msgstr "  - %s: %s (%s)"
+msgstr "  - %s : %s (%s)"
 
 #: uptodate/__init__.py:164
 msgid " and "
@@ -272,7 +272,7 @@ msgstr "Erreur : Aucune version trouvée."
 #: uptodate.py:250
 #, python-format
 msgid "Error: Property %s doesn't exist."
-msgstr "Erreur: La propriété %s n'éxiste pas."
+msgstr "Erreur : La propriété %s n'éxiste pas."
 
 #: uptodate.py:254
 #, python-format

@@ -33,7 +33,11 @@ else :
 
 
 import gettext
-gettext.translation("uptodate", fallback=True).install()
+try :
+    # try to load current translation in local locale dir
+    gettext.translation("uptodate", "locale").install()
+except :
+    gettext.translation("uptodate", fallback=True).install()
 
 # error codes
 
