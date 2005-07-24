@@ -23,33 +23,11 @@
 VERSION = "0.3"
 
 
-import gettext
-gettext.install('uptodate')
-
-
-
-
 import sys
 import os.path
 from optparse import OptionParser, IndentedHelpFormatter
 from uptodate import *
 
-
-
-
-														
-# COMMANDS = [(['add'], commandAdd),
-# 	    (['check'], commandCheck),
-# 	    (['edit'], commandEdit),
-# 	    (['remove', 'rm', 'del'], commandRemove),
-# 	    (['display'], commandDisplay),
-# 	    (['copy', 'cp'], commandCopy),
-# 	    (['rename', 'mv'], commandRename),
-# 	    (['auto'], commandAuto),
-# 	    (['import'], commandImport),
-# 	    (['export'], commandExport),
-# 	    (['history'], commandHistory),
-# 	    ]
 
 def addGlobalOptions(parser) :
 	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("config file (%default)"))
@@ -71,7 +49,7 @@ last search. If you update some softs by hand, if you are a package maintainer,
 or if you simply want to know when the new version of your favorite game (or
 everything else with a version) is out, uptodate is for you !
 
-Author: Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>
+Author: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>
 Website: http://gleh.dyndns.org/uptodate/
 
 Commands:

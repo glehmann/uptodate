@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 13:23+0200\n"
-"PO-Revision-Date: 2005-07-24 13:24+0100\n"
+"POT-Creation-Date: 2005-07-24 16:09+0200\n"
+"PO-Revision-Date: 2005-07-24 16:09+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr ""
 "\n"
 "    - %s : %s"
 
-#: uptodate.py:117
+#: uptodate.py:95
 #, python-format
 msgid "  %s  %s\n"
 msgstr "  %s  %s\n"
@@ -114,8 +114,8 @@ msgstr ", "
 msgid "- %s: %s (%s)"
 msgstr "- %s : %s (%s)"
 
-#: uptodate.py:212
-#: uptodate.py:214
+#: uptodate.py:190
+#: uptodate.py:192
 msgid ": "
 msgstr " : "
 
@@ -253,35 +253,35 @@ msgstr ""
 "Exemple:\n"
 "uptodate edit itk-app comment 'applications utilisant itk'"
 
-#: uptodate.py:258
+#: uptodate.py:236
 msgid "Error: Invalid data."
 msgstr "Erreur : Données invalides."
 
-#: uptodate.py:231
+#: uptodate.py:209
 msgid "Error: No version found."
 msgstr "Erreur : Aucune version trouvée."
 
-#: uptodate.py:250
+#: uptodate.py:228
 #, python-format
 msgid "Error: Property %s doesn't exist."
 msgstr "Erreur : La propriété %s n'éxiste pas."
 
-#: uptodate.py:254
+#: uptodate.py:232
 #, python-format
 msgid "Error: The command %s doesn't exist."
 msgstr "Erreur : La commande %s n'existe pas."
 
-#: uptodate.py:227
+#: uptodate.py:205
 #, python-format
 msgid "Error: The module %s already exists."
 msgstr "Erreur : Le module %s existe déjà."
 
-#: uptodate.py:235
+#: uptodate.py:213
 #, python-format
 msgid "Error: The module %s doesn't exist."
 msgstr "Erreur : Le module %s n'existe pas."
 
-#: uptodate.py:236
+#: uptodate.py:214
 #, python-format
 msgid "Error: The modules %s don't exist."
 msgstr "Erreur : Les modules %s n'existent pas."
@@ -312,8 +312,8 @@ msgstr ""
 msgid "Export modules"
 msgstr "Exporte des modules"
 
-#: uptodate.py:55
-#: uptodate.py:57
+#: uptodate.py:33
+#: uptodate.py:35
 msgid "FILE"
 msgstr "FICHIER"
 
@@ -332,7 +332,7 @@ msgstr ""
 "uptodate history itk-app\n"
 "uptodate history --all --last 10"
 
-#: uptodate.py:90
+#: uptodate.py:68
 msgid "IO error"
 msgstr "Erreur d'entée/sortie"
 
@@ -352,15 +352,15 @@ msgstr ""
 msgid "Import modules"
 msgstr "Importe des modules"
 
-#: uptodate.py:84
+#: uptodate.py:62
 msgid "Invalid arguments number"
 msgstr "Nombre d'arguments invalide"
 
-#: uptodate.py:92
+#: uptodate.py:70
 msgid "Invalid data"
 msgstr "Donnée invalide"
 
-#: uptodate.py:91
+#: uptodate.py:69
 msgid "Keyboard interrupt"
 msgstr "Iterruption au clavier"
 
@@ -368,15 +368,15 @@ msgstr "Iterruption au clavier"
 msgid "Modify module's properties"
 msgstr "Modifie les propriétés d'un module"
 
-#: uptodate.py:86
+#: uptodate.py:64
 msgid "Module not found"
 msgstr "Module non trouvé"
 
-#: uptodate.py:85
+#: uptodate.py:63
 msgid "No version found"
 msgstr "Aucune version trouvé"
 
-#: uptodate.py:87
+#: uptodate.py:65
 msgid "Property not found"
 msgstr "Propritété non trouvé"
 
@@ -436,11 +436,11 @@ msgstr ""
 msgid "Search new versions"
 msgstr "Recherche les nouvelles versions"
 
-#: uptodate.py:88
+#: uptodate.py:66
 msgid "This module already exists"
 msgstr "Ce module existe déjà"
 
-#: uptodate.py:89
+#: uptodate.py:67
 msgid "Unknown command"
 msgstr "Commande inconnue"
 
@@ -465,7 +465,7 @@ msgstr "permet de choisir une expression régulière dans la liste proposée par up
 msgid "associate the comment with the module"
 msgstr "associe le commentaire au module"
 
-#: uptodate.py:55
+#: uptodate.py:33
 #, python-format
 msgid "config file (%default)"
 msgstr "fichier de configuration (%default)"
@@ -478,7 +478,7 @@ msgstr "affiche l'historique des versions ajoutées"
 msgid "display all modules"
 msgstr "affiche tous les modules"
 
-#: uptodate.py:61
+#: uptodate.py:39
 msgid "display available options and commands"
 msgstr "affiche les options et les commandes disponibles"
 
@@ -498,15 +498,15 @@ msgstr "affiche les versions ajoutées depuis la dernière recherche"
 msgid "display the removed versions since last search"
 msgstr "affiche les versions supprimées depuis la dernière recherche"
 
-#: uptodate.py:60
+#: uptodate.py:38
 msgid "display what has been done"
 msgstr "affiche ce qui est fait"
 
-#: uptodate.py:58
+#: uptodate.py:36
 msgid "don't ask question"
 msgstr "ne pas poser de question"
 
-#: uptodate.py:56
+#: uptodate.py:34
 msgid "don't save the changes"
 msgstr "ne pas sauver les changements"
 
@@ -514,7 +514,7 @@ msgstr "ne pas sauver les changements"
 msgid "export all modules"
 msgstr "exporte tous les modules"
 
-#: uptodate.py:59
+#: uptodate.py:37
 msgid "ignore the missing modules"
 msgstr "ignorer les modules absents"
 
@@ -550,7 +550,7 @@ msgstr "uptodate [options] add nom url regexp"
 msgid "uptodate [options] auto name url version"
 msgstr "uptodate [options] auto nom url version"
 
-#: uptodate.py:132
+#: uptodate.py:110
 msgid "uptodate [options] command [options] [arguments]"
 msgstr "uptodate [options] commande [options] [arguments]"
 
@@ -590,7 +590,7 @@ msgstr "uptodate [options] rename nom nom"
 msgid "uptodate [options] search [name] ..."
 msgstr "uptodate [options] search [nom] ..."
 
-#: uptodate.py:65
+#: uptodate.py:43
 #, python-format
 msgid ""
 "uptodate allows you to trace the versions of everything which has a version\n"
@@ -602,7 +602,7 @@ msgid ""
 "or if you simply want to know when the new version of your favorite game (or\n"
 "everything else with a version) is out, uptodate is for you !\n"
 "\n"
-"Author: Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
+"Author: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Website: http://gleh.dyndns.org/uptodate/\n"
 "\n"
 "Commands:\n"
@@ -623,7 +623,7 @@ msgstr ""
 "nouvelle version de votre jeu favori (ou de tout autre chose avec une version)\n"
 "est disponible, uptodate est fait pour vous !\n"
 "\n"
-"Auteurr : Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
+"Auteur : Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Site web : http://gleh.dyndns.org/uptodate/\n"
 "\n"
 "Commandes :\n"
@@ -633,7 +633,7 @@ msgstr ""
 "Codes de sortie :\n"
 "%s"
 
-#: uptodate.py:57
+#: uptodate.py:35
 msgid "write in a file (default standard output)"
 msgstr "écrit dans le fichier (sortie standard par défaut)"
 
