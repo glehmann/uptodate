@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-24 16:09+0200\n"
-"PO-Revision-Date: 2005-07-24 16:09+0100\n"
+"PO-Revision-Date: 2005-07-24 16:26+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -213,7 +213,7 @@ msgstr ""
 
 #: uptodate/plugins/display.py:27
 msgid "Display informations about modules"
-msgstr "Affiche les informations sur les modules"
+msgstr "Affiche les informations de modules"
 
 #: uptodate/plugins/display.py:29
 msgid ""
@@ -229,7 +229,7 @@ msgstr ""
 
 #: uptodate/plugins/history.py:27
 msgid "Display versions history"
-msgstr "Affiche l'ihistorique des versions"
+msgstr "Affiche l'historique des versions"
 
 #: uptodate/plugins/copy.py:47
 #: uptodate/plugins/add.py:62
