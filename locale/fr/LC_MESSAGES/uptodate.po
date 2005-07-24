@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 12:57+0200\n"
-"PO-Revision-Date: 2005-07-24 13:10+0100\n"
+"POT-Creation-Date: 2005-07-24 13:23+0200\n"
+"PO-Revision-Date: 2005-07-24 13:24+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -449,6 +449,10 @@ msgstr "Commande inconnue"
 msgid "Warning: No version fond for %s. The current versions are kept."
 msgstr "Attention : Aucune version trouvé pour le module %s. Les versions actuelles sont conservées."
 
+#: uptodate/plugins/history.py:41
+msgid "X"
+msgstr "X"
+
 #: uptodate/__init__.py:179
 msgid "Y/n"
 msgstr "O/n"
@@ -479,8 +483,8 @@ msgid "display available options and commands"
 msgstr "affiche les options et les commandes disponibles"
 
 #: uptodate/plugins/history.py:41
-msgid "display last modifications"
-msgstr "affiche les dernières modifications"
+msgid "display last X modifications"
+msgstr "affiche les X dernières modifications"
 
 #: uptodate/plugins/history.py:40
 msgid "display removed versions history"

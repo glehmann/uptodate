@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 12:57+0200\n"
+"POT-Creation-Date: 2005-07-24 13:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,6 +379,10 @@ msgstr ""
 msgid "Warning: No version fond for %s. The current versions are kept."
 msgstr ""
 
+#: uptodate/plugins/history.py:41
+msgid "X"
+msgstr ""
+
 #: uptodate/__init__.py:179
 msgid "Y/n"
 msgstr ""
@@ -409,7 +413,7 @@ msgid "display available options and commands"
 msgstr ""
 
 #: uptodate/plugins/history.py:41
-msgid "display last modifications"
+msgid "display last X modifications"
 msgstr ""
 
 #: uptodate/plugins/history.py:40

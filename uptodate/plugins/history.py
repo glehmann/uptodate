@@ -38,7 +38,7 @@ names = ['history']
 options = [Option("-a", "--all", action="store_true", dest="all", help=_("export all modules")),
 	Option("-A", "--added", action="store_true", dest="added", help=_("display added versions history")),
 	Option("-r", "--removed", action="store_true", dest="removed", help=_("display removed versions history")),
-	Option("-l", "--last", dest="last", default=None, type="int", help=_("display last modifications"))
+	Option("-l", "--last", dest="last", default=None, type="int", metavar=_("X"), help=_("display last X modifications"))
 	]
 
 def runCommand(opts, args, conf, out) :
