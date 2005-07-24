@@ -122,13 +122,6 @@ def printModule(conf, module, out, verbose=False) :
                 else :
                         historyString = _('none')
 
-                if removed :
-                        removedString = ""
-                        for t in sorted(removed.keys(), reverse=True) :
-                                removedString += _('\n      - %s: %s') % (makeTime(t), andJoin(map(repr, removed[t])))
-                else :
-                        removedString = _('none')
-		
 		print >> out, template % {'module': module, 'comment': comment, 'url': url, 'regexp': regexp, 'current': andJoin(map(repr, current)), 'history': historyString}
 	else :
 		# display some information on one line
