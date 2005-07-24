@@ -8,6 +8,7 @@ last search. If you update some softs by hand, if you are a package maintainer,
 or if you simply want to know when the new version of your favorite game (or
 everything else with a version) is out, uptodate is for you !
 
+
 USAGE:
 To be able to search for new versions, you must ask uptodate to add a
 module to his config. For example, if you want to search zope's new
@@ -86,17 +87,44 @@ uptodate auto tailor-test \
 
 
 TODO:
- + make test
- + what you want to add here. Fill free to send patch (see below)
++ make test
++ what you want to add here. Fill free to send patch (see below)
+
+
+INSTALLATION:
+get archive from website, unpack it, change to unpacked directory, and run
+
+    python setup.py install
+
+You can also choose to build a rpm package
+
+    rpmbuild -ta uptodate-0.3.tar.bz2
+    rpm -i uptodate-0.3-1.noarch.rpm
+
+Or if you are using mandriva, just use urpmi
+
+    urpmi uptodate
+
+
+DEPENDENCIES:
++ required:
+  python >= 2.3
+
++ optional
+  bash-completion
 
 
 AUTHOR: Gaetan Lehmann
 
+
 WEBSITE: http://voxel.jouy.inra.fr/uptodate/
+
 
 EMAIL: gaetan.lehmann@jouy.inra.fr
 
+
 LICENSE: GPL (see COPYING file)
+
 
 DARCS :
 uptodate source code is available in a Darcs repository.
