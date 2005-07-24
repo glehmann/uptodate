@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 17:44+0200\n"
+"POT-Creation-Date: 2005-07-24 19:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -244,14 +244,6 @@ msgstr ""
 msgid "Error: The modules %s don't exist."
 msgstr ""
 
-#: uptodate/plugins/add.py:40
-msgid "Execute this command when a new version is available"
-msgstr ""
-
-#: uptodate/plugins/add.py:42
-msgid "Execute this command when a version is no more available"
-msgstr ""
-
 #: uptodate/plugins/export.py:29
 msgid ""
 "Export is used in order to export modules.\n"
@@ -395,11 +387,6 @@ msgstr ""
 msgid "associate the comment with the module"
 msgstr ""
 
-#: uptodate.py:33
-#, python-format
-msgid "config file (%default)"
-msgstr ""
-
 #: uptodate/plugins/history.py:39
 msgid "display added versions history"
 msgstr ""
@@ -410,6 +397,10 @@ msgstr ""
 
 #: uptodate.py:39
 msgid "display available options and commands"
+msgstr ""
+
+#: uptodate/plugins/history.py:38
+msgid "display history of all modules"
 msgstr ""
 
 #: uptodate/plugins/history.py:41
@@ -428,10 +419,6 @@ msgstr ""
 msgid "display the removed versions since last search"
 msgstr ""
 
-#: uptodate.py:38
-msgid "display what has been done"
-msgstr ""
-
 #: uptodate.py:36
 msgid "don't ask question"
 msgstr ""
@@ -440,8 +427,12 @@ msgstr ""
 msgid "don't save the changes"
 msgstr ""
 
-#: uptodate/plugins/history.py:38
-msgid "export all modules"
+#: uptodate/plugins/add.py:40
+msgid "execute this command when a new version is available"
+msgstr ""
+
+#: uptodate/plugins/add.py:42
+msgid "execute this command when a version is no more available"
 msgstr ""
 
 #: uptodate.py:37
@@ -546,8 +537,17 @@ msgid ""
 "%s"
 msgstr ""
 
+#: uptodate.py:33
+#, python-format
+msgid "use FILE as config file (default: %default)"
+msgstr ""
+
+#: uptodate.py:38
+msgid "verbose mode"
+msgstr ""
+
 #: uptodate.py:35
-msgid "write in a file (default standard output)"
+msgid "write in a file (default: standard output)"
 msgstr ""
 
 #: uptodate/__init__.py:193

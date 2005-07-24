@@ -30,12 +30,12 @@ from uptodate import *
 
 
 def addGlobalOptions(parser) :
-	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("config file (%default)"))
+	parser.add_option("-c", "--config-file", dest="configPath", default=os.path.expanduser("~/.uptodate"), metavar=_("FILE"), help=_("use FILE as config file (default: %default)"))
 	parser.add_option("-d", "--dry-run", action="store_true", dest="dryRun", help=_("don't save the changes"))
-	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FILE"), help=_("write in a file (default standard output)"))
+	parser.add_option("-o", "--output", dest="outputPath", default="-", metavar=_("FILE"), help=_("write in a file (default: standard output)"))
 	parser.add_option("-b", "--batch", action="store_true", dest="batch", help=_("don't ask question"))
 	parser.add_option("-f", "--force", action="store_true", dest="force", help=_("ignore the missing modules"))
-	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("display what has been done"))
+	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help=_("verbose mode"))
 	parser.add_option("--list-option", action="store_true", dest="listOption", help=_("display available options and commands"))
 
 	

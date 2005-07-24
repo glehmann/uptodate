@@ -37,9 +37,9 @@ uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>
 
 names = ['add']
 
-options = [Option("-A", "--add-command", dest="addCommand", default="", metavar="COMMAND", help=_("Execute this command when a new version is available")),
+options = [Option("-A", "--add-command", dest="addCommand", default="", metavar="COMMAND", help=_("execute this command when a new version is available")),
         Option("-C", "--comment", dest="comment", default="", metavar="COMMENT", help=_("associate the comment with the module")),
-        Option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMAND", help=_("Execute this command when a version is no more available")),
+        Option("-r", "--remove-command", dest="removeCommand", default="", metavar="COMMAND", help=_("execute this command when a version is no more available")),
 	]
 
 def runCommand(opts, args, conf, out) :

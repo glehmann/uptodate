@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 17:44+0200\n"
-"PO-Revision-Date: 2005-07-24 17:45+0100\n"
+"POT-Creation-Date: 2005-07-24 19:33+0200\n"
+"PO-Revision-Date: 2005-07-24 19:30+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -73,14 +73,12 @@ msgstr ""
 msgid "%s value: "
 msgstr "%s valeur : "
 
-#: uptodate/plugins/search.py:97
-#: uptodate/plugins/search.py:99
+#: uptodate/plugins/search.py:97 uptodate/plugins/search.py:99
 #, python-format
 msgid "%s: %s added."
 msgstr "%s : %s ajoutée."
 
-#: uptodate/plugins/search.py:102
-#: uptodate/plugins/search.py:104
+#: uptodate/plugins/search.py:102 uptodate/plugins/search.py:104
 #, python-format
 msgid "%s: %s removed."
 msgstr "%s : %s supprimée."
@@ -114,8 +112,7 @@ msgstr ", "
 msgid "- %s: %s (%s)"
 msgstr "- %s : %s (%s)"
 
-#: uptodate.py:190
-#: uptodate.py:192
+#: uptodate.py:190 uptodate.py:192
 msgid ": "
 msgstr " : "
 
@@ -129,31 +126,45 @@ msgstr "Ajoute un nouveau module sans avoir à donner une expression régulière"
 
 #: uptodate/plugins/add.py:29
 msgid ""
-"Add is used to add a new module. A module has a name and contains the appropriate informations in order to search the new versions:\n"
+"Add is used to add a new module. A module has a name and contains the "
+"appropriate informations in order to search the new versions:\n"
 "- the module's name\n"
-"- the URL of a file or a directory. The file or the directory may be distant (website, ftp) or local.\n"
-"- a regular expression which find the versions in the received data from the URL.\n"
+"- the URL of a file or a directory. The file or the directory may be distant "
+"(website, ftp) or local.\n"
+"- a regular expression which find the versions in the received data from the "
+"URL.\n"
 "You can add a comment to describe the module, to store the homepage, etc.\n"
 "\n"
 "Example:\n"
-"uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' -C 'A leading open source application server'"
+"uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})"
+"\\s*</a>' -C 'A leading open source application server'"
 msgstr ""
-"Add est utilisé pour ajouter un nouveau module. Un module a un nom et contient les informations nécessaires pour la recherche de nouvelles versions:\n"
+"Add est utilisé pour ajouter un nouveau module. Un module a un nom et "
+"contient les informations nécessaires pour la recherche de nouvelles "
+"versions:\n"
 "- le nom du module\n"
-"- l'URL d'un fichier ou  d'un répertoire. Le fichier ou le répertoire peut être distant (site web, site ftp) ou local.\n"
-"- une expression régulière utilisée pour trouver les nouvelles versions dans les donnée obtenues depuis l'URL.\n"
-"Vous pouvez ajouter un commentaire pour décrire le module, retenir le site web, etc.\n"
+"- l'URL d'un fichier ou  d'un répertoire. Le fichier ou le répertoire peut "
+"être distant (site web, site ftp) ou local.\n"
+"- une expression régulière utilisée pour trouver les nouvelles versions dans "
+"les donnée obtenues depuis l'URL.\n"
+"Vous pouvez ajouter un commentaire pour décrire le module, retenir le site "
+"web, etc.\n"
 "\n"
 "Exemple :\n"
-"uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})\\s*</a>' -C 'Un excellent serveur d'application open source'"
+"uptodate add zope http://www.zope.org/Products/ 'Download Zope (.{1,10})"
+"\\s*</a>' -C 'Un excellent serveur d'application open source'"
 
 #: uptodate/plugins/auto.py:30
 msgid ""
-"Auto is used in order to add a new module with no need of the regular expression used to get versions.\n"
+"Auto is used in order to add a new module with no need of the regular "
+"expression used to get versions.\n"
 "You must give:\n"
-"+ the module's name. If the name is in the received data from the URL, it'll influence the choice of the regular expression.\n"
-"+ the URL of a file or a directory. The file or the directory may be distant (website, ftp) or local.\n"
-"+ an existing version number. This version number allows to find the regular expression which will be used to obtain new versions.\n"
+"+ the module's name. If the name is in the received data from the URL, it'll "
+"influence the choice of the regular expression.\n"
+"+ the URL of a file or a directory. The file or the directory may be distant "
+"(website, ftp) or local.\n"
+"+ an existing version number. This version number allows to find the regular "
+"expression which will be used to obtain new versions.\n"
 "You can add a comment to describe the module, to store the homepage, etc.\n"
 "\n"
 "Examples:\n"
@@ -161,32 +172,45 @@ msgid ""
 "uptodate auto zope http://www.zope.org/Products/ 2.7.4\n"
 "\n"
 "+ InsightToolkit, from the sourceforge download page:\n"
-"uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?group_id=108122&package_id=116777' 2.0.1\n"
+"uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?"
+"group_id=108122&package_id=116777' 2.0.1\n"
 "\n"
 "+ jpackage non free files, from a ftp directory :\n"
-"uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm\n"
+"uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/"
+"jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm\n"
 "\n"
 "+ jpackage releases, from a ftp directory :\n"
-"uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"
+"uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/"
+"Linux/jpackage/ 1.6"
 msgstr ""
-"Auto est utilisé pour ajouter un nouveau module sans avoir a fournir l'expression régulière qui permet d'obtenir les versions.Vous devez fournir :- le nom du module\n"
-"- l'URL d'un fichier ou  d'un répertoire. Le fichier ou le répertoire peut être distant (site web, site ftp) ou local.\n"
-"- une expression régulière utilisée pour trouver les nouvelles versions dans les donnée obtenues depuis l'URL.\n"
-"- un numéro de version présent à l'URL fournie. Ce numéro permet de trouver l'expression régulière qui sera utilisée pour obtenir les nouvelles versions.\n"
-"Vous pouvez ajouter un commentaire pour décrire le module, pour retenir le site web, etc.\n"
+"Auto est utilisé pour ajouter un nouveau module sans avoir a fournir "
+"l'expression régulière qui permet d'obtenir les versions.Vous devez "
+"fournir :- le nom du module\n"
+"- l'URL d'un fichier ou  d'un répertoire. Le fichier ou le répertoire peut "
+"être distant (site web, site ftp) ou local.\n"
+"- une expression régulière utilisée pour trouver les nouvelles versions dans "
+"les donnée obtenues depuis l'URL.\n"
+"- un numéro de version présent à l'URL fournie. Ce numéro permet de trouver "
+"l'expression régulière qui sera utilisée pour obtenir les nouvelles "
+"versions.\n"
+"Vous pouvez ajouter un commentaire pour décrire le module, pour retenir le "
+"site web, etc.\n"
 "\n"
 "Examples:\n"
 "+ zope\n"
 "uptodate auto zope http://www.zope.org/Products/ 2.7.4\n"
 "\n"
 "+ InsightToolkit, from the sourceforge download page:\n"
-"uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?group_id=108122&package_id=116777' 2.0.1\n"
+"uptodate auto InsightToolkit 'http://sourceforge.net/project/showfiles.php?"
+"group_id=108122&package_id=116777' 2.0.1\n"
 "\n"
 "+ jpackage non free files, from a ftp directory :\n"
-"uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm\n"
+"uptodate auto jpackage ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/"
+"jpackage/1.6/generic/SRPMS.non-free/ j2ee-connector-1.5-3jpp.nosrc.rpm\n"
 "\n"
 "+ jpackage releases, from a ftp directory :\n"
-"uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"
+"uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/"
+"Linux/jpackage/ 1.6"
 
 #: uptodate/plugins/auto.py:150
 msgid "Available regular expressions:"
@@ -231,24 +255,27 @@ msgstr ""
 msgid "Display versions history"
 msgstr "Affiche l'historique des versions"
 
-#: uptodate/plugins/copy.py:47
-#: uptodate/plugins/add.py:62
-#: uptodate/plugins/rename.py:48
-#: uptodate/plugins/auto.py:71
-#: uptodate/plugins/remove.py:56
-#: uptodate/plugins/import.py:71
+#: uptodate/plugins/copy.py:47 uptodate/plugins/add.py:62
+#: uptodate/plugins/rename.py:48 uptodate/plugins/auto.py:71
+#: uptodate/plugins/remove.py:56 uptodate/plugins/import.py:71
 #, python-format
 msgid "Do you want to remove the module %s?"
 msgstr "Voulez-vous supprimer le module %s ?"
 
 #: uptodate/plugins/edit.py:29
 msgid ""
-"Edit is used in order to modify module's properties. Modifiable properties are: added, removed, current, add-command, remove-command, url, regexp and comment. If url or regexp are modified, uptodate check if it can obtain versions before validating changes.\n"
+"Edit is used in order to modify module's properties. Modifiable properties "
+"are: added, removed, current, add-command, remove-command, url, regexp and "
+"comment. If url or regexp are modified, uptodate check if it can obtain "
+"versions before validating changes.\n"
 "\n"
 "Example:\n"
 "uptodate edit itk-app comment 'applications using InsightToolkit'"
 msgstr ""
-"Edit est utiliser pour modifier une propriété d'un module. Les propriétés modifiable sont : added, removed, current, add-command, remove-command, url, regexp et comment. SI url ou regexp sont modifiés, uptodate vérifie si il peut obtenir des versions avant de valider les modifications.\n"
+"Edit est utiliser pour modifier une propriété d'un module. Les propriétés "
+"modifiable sont : added, removed, current, add-command, remove-command, url, "
+"regexp et comment. SI url ou regexp sont modifiés, uptodate vérifie si il "
+"peut obtenir des versions avant de valider les modifications.\n"
 "\n"
 "Exemple:\n"
 "uptodate edit itk-app comment 'applications utilisant itk'"
@@ -286,14 +313,6 @@ msgstr "Erreur : Le module %s n'existe pas."
 msgid "Error: The modules %s don't exist."
 msgstr "Erreur : Les modules %s n'existent pas."
 
-#: uptodate/plugins/add.py:40
-msgid "Execute this command when a new version is available"
-msgstr "Execute cette commande quand une nouvelle version est disponible"
-
-#: uptodate/plugins/add.py:42
-msgid "Execute this command when a version is no more available"
-msgstr "Execute cette commande quand une version n'est plus disponible"
-
 #: uptodate/plugins/export.py:29
 msgid ""
 "Export is used in order to export modules.\n"
@@ -312,8 +331,7 @@ msgstr ""
 msgid "Export modules"
 msgstr "Exporte des modules"
 
-#: uptodate.py:33
-#: uptodate.py:35
+#: uptodate.py:33 uptodate.py:35
 msgid "FILE"
 msgstr "FICHIER"
 
@@ -414,18 +432,25 @@ msgstr ""
 
 #: uptodate/plugins/search.py:31
 msgid ""
-"Search is used in order to find new versions of the wanted modules. By default, new and removed versions are displayed.\n"
-"The found versions are stored in order to display the modification at the next search.\n"
-"You can execute this command periodically (with cron for example) to follow the versions evolution.\n"
+"Search is used in order to find new versions of the wanted modules. By "
+"default, new and removed versions are displayed.\n"
+"The found versions are stored in order to display the modification at the "
+"next search.\n"
+"You can execute this command periodically (with cron for example) to follow "
+"the versions evolution.\n"
 "\n"
 "Example:\n"
 "uptodate check zope \n"
 "zope: '2.7.5' added.\n"
 "zope: '2.7.4' removed."
 msgstr ""
-"Check est utilisé pour chercher les nouvelles versions des modules donnés en paramètres. Par défaut, les nouvelles versions et les versions supprimées sont affichées.\n"
-"Les versions trouvées sont enregistrées afin de pouvoir afficher les modifications à la prochaine recherche.\n"
-"Vous pouvez exécuter cette commande périodiquement (avec cron par exemple) pour suivre l'évolution des versions.\n"
+"Check est utilisé pour chercher les nouvelles versions des modules donnés en "
+"paramètres. Par défaut, les nouvelles versions et les versions supprimées "
+"sont affichées.\n"
+"Les versions trouvées sont enregistrées afin de pouvoir afficher les "
+"modifications à la prochaine recherche.\n"
+"Vous pouvez exécuter cette commande périodiquement (avec cron par exemple) "
+"pour suivre l'évolution des versions.\n"
 "\n"
 "Exemple :\n"
 "uptodate check zope \n"
@@ -447,7 +472,9 @@ msgstr "Commande inconnue"
 #: uptodate/plugins/search.py:123
 #, python-format
 msgid "Warning: No version fond for %s. The current versions are kept."
-msgstr "Attention : Aucune version trouvé pour le module %s. Les versions actuelles sont conservées."
+msgstr ""
+"Attention : Aucune version trouvé pour le module %s. Les versions actuelles "
+"sont conservées."
 
 #: uptodate/plugins/history.py:41
 msgid "X"
@@ -459,16 +486,13 @@ msgstr "O/n"
 
 #: uptodate/plugins/auto.py:52
 msgid "allows to choose a regular expression in the list proposed by uptodate"
-msgstr "permet de choisir une expression régulière dans la liste proposée par uptodate"
+msgstr ""
+"permet de choisir une expression régulière dans la liste proposée par "
+"uptodate"
 
 #: uptodate/plugins/add.py:41
 msgid "associate the comment with the module"
 msgstr "associe le commentaire au module"
-
-#: uptodate.py:33
-#, python-format
-msgid "config file (%default)"
-msgstr "fichier de configuration (%default)"
 
 #: uptodate/plugins/history.py:39
 msgid "display added versions history"
@@ -481,6 +505,10 @@ msgstr "affiche tous les modules"
 #: uptodate.py:39
 msgid "display available options and commands"
 msgstr "affiche les options et les commandes disponibles"
+
+#: uptodate/plugins/history.py:38
+msgid "display history of all modules"
+msgstr "affiche l'historique de tous les modules"
 
 #: uptodate/plugins/history.py:41
 msgid "display last X modifications"
@@ -498,10 +526,6 @@ msgstr "affiche les versions ajoutées depuis la dernière recherche"
 msgid "display the removed versions since last search"
 msgstr "affiche les versions supprimées depuis la dernière recherche"
 
-#: uptodate.py:38
-msgid "display what has been done"
-msgstr "affiche ce qui est fait"
-
 #: uptodate.py:36
 msgid "don't ask question"
 msgstr "ne pas poser de question"
@@ -510,9 +534,13 @@ msgstr "ne pas poser de question"
 msgid "don't save the changes"
 msgstr "ne pas sauver les changements"
 
-#: uptodate/plugins/history.py:38
-msgid "export all modules"
-msgstr "exporte tous les modules"
+#: uptodate/plugins/add.py:40
+msgid "execute this command when a new version is available"
+msgstr "exécute cette commande quand une nouvelle version est disponible"
+
+#: uptodate/plugins/add.py:42
+msgid "execute this command when a version is no more available"
+msgstr "exécute cette commande quand une version n'est plus disponible"
 
 #: uptodate.py:37
 msgid "ignore the missing modules"
@@ -597,9 +625,12 @@ msgid ""
 "\n"
 "uptodate is powerful and user friendly command line tool which helps you to\n"
 "know when a new version is available. It searches for new versions in a web\n"
-"page, a ftp directory, etc, and shows you added and removed version since the\n"
-"last search. If you update some softs by hand, if you are a package maintainer,\n"
-"or if you simply want to know when the new version of your favorite game (or\n"
+"page, a ftp directory, etc, and shows you added and removed version since "
+"the\n"
+"last search. If you update some softs by hand, if you are a package "
+"maintainer,\n"
+"or if you simply want to know when the new version of your favorite game "
+"(or\n"
 "everything else with a version) is out, uptodate is for you !\n"
 "\n"
 "Author: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
@@ -614,13 +645,18 @@ msgid ""
 msgstr ""
 "uptodate permet de suivre les versions de tout ce qui a une version\n"
 "\n"
-"uptodate est un programme en ligne de commande facile à utiliser qui vous aide à\n"
-"savoir quand une nouvelle version est disponible. Il recherche les versions dans\n"
-"une page web, un répertoire ftp, etc, et vous montre les versions ajoutées et\n"
+"uptodate est un programme en ligne de commande facile à utiliser qui vous "
+"aide à\n"
+"savoir quand une nouvelle version est disponible. Il recherche les versions "
+"dans\n"
+"une page web, un répertoire ftp, etc, et vous montre les versions ajoutées "
+"et\n"
 "supprimées depuis la dernière recherche.\n"
-"Si vous mettez à jour certains logiciels à la main, si vous êtes mainteneur de\n"
+"Si vous mettez à jour certains logiciels à la main, si vous êtes mainteneur "
+"de\n"
 "paquetages (rpm, deb, ...), ou si vous voulez simplement savoir quand la\n"
-"nouvelle version de votre jeu favori (ou de tout autre chose avec une version)\n"
+"nouvelle version de votre jeu favori (ou de tout autre chose avec une "
+"version)\n"
 "est disponible, uptodate est fait pour vous !\n"
 "\n"
 "Auteur : Gaëtan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
@@ -633,9 +669,18 @@ msgstr ""
 "Codes de sortie :\n"
 "%s"
 
+#: uptodate.py:33
+#, python-format
+msgid "use FILE as config file (default: %default)"
+msgstr "utilise le fichier de configuration FICHIER (%default par défaut)"
+
+#: uptodate.py:38
+msgid "verbose mode"
+msgstr "mode volubile"
+
 #: uptodate.py:35
-msgid "write in a file (default standard output)"
-msgstr "écrit dans le fichier (sortie standard par défaut)"
+msgid "write in a file (default: standard output)"
+msgstr "écrit les sorties dans le fichier FICHIER (sortie standard par défaut)"
 
 #: uptodate/__init__.py:193
 msgid "y"
@@ -659,10 +704,19 @@ msgstr "oui"
 #~ msgstr ""
 #~ "\n"
 #~ "      - %s : %s"
+
 #~ msgid "Do you to remove the module %s?"
 #~ msgstr "Voulez-vous supprimer le module %s ?"
+
 #~ msgid "Do you want to remove module %s?"
 #~ msgstr "Voulez-vous supprimer le module %s ?"
+
+#, fuzzy
+#~ msgid "display what has been done and/or increase output details"
+#~ msgstr "affiche ce qui est fait"
+
+#~ msgid "export all modules"
+#~ msgstr "exporte tous les modules"
+
 #~ msgid "uptodate [options] check [nom] ..."
 #~ msgstr "uptodate [options] check [nom] ..."
-
