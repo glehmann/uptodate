@@ -107,7 +107,7 @@ def main(argv) :
 			commands[name] = mod
         
 	# and create option parser
-	parser = OptionParser(usage = _("uptodate [options] command [options] [arguments]"),
+	parser = OptionParser(usage = _("uptodate [options] command [arguments]"),
 			      description = makeDescription(),
 			      version = "uptodate %s" % VERSION,
 			      formatter = UptodateHelpFormatter())

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 16:09+0200\n"
+"POT-Creation-Date: 2005-07-24 17:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -481,7 +481,7 @@ msgid "uptodate [options] auto name url version"
 msgstr ""
 
 #: uptodate.py:110
-msgid "uptodate [options] command [options] [arguments]"
+msgid "uptodate [options] command [arguments]"
 msgstr ""
 
 #: uptodate/plugins/copy.py:25
