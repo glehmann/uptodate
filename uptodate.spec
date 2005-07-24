@@ -10,9 +10,10 @@ URL:		http://gleh.dyndns.org/uptodate/
 Source0:	http://gleh.dyndns.org/uptodate/uptodate-%{version}.tar.bz2
 License:	GPL
 Group:		Networking/Other
-Requires:	python >= 2.4
+Requires:	python >= 2.3
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
+BuildRequires:	python
 
 %description
 uptodate is powerful and user friendly command line tool which helps you to
