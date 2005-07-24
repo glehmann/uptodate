@@ -42,5 +42,5 @@ python setup.py install --root=%buildroot
 %{_libdir}/python%{pyver}/site-packages/*
 %{_datadir}/locale/*/*/*
 %config(noreplace) %{_sysconfdir}/bash_completion.d/uptodate
-%doc COPYING README version
+%doc COPYING README
 
