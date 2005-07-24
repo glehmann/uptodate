@@ -92,7 +92,7 @@ TODO:
 
 AUTHOR: Gaetan Lehmann
 
-WEBSITE: http://gleh.dyndns.org/uptodate/
+WEBSITE: http://voxel.jouy.inra.fr/uptodate/
 
 EMAIL: gaetan.lehmann@jouy.inra.fr
 
@@ -103,7 +103,7 @@ uptodate source code is available in a Darcs repository.
 http://darcs.net/
 Fill free to get it with
 
-     darcs get --partial http://gleh.dyndns.org/uptodate/
+     darcs get --partial http://voxel.jouy.inra.fr/darcs/uptodate/
 
 and to send me patches with
 
