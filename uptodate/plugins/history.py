@@ -73,8 +73,8 @@ def runCommand(opts, args, conf, out) :
 			for t, versions in removed.iteritems() :
 				hList.append((t, False, module, versions))
 
-	addedTemp = _('+ %s: %s (%s)')
-	removedTemp = _('- %s: %s (%s)')
+	addedTemp = _('+ %s: %s: %s')
+	removedTemp = _('- %s: %s: %s')
 	# sort history
 	hList = sorted(hList, reverse = True)
 	# select only last changes (if needed)
@@ -83,6 +83,6 @@ def runCommand(opts, args, conf, out) :
 	# display history
 	for t, add, module, versions in sorted(hList, reverse = True) :
 	    if add :
-		print >> out, addedTemp % (module, andJoin(map(repr, versions)), makeTime(t)) 
+		print >> out, addedTemp % (makeTime(t), module, andJoin(map(repr, versions))) 
 	    else :
-		print >> out, removedTemp % (module, andJoin(map(repr, versions)), makeTime(t)) 
+		print >> out, removedTemp % (makeTime(t), module, andJoin(map(repr, versions))) 
