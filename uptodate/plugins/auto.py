@@ -49,8 +49,7 @@ uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux
 
 names = ["auto"]
 
-options = add.options + [Option("-i", "--interactive", action="store_true", dest="choose", help=_("allows to choose a regular expression in the list proposed by uptodate")),
-	]
+options = add.options
 
 def runCommand(opts, args, conf, out) :
 	versionRegExp = r'([^<>\n\r]+)'
@@ -145,7 +144,7 @@ def runCommand(opts, args, conf, out) :
 	candidates = bestCandidates + otherCandidates
 	regexp = candidates[0]
 	
-	if opts.choose :
+	if not opts.batch :
 		# ask to user to select a regexp
 		print >> sys.stderr, _("Available regular expressions:")
 		for i, candidate in enumerate(candidates) :
