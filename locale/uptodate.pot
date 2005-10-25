@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-31 22:38+0200\n"
+"POT-Creation-Date: 2005-10-25 15:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,11 +157,11 @@ msgid ""
 "Linux/jpackage/ 1.6"
 msgstr ""
 
-#: uptodate/plugins/auto.py:150
+#: uptodate/plugins/auto.py:149
 msgid "Available regular expressions:"
 msgstr ""
 
-#: uptodate/plugins/auto.py:160
+#: uptodate/plugins/auto.py:159
 msgid "Choose a regular expression (0):"
 msgstr ""
 
@@ -194,7 +194,7 @@ msgid "Display versions history"
 msgstr ""
 
 #: uptodate/plugins/copy.py:47 uptodate/plugins/add.py:62
-#: uptodate/plugins/rename.py:48 uptodate/plugins/auto.py:71
+#: uptodate/plugins/rename.py:48 uptodate/plugins/auto.py:70
 #: uptodate/plugins/remove.py:56 uptodate/plugins/import.py:71
 #, python-format
 msgid "Do you want to remove the module %s?"
@@ -268,7 +268,7 @@ msgid ""
 "Examples:\n"
 "uptodate history itk-app\n"
 "\n"
-"uptodate history --all --last 10"
+"uptodate history --all --added --last 10"
 msgstr ""
 
 #: uptodate.py:68
@@ -368,7 +368,7 @@ msgstr ""
 
 #: uptodate/plugins/search.py:123
 #, python-format
-msgid "Warning: No version fond for %s. The current versions are kept."
+msgid "Warning: No version found for %s. The current versions are kept."
 msgstr ""
 
 #: uptodate/plugins/history.py:41
@@ -377,10 +377,6 @@ msgstr ""
 
 #: uptodate/__init__.py:179
 msgid "Y/n"
-msgstr ""
-
-#: uptodate/plugins/auto.py:52
-msgid "allows to choose a regular expression in the list proposed by uptodate"
 msgstr ""
 
 #: uptodate/plugins/add.py:41

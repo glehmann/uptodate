@@ -31,7 +31,7 @@ description = _("""History is used in order to display versions history.
 Examples:
 uptodate history itk-app
 
-uptodate history --all --last 10""")
+uptodate history --all --added --last 10""")
 
 names = ['history']
 

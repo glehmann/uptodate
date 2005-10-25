@@ -120,5 +120,5 @@ def runCommand(opts, args, conf, out) :
 						os.system(command)
 		else :
 			# no version found
-			print >> sys.stderr, _("Warning: No version fond for %s. The current versions are kept.") % module
+			print >> sys.stderr, _("Warning: No version found for %s. The current versions are kept.") % module
 			# return

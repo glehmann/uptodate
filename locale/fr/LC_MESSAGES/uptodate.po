@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-31 22:38+0200\n"
-"PO-Revision-Date: 2005-07-31 22:39+0100\n"
+"POT-Creation-Date: 2005-10-25 15:10+0200\n"
+"PO-Revision-Date: 2005-10-25 15:16+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -188,11 +188,11 @@ msgstr ""
 "+ jpackage releases, from a ftp directory :\n"
 "uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux/jpackage/ 1.6"
 
-#: uptodate/plugins/auto.py:150
+#: uptodate/plugins/auto.py:149
 msgid "Available regular expressions:"
 msgstr "Expressions régulières disponibles :"
 
-#: uptodate/plugins/auto.py:160
+#: uptodate/plugins/auto.py:159
 msgid "Choose a regular expression (0):"
 msgstr "Choisissez une expression régulière (0) :"
 
@@ -234,7 +234,7 @@ msgstr "Affiche l'historique des versions"
 #: uptodate/plugins/copy.py:47
 #: uptodate/plugins/add.py:62
 #: uptodate/plugins/rename.py:48
-#: uptodate/plugins/auto.py:71
+#: uptodate/plugins/auto.py:70
 #: uptodate/plugins/remove.py:56
 #: uptodate/plugins/import.py:71
 #, python-format
@@ -316,13 +316,14 @@ msgid ""
 "Examples:\n"
 "uptodate history itk-app\n"
 "\n"
-"uptodate history --all --last 10"
+"uptodate history --all --added --last 10"
 msgstr ""
 "History est utilisé pour afficher l'historique des versions.\n"
 "\n"
 "Exemples :\n"
 "uptodate history itk-app\n"
-"uptodate history --all --last 10"
+"\n"
+"uptodate history --all --added --last 10"
 
 #: uptodate.py:68
 msgid "IO error"
@@ -438,8 +439,8 @@ msgstr "Commande inconnue"
 
 #: uptodate/plugins/search.py:123
 #, python-format
-msgid "Warning: No version fond for %s. The current versions are kept."
-msgstr "Attention : Aucune version trouvé pour le module %s. Les versions actuelles sont conservées."
+msgid "Warning: No version found for %s. The current versions are kept."
+msgstr "Attention : Aucune version trouvée pour le module %s. Les versions actuelles sont conservées."
 
 #: uptodate/plugins/history.py:41
 msgid "X"
@@ -448,10 +449,6 @@ msgstr "X"
 #: uptodate/__init__.py:179
 msgid "Y/n"
 msgstr "O/n"
-
-#: uptodate/plugins/auto.py:52
-msgid "allows to choose a regular expression in the list proposed by uptodate"
-msgstr "permet de choisir une expression régulière dans la liste proposée par uptodate"
 
 #: uptodate/plugins/add.py:41
 msgid "associate the comment with the module"
@@ -663,6 +660,11 @@ msgstr "oui"
 #~ msgstr "Voulez-vous supprimer le module %s ?"
 #~ msgid "Do you want to remove module %s?"
 #~ msgstr "Voulez-vous supprimer le module %s ?"
+#~ msgid ""
+#~ "allows to choose a regular expression in the list proposed by uptodate"
+#~ msgstr ""
+#~ "permet de choisir une expression régulière dans la liste proposée par "
+#~ "uptodate"
 
 #, fuzzy
 #~ msgid "display what has been done and/or increase output details"
