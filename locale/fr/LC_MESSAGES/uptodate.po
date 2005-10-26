@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uptodate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-25 15:10+0200\n"
-"PO-Revision-Date: 2005-10-25 15:16+0100\n"
+"POT-Creation-Date: 2005-10-26 14:27+0200\n"
+"PO-Revision-Date: 2005-10-26 14:30+0100\n"
 "Last-Translator: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -73,14 +73,14 @@ msgstr ""
 msgid "%s value: "
 msgstr "%s valeur : "
 
-#: uptodate/plugins/search.py:97
-#: uptodate/plugins/search.py:99
+#: uptodate/plugins/search.py:98
+#: uptodate/plugins/search.py:100
 #, python-format
 msgid "%s: %s added."
 msgstr "%s : %s ajoutée."
 
-#: uptodate/plugins/search.py:102
-#: uptodate/plugins/search.py:104
+#: uptodate/plugins/search.py:103
+#: uptodate/plugins/search.py:105
 #, python-format
 msgid "%s: %s removed."
 msgstr "%s : %s supprimée."
@@ -90,12 +90,12 @@ msgstr "%s : %s supprimée."
 msgid "%s: Searching new versions."
 msgstr "%s : Recherche de nouvelles versions."
 
-#: uptodate/plugins/search.py:113
+#: uptodate/plugins/search.py:114
 #, python-format
 msgid "%s: execute +: %s"
 msgstr "%s : execute +: %s"
 
-#: uptodate/plugins/search.py:119
+#: uptodate/plugins/search.py:120
 #, python-format
 msgid "%s: execute -: %s"
 msgstr "%s: execute -: %s"
@@ -437,7 +437,12 @@ msgstr "Ce module existe déjà"
 msgid "Unknown command"
 msgstr "Commande inconnue"
 
-#: uptodate/plugins/search.py:123
+#: uptodate/plugins/search.py:127
+#, python-format
+msgid "Warning: An IO error occured when getting data for %s. The current versions are kept."
+msgstr "Attention : Une erreur d'entrée/sortie est survenue pendant l'acquisition des données pour %s. Les versions actuelles sont conservées."
+
+#: uptodate/plugins/search.py:124
 #, python-format
 msgid "Warning: No version found for %s. The current versions are kept."
 msgstr "Attention : Aucune version trouvée pour le module %s. Les versions actuelles sont conservées."

@@ -83,42 +83,45 @@ def runCommand(opts, args, conf, out) :
 			removeCommand = Template("")
 		
 		# get new versions
-		newVersions = getVersions(module, url, regexp)
-		# test if a version can be found
-		if len(newVersions) != 0 :
-			updateVersions(conf, module, newVersions)
-			# conf.set(module, 'current', repr(newVersions))
-			
-			added = set(newVersions) - set(currentVersions)
-			removed = set(currentVersions) - set(newVersions)
-			# display added and removed versions
-			if added and opts.added :
-				if len(added) == 1 :
-					print >> out, _("%s: %s added.") % (module, repr(list(added)[0]))
-				else :
-					print >> out, _("%s: %s added.") % (module, andJoin(map(repr, added)))
-			if removed and opts.removed :
-				if len(removed) == 1 :
-					print >> out, _("%s: %s removed.") % (module, repr(list(removed)[0]))
-				else :
-					print >> out, _("%s: %s removed.") % (module, andJoin(map(repr, removed)))
-					
-			# execute commands
-			if not opts.dryRun :
-				if addCommand.template :
-					for version in added :
-						d = {'module': module, 'version': version}
-						command = addCommand.substitute(d)
-						if opts.verbose :
-							print >> sys.stderr,  _("%s: execute +: %s") % (module, command)
-						os.system(command)
-				if removeCommand.template :
-					for version in removed :
-						command = removeCommand.substitute(d)
-						if opts.verbose :
-							print >> sys.stderr, _("%s: execute -: %s") % (module, command)
-						os.system(command)
-		else :
-			# no version found
-			print >> sys.stderr, _("Warning: No version found for %s. The current versions are kept.") % module
-			# return
+                try :
+			newVersions = getVersions(module, url, regexp)
+			# test if a version can be found
+			if len(newVersions) != 0 :
+				updateVersions(conf, module, newVersions)
+				# conf.set(module, 'current', repr(newVersions))
+				
+				added = set(newVersions) - set(currentVersions)
+				removed = set(currentVersions) - set(newVersions)
+				# display added and removed versions
+				if added and opts.added :
+					if len(added) == 1 :
+						print >> out, _("%s: %s added.") % (module, repr(list(added)[0]))
+					else :
+						print >> out, _("%s: %s added.") % (module, andJoin(map(repr, added)))
+				if removed and opts.removed :
+					if len(removed) == 1 :
+						print >> out, _("%s: %s removed.") % (module, repr(list(removed)[0]))
+					else :
+						print >> out, _("%s: %s removed.") % (module, andJoin(map(repr, removed)))
+						
+				# execute commands
+				if not opts.dryRun :
+					if addCommand.template :
+						for version in added :
+							d = {'module': module, 'version': version}
+							command = addCommand.substitute(d)
+							if opts.verbose :
+								print >> sys.stderr,  _("%s: execute +: %s") % (module, command)
+							os.system(command)
+					if removeCommand.template :
+						for version in removed :
+							command = removeCommand.substitute(d)
+							if opts.verbose :
+								print >> sys.stderr, _("%s: execute -: %s") % (module, command)
+							os.system(command)
+			else :
+				# no version found
+				print >> sys.stderr, _("Warning: No version found for %s. The current versions are kept.") % module
+				# return
+		except (IOError, AttributeError) : # also use AttributeError because of a bug in python lib
+			print >> sys.stderr, _("Warning: An IO error occured when getting data for %s. The current versions are kept.") % module
