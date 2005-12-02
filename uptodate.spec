@@ -6,8 +6,8 @@ Name:		%{name}
 Summary:	Uptodate helps you to keep your system uptodate
 Version:	%{version}
 Release:	%{release}
-URL:		http://gleh.dyndns.org/uptodate/
-Source0:	http://gleh.dyndns.org/uptodate/uptodate-%{version}.tar.bz2
+URL:		http://voxel.jouy.inra.fr/darcs/uptodate
+Source0:	http://voxel.jouy.inra.fr/darcs/uptodate/uptodate-%{version}.tar.bz2
 License:	GPL
 Group:		Networking/Other
 Requires:	python >= 2.3
