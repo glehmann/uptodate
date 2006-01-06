@@ -129,7 +129,7 @@ LICENSE: GPL (see COPYING file)
 DARCS :
 uptodate source code is available in a Darcs repository.
 http://darcs.net/
-Fill free to get it with
+Feel free to get it with
 
      darcs get --partial http://voxel.jouy.inra.fr/darcs/uptodate/
 
