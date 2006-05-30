@@ -26,10 +26,25 @@ usage = _("uptodate [options] edit name property [value]")
 
 summary = _("Modify module's properties")
 
-description = _("""Edit is used in order to modify module's properties. Modifiable properties are: added, removed, current, add-command, remove-command, url, regexp and comment. If url or regexp are modified, uptodate check if it can obtain versions before validating changes.
+description = _("""Edit is used in order to modify module's properties. Modifiable properties are: 
+  - added: a python dict containing the added version
+  - removed: a python dict containing the removed version
+  - current: a python list of the current version available
+  - add-command: a command to be run when a new version is added. $module and $version are extended to the current module and the added version
+  - remove-command: a command to be run when a new version is removed. $module and $version are extended to the current module and the removed version
+  - url: the url where uptodate search the versions
+  - regexp: the regular expression used by uptodate to find the versions
+  - comment: a comment
 
-Example:
-uptodate edit itk-app comment 'applications using InsightToolkit'""")
+If url or regexp are modified, uptodate check if it can obtain versions before validating changes.
+
+Examples:
+uptodate edit itk-app comment 'applications using InsightToolkit'
+  
+uptodate edit zope add-command "echo 'new version: $version' | mail -s 'New version of $module available' packager@example.com"
+  
+uptodate edit foo url http://new.url.org/downloads/
+""")
 
 names = ["edit"]
 
