@@ -50,7 +50,7 @@ or if you simply want to know when the new version of your favorite game (or
 everything else with a version) is out, uptodate is for you !
 
 Author: Gaetan Lehmann <gaetan.lehmann@jouy.inra.fr>
-Website: http://gleh.dyndns.org/uptodate/
+Website: http://voxel.jouy.inra.fr/darcs/uptodate/
 
 Commands:
 %s
