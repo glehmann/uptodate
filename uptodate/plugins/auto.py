@@ -50,6 +50,8 @@ uptodate auto jpackage-release ftp://sunsite.informatik.rwth-aachen.de/pub/Linux
 names = ["auto"]
 
 options = add.options
+options.append( Option("-k", "--keep", action="store_true", dest="keep", help=_("keep the history, if the module already exist")) )
+
 
 def runCommand(opts, args, conf, out) :
 	versionRegExp = r'([^<>\n\r]+)'
@@ -65,14 +67,22 @@ def runCommand(opts, args, conf, out) :
 		raise InvalidNbOfArgsException(usage)
 
 	module, url, version = args
-	
-	if not opts.force and conf.has_section(module) :
-		if opts.batch or not yes(_("Do you want to remove the module %s?") % module, False) :
+  
+	if conf.has_section(module) :
+		if opts.keep :
+			# just do nothing for now
+			pass
+		elif opts.force :
+			# well, still nothing to do
+			pass
+		elif opts.batch or not yes(_("Do you want to remove the module %s?") % module, False) :
+			# the user don't want to erase its module
 			raise ModuleExistsException(module)
 		else :
+			# the user want to erase the module - just do like when --force is used
 			opts.force = True
-	
-	# load data which will be used to search regexp
+  
+  # load data which will be used to search regexp
 	urlData = loadData(url)
 
 	# find text around version string given by user
@@ -172,14 +182,25 @@ def runCommand(opts, args, conf, out) :
 	# get versions founds with selected regexp
 	current = list(set(re.findall(regexp, urlData)))
 
-	# test if a version can be found
+  # test if a version can be found
 	if len(current) != 0 :
-		if opts.force and conf.has_section(module) :
-			conf.remove_section(module)
-		add.createModule(conf, module, url, regexp, opts.comment, opts.addCommand, opts.removeCommand)
+		if conf.has_section(module) :
+			if opts.keep :
+				# update the module's attributes
+				conf.set(module, 'url', url)
+				conf.set(module, 'regexp', regexp)
+				pass
+			elif opts.force :
+				# remove the module, and create
+				conf.remove_section(module)
+				add.createModule(conf, module, url, regexp, opts.comment, opts.addCommand, opts.removeCommand)
+		else :
+			# there is no such module - create one
+			add.createModule(conf, module, url, regexp, opts.comment, opts.addCommand, opts.removeCommand)
+		# and update the version of the new module
 		updateVersions(conf, module, current)
 		# conf.set(module, 'current', repr(current))
-		
+    
 		if opts.verbose :
 			printModule(conf, module, sys.stderr, True)
 	else :
